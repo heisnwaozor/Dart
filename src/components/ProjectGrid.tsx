@@ -138,15 +138,15 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
             </div>
           </div>
 
-          {/* Filter Pills with Roomy Spacing and Rolling Labels */}
-          <div className="flex items-center space-x-2.5 overflow-x-auto pb-1 scrollbar-none">
+          {/* Filter Pills neatly wrapped inside the frame with full text visibility */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-1">
             {allTags.map(tag => (
               <button
                 key={tag}
                 onClick={() => setSelectedTag(tag)}
-                className={`ctrl-roll-button px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 ${
+                className={`ctrl-roll-button flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 ${
                   selectedTag === tag
-                    ? 'bg-[#05c92f] text-slate-950 border-2 border-slate-950 shadow-md shadow-emerald-500/25 scale-105'
+                    ? 'bg-[#05c92f] text-slate-950 border-2 border-slate-950 shadow-md shadow-emerald-500/25 scale-105 font-black'
                     : 'bg-[#ecefec] dark:bg-white/[0.06] dark:text-slate-200 text-slate-700 hover:text-slate-950 dark:hover:text-white border dark:border-white/[0.08] border-slate-300'
                 }`}
               >

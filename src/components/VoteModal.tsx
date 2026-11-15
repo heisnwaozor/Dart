@@ -103,25 +103,25 @@ export const VoteModal: React.FC<VoteModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div 
-        className="ctrl-card relative w-full max-w-xl rounded-[36px] shadow-2xl overflow-hidden transition-all"
+        className="ctrl-card relative w-full max-w-xl rounded-[32px] sm:rounded-[36px] shadow-2xl overflow-hidden max-h-[88vh] flex flex-col transition-all"
         onClick={e => e.stopPropagation()}
       >
         {/* Top Header */}
-        <div className="flex items-center justify-between p-5 sm:p-6 border-b dark:border-white/[0.08] border-slate-200">
+        <div className="flex items-center justify-between p-4 sm:p-5 border-b dark:border-white/[0.08] border-slate-200 flex-shrink-0">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] flex items-center justify-center">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] flex items-center justify-center flex-shrink-0">
               <Fingerprint className="w-5 h-5 text-[#05c92f] animate-pulse" />
             </div>
             <div>
-              <h3 className="text-base font-black dark:text-white text-slate-950 flex items-center gap-2">
+              <h3 className="text-sm sm:text-base font-black dark:text-white text-slate-950 flex items-center gap-2">
                 <span>Cryptographic Vote Signing</span>
                 <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 font-mono font-bold">
                   Stellar SEP-53
                 </span>
               </h3>
-              <p className="text-xs dark:text-slate-400 text-slate-500">Zero gas fees • Non-repudiation on Stellar</p>
+              <p className="text-[11px] sm:text-xs dark:text-slate-400 text-slate-500">Zero gas fees • Non-repudiation on Stellar</p>
             </div>
           </div>
 
@@ -133,36 +133,36 @@ export const VoteModal: React.FC<VoteModalProps> = ({
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="p-6 space-y-5">
+        {/* Modal Scrollable Body */}
+        <div className="p-4 sm:p-5 space-y-3.5 overflow-y-auto flex-1">
           
           {/* Target Project Card */}
-          <div className="flex items-center space-x-4 p-4 rounded-2xl dark:bg-white/[0.03] bg-slate-50 border dark:border-white/[0.06] border-slate-200">
+          <div className="flex items-center space-x-3.5 p-3 rounded-2xl dark:bg-white/[0.03] bg-slate-50 border dark:border-white/[0.06] border-slate-200">
             <img
               src={project.coverImage}
               alt={project.name}
               onError={(e) => {
                 e.currentTarget.src = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=600&q=80';
               }}
-              className="w-16 h-16 rounded-2xl object-cover ring-2 ring-blue-500/30"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl object-cover ring-2 ring-blue-500/30 flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
-              <span className="text-[10px] font-mono text-blue-500 uppercase tracking-wider font-bold">
+              <span className="text-[10px] font-mono text-blue-500 uppercase tracking-wider font-bold block">
                 Voting For Project:
               </span>
-              <h4 className="text-base font-bold dark:text-white text-slate-900 truncate">{project.name}</h4>
-              <p className="text-xs dark:text-slate-400 text-slate-500 truncate">{project.tagline}</p>
+              <h4 className="text-sm sm:text-base font-bold dark:text-white text-slate-900 truncate">{project.name}</h4>
+              <p className="text-[11px] sm:text-xs dark:text-slate-400 text-slate-500 truncate">{project.tagline}</p>
             </div>
           </div>
 
           {!currentUser ? (
             /* Unauthenticated prompt */
-            <div className="text-center py-8 px-5 rounded-3xl dark:bg-white/[0.02] bg-slate-50 border border-dashed dark:border-white/[0.1] border-slate-300 space-y-4">
-              <div className="w-14 h-14 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] flex items-center justify-center mx-auto">
-                <KeyRound className="w-7 h-7 text-[#05c92f] animate-pulse" />
+            <div className="text-center py-6 px-4 rounded-3xl dark:bg-white/[0.02] bg-slate-50 border border-dashed dark:border-white/[0.1] border-slate-300 space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] flex items-center justify-center mx-auto">
+                <KeyRound className="w-6 h-6 text-[#05c92f] animate-pulse" />
               </div>
               <div className="space-y-1">
-                <h4 className="text-base font-black dark:text-white text-slate-900">
+                <h4 className="text-sm sm:text-base font-black dark:text-white text-slate-900">
                   Account Required to Vote
                 </h4>
                 <p className="text-xs dark:text-slate-400 text-slate-600 max-w-sm mx-auto leading-relaxed">
@@ -172,7 +172,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
               <button
                 type="button"
                 onClick={onOpenAuth}
-                className="ctrl-roll-button inline-flex items-center space-x-2.5 px-7 py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/25 transition-all"
+                className="ctrl-roll-button inline-flex items-center space-x-2.5 px-6 py-3 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/25 transition-all"
               >
                 <div className="flex items-center -space-x-1 mr-1 flex-shrink-0">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#fbe74e] ring-1 ring-slate-950"></span>
@@ -184,31 +184,31 @@ export const VoteModal: React.FC<VoteModalProps> = ({
             </div>
           ) : step === 'review' ? (
             /* Review Payload Step */
-            <div className="space-y-4">
+            <div className="space-y-3">
               
               {/* Vote Selection Status Notice */}
               {currentVote && (
                 currentVote.projectId === project.id ? (
-                  <div className="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/25 text-xs text-blue-600 dark:text-blue-400 font-medium">
+                  <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/25 text-xs text-blue-600 dark:text-blue-400 font-medium">
                     <strong>Active Pick:</strong> You have already recorded a vote for this project. Re-signing will update your cryptographic timestamp.
                   </div>
                 ) : (
-                  <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-xs text-amber-600 dark:text-amber-400 font-medium">
+                  <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-xs text-amber-600 dark:text-amber-400 font-medium">
                     <strong>Switching Pick:</strong> Your vote will be reassigned from <strong>{currentVote.projectName}</strong> to <strong>{project.name}</strong> upon signature.
                   </div>
                 )
               )}
 
               {/* Voter Identity Callout */}
-              <div className="flex items-center justify-between px-4 py-3 rounded-2xl dark:bg-white/[0.04] bg-slate-50 border dark:border-white/[0.06] border-slate-200 text-xs">
+              <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl dark:bg-white/[0.04] bg-slate-50 border dark:border-white/[0.06] border-slate-200 text-xs">
                 <div className="flex items-center space-x-2.5">
                   <img
                     src={currentUser.avatar}
                     alt={currentUser.name}
-                    className="w-7 h-7 rounded-full object-cover ring-1 ring-[#05c92f]"
+                    className="w-6 h-6 rounded-full object-cover ring-1 ring-[#05c92f]"
                   />
                   <div>
-                    <span className="dark:text-slate-200 text-slate-800 font-bold block">{currentUser.name}</span>
+                    <span className="dark:text-slate-200 text-slate-800 font-bold block leading-tight">{currentUser.name}</span>
                     <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">Recorded in Database</span>
                   </div>
                 </div>
@@ -219,8 +219,8 @@ export const VoteModal: React.FC<VoteModalProps> = ({
 
               {/* SEP-53 Plaintext Message Payload */}
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-mono dark:text-slate-400 text-slate-500">Structured SEP-53 Payload:</span>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[11px] font-mono dark:text-slate-400 text-slate-500 font-bold">Structured SEP-53 Payload:</span>
                   <button
                     onClick={() => copyToClipboard(structuredMessage)}
                     className="text-[11px] font-mono text-blue-500 hover:underline flex items-center gap-1 font-bold"
@@ -230,13 +230,13 @@ export const VoteModal: React.FC<VoteModalProps> = ({
                   </button>
                 </div>
 
-                <div className="p-4 rounded-2xl dark:bg-black/70 bg-slate-900 border dark:border-white/[0.08] border-slate-700 font-mono text-xs text-blue-300 whitespace-pre leading-relaxed overflow-x-auto shadow-inner">
+                <div className="p-3 rounded-xl dark:bg-black/70 bg-slate-900 border dark:border-white/[0.08] border-slate-700 font-mono text-[11px] text-blue-300 whitespace-pre leading-relaxed overflow-x-auto max-h-24 sm:max-h-28 overflow-y-auto shadow-inner">
                   {structuredMessage}
                 </div>
               </div>
 
               {/* Security Callout */}
-              <div className="flex items-start space-x-2.5 p-3.5 rounded-2xl bg-blue-500/10 border border-blue-500/25 text-xs text-blue-600 dark:text-blue-400 font-medium">
+              <div className="flex items-start space-x-2.5 p-3 rounded-xl bg-blue-500/10 border border-blue-500/25 text-xs text-blue-600 dark:text-blue-400 font-medium">
                 <ShieldCheck className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <div className="text-[11px] leading-relaxed">
                   <strong>Cryptographic Integrity:</strong> Your vote is signed with an Ed25519 keypair. Network fees are fully sponsored by the hackathon fund.
@@ -307,8 +307,8 @@ export const VoteModal: React.FC<VoteModalProps> = ({
 
         </div>
 
-        {/* Footer Actions */}
-        <div className="p-5 sm:p-6 border-t dark:border-white/[0.08] border-slate-200 dark:bg-black/40 bg-slate-50 flex items-center justify-end space-x-3">
+        {/* Footer Actions: Always anchored at bottom and clearly visible */}
+        <div className="p-4 sm:p-5 border-t dark:border-white/[0.08] border-slate-200 dark:bg-black/60 bg-slate-50 flex items-center justify-end space-x-3 flex-shrink-0 sticky bottom-0 z-10">
           {step === 'confirmed' ? (
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full">
               {onViewReceipt && (
@@ -317,7 +317,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
                     onClose();
                     onViewReceipt();
                   }}
-                  className="ctrl-roll-button w-full sm:flex-1 py-3.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] hover:bg-slate-200 border-2 border-slate-950 dark:border-white/20 text-slate-950 dark:text-white font-bold text-xs transition-all shadow-sm"
+                  className="ctrl-roll-button w-full sm:flex-1 py-3 rounded-full bg-[#ecefec] dark:bg-white/[0.08] hover:bg-slate-200 border-2 border-slate-950 dark:border-white/20 text-slate-950 dark:text-white font-bold text-xs transition-all shadow-sm"
                 >
                   <span className="ctrl-roll-label">Check My Vote Receipt</span>
                 </button>
@@ -327,7 +327,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
                   onClose();
                   if (onViewLeaderboard) onViewLeaderboard();
                 }}
-                className="ctrl-roll-button w-full sm:flex-1 py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs border-2 border-slate-950 shadow-md transition-all"
+                className="ctrl-roll-button w-full sm:flex-1 py-3 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs border-2 border-slate-950 shadow-md transition-all"
               >
                 <span className="ctrl-roll-label">Done & View Leaderboard</span>
               </button>
@@ -342,7 +342,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
               </button>
               <button
                 onClick={handleSign}
-                className="ctrl-roll-button flex items-center space-x-2 px-7 py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-sm border-2 border-slate-950 shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all"
+                className="ctrl-roll-button flex items-center space-x-2 px-6 sm:px-7 py-3 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all"
               >
                 <div className="flex items-center -space-x-1 mr-0.5 flex-shrink-0">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#fbe74e] ring-1 ring-slate-950"></span>

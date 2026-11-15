@@ -287,13 +287,13 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div 
-        className="ctrl-card relative w-full max-w-md rounded-[36px] shadow-2xl overflow-hidden transition-all"
+        className="ctrl-card relative w-full max-w-md rounded-[32px] sm:rounded-[36px] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col transition-all"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-6 pb-4 border-b dark:border-white/[0.08] border-slate-200">
+        <div className="p-5 sm:p-6 pb-4 border-b dark:border-white/[0.08] border-slate-200 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center">
@@ -354,8 +354,8 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
           </div>
         </div>
 
-        {/* Modal Body */}
-        <div className="p-6">
+        {/* Modal Scrollable Body */}
+        <div className="p-5 sm:p-6 overflow-y-auto flex-1">
 
           {/* Loading Animation Overlay */}
           {isLoading ? (
