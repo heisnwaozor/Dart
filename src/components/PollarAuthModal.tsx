@@ -293,8 +293,8 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-5 sm:p-6 pb-4 border-b dark:border-white/[0.08] border-slate-200 flex-shrink-0">
-          <div className="flex items-center justify-between mb-4">
+        <div className="p-5 sm:p-6 pb-3 sm:pb-4 border-b dark:border-white/[0.08] border-slate-200 flex-shrink-0">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center">
                 <DartLogo size={24} />
@@ -355,7 +355,7 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex-1">
+        <div className="p-5 sm:p-6 pb-7 sm:pb-8 overflow-y-auto flex-1">
 
           {/* Loading Animation Overlay */}
           {isLoading ? (
@@ -372,14 +372,14 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
             </div>
           ) : activeTab === 'signup' ? (
             /* CREATE ACCOUNT VIEW */
-            <div className="space-y-4">
+            <div className="space-y-3.5">
               
               {/* Primary OAuth Action: Continue with Google */}
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 <button
                   type="button"
                   onClick={handleStartGoogle}
-                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-3.5 rounded-full bg-white text-slate-950 font-black text-sm border-2 border-slate-950 shadow-md hover:scale-[1.01] active:scale-95 transition-all group"
+                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-3 rounded-full bg-white text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md hover:scale-[1.01] active:scale-95 transition-all group"
                 >
                   <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -393,7 +393,7 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                 <button
                   type="button"
                   onClick={handleStartGithub}
-                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-3 rounded-full bg-slate-950 text-white font-bold text-xs border-2 border-slate-950 shadow-sm hover:scale-[1.01] active:scale-95 transition-all group"
+                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-2.5 rounded-full bg-slate-950 text-white font-bold text-xs border-2 border-slate-950 shadow-sm hover:scale-[1.01] active:scale-95 transition-all group"
                 >
                   <svg className="w-4 h-4 fill-white flex-shrink-0" viewBox="0 0 24 24">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -402,13 +402,13 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                 </button>
               </div>
 
-              {/* Divider */}
-              <div className="relative flex items-center justify-center my-2">
-                <div className="border-t w-full dark:border-white/10 border-slate-200"></div>
-                <span className="bg-[#f9faf9] dark:bg-[#151d2e] px-3 text-[10px] font-mono uppercase tracking-wider text-slate-400">
-                  or register with details
+              {/* Clean Horizontal Divider */}
+              <div className="flex items-center my-2">
+                <div className="flex-1 border-t dark:border-white/10 border-slate-200"></div>
+                <span className="px-3 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-slate-400 flex-shrink-0">
+                  or
                 </span>
-                <div className="border-t w-full dark:border-white/10 border-slate-200"></div>
+                <div className="flex-1 border-t dark:border-white/10 border-slate-200"></div>
               </div>
 
               {formError && (
@@ -452,7 +452,7 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
 
                 {/* Name */}
                 <div>
-                  <label className="block text-[11px] font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-1">
+                  <label className="block text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-1">
                     Full Name *
                   </label>
                   <input
@@ -467,7 +467,7 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
 
                 {/* Email */}
                 <div>
-                  <label className="block text-[11px] font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-1">
+                  <label className="block text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-1">
                     Email Address *
                   </label>
                   <input
@@ -484,10 +484,10 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                 <div className="pt-1">
                   <button
                     type="submit"
-                    className="ctrl-roll-button w-full py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 group"
+                    className="ctrl-roll-button w-full py-3 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 group"
                   >
                     <UserPlus className="w-4 h-4" />
-                    <span className="ctrl-roll-label">Create Account &amp; Save in Database</span>
+                    <span className="ctrl-roll-label">Create Account</span>
                   </button>
                 </div>
               </form>
@@ -510,14 +510,14 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
             </div>
           ) : (
             /* SIGN IN VIEW */
-            <div className="space-y-4">
+            <div className="space-y-3.5">
               
               {/* Primary OAuth Action: Sign In with Google */}
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 <button
                   type="button"
                   onClick={handleStartGoogle}
-                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-3.5 rounded-full bg-white text-slate-950 font-black text-sm border-2 border-slate-950 shadow-md hover:scale-[1.01] active:scale-95 transition-all group"
+                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-3 rounded-full bg-white text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md hover:scale-[1.01] active:scale-95 transition-all group"
                 >
                   <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -531,7 +531,7 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                 <button
                   type="button"
                   onClick={handleStartGithub}
-                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-3 rounded-full bg-slate-950 text-white font-bold text-xs border-2 border-slate-950 shadow-sm hover:scale-[1.01] active:scale-95 transition-all group"
+                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-2.5 rounded-full bg-slate-950 text-white font-bold text-xs border-2 border-slate-950 shadow-sm hover:scale-[1.01] active:scale-95 transition-all group"
                 >
                   <svg className="w-4 h-4 fill-white flex-shrink-0" viewBox="0 0 24 24">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -540,13 +540,13 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                 </button>
               </div>
 
-              {/* Divider */}
-              <div className="relative flex items-center justify-center my-2">
-                <div className="border-t w-full dark:border-white/10 border-slate-200"></div>
-                <span className="bg-[#f9faf9] dark:bg-[#151d2e] px-3 text-[10px] font-mono uppercase tracking-wider text-slate-400">
-                  or sign in with email
+              {/* Clean Horizontal Divider */}
+              <div className="flex items-center my-2">
+                <div className="flex-1 border-t dark:border-white/10 border-slate-200"></div>
+                <span className="px-3 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-slate-400 flex-shrink-0">
+                  or
                 </span>
-                <div className="border-t w-full dark:border-white/10 border-slate-200"></div>
+                <div className="flex-1 border-t dark:border-white/10 border-slate-200"></div>
               </div>
 
               {formError && (
@@ -559,7 +559,7 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
               {/* Email Sign In Form */}
               <form onSubmit={handleSignInSubmit} className="space-y-3">
                 <div>
-                  <label className="block text-[11px] font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-1">
+                  <label className="block text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600 mb-1">
                     Your Registered Email or Wallet *
                   </label>
                   <input
@@ -568,17 +568,17 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                     onChange={e => setSigninIdentifier(e.target.value)}
                     placeholder="e.g. agbochidera95@gmail.com"
                     required
-                    className="w-full px-3.5 py-2.5 rounded-xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-xs dark:text-white text-slate-900"
+                    className="w-full px-3.5 py-2 rounded-xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-xs dark:text-white text-slate-900"
                   />
                 </div>
 
                 <div className="pt-1">
                   <button
                     type="submit"
-                    className="ctrl-roll-button w-full py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 group"
+                    className="ctrl-roll-button w-full py-3 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 group"
                   >
                     <LogIn className="w-4 h-4" />
-                    <span className="ctrl-roll-label">Sign In to Account</span>
+                    <span className="ctrl-roll-label">Sign In</span>
                   </button>
                 </div>
               </form>
