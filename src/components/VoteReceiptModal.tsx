@@ -100,6 +100,9 @@ export const VoteReceiptModal: React.FC<VoteReceiptModalProps> = ({
                 <img
                   src={project.coverImage}
                   alt={vote.projectName}
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=600&q=80';
+                  }}
                   className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover ring-2 ring-blue-500/40 shadow-md flex-shrink-0"
                 />
               )}

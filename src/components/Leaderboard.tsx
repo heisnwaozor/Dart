@@ -127,11 +127,16 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
 
                   {/* Project Image & Identity */}
                   <div className="flex flex-col items-center w-full mb-4">
-                    <img
-                      src={top2.coverImage}
-                      alt={top2.name}
-                      className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl object-cover mb-3 ring-2 ring-slate-400/40 shadow-md"
-                    />
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden mb-3 ring-2 ring-slate-400/40 shadow-md flex-shrink-0 bg-slate-800">
+                      <img
+                        src={top2.coverImage}
+                        alt={top2.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=600&q=80';
+                        }}
+                      />
+                    </div>
                     <h3 className="text-base sm:text-lg font-bold dark:text-white text-slate-900 mb-0.5 truncate max-w-full">
                       {top2.name}
                     </h3>
@@ -204,11 +209,16 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
 
                   {/* Project Image & Identity */}
                   <div className="flex flex-col items-center w-full mb-4">
-                    <img
-                      src={top1.coverImage}
-                      alt={top1.name}
-                      className="w-22 h-22 sm:w-24 sm:h-24 rounded-2xl object-cover mb-3 ring-2 ring-blue-500/60 shadow-lg"
-                    />
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden mb-3 ring-2 ring-blue-500/60 shadow-lg flex-shrink-0 bg-slate-800">
+                      <img
+                        src={top1.coverImage}
+                        alt={top1.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&w=600&q=80';
+                        }}
+                      />
+                    </div>
                     <h3 className="text-lg sm:text-xl font-black dark:text-white text-slate-900 mb-0.5 truncate max-w-full">
                       {top1.name}
                     </h3>
@@ -281,11 +291,16 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
 
                   {/* Project Image & Identity */}
                   <div className="flex flex-col items-center w-full mb-4">
-                    <img
-                      src={top3.coverImage}
-                      alt={top3.name}
-                      className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl object-cover mb-3 ring-2 ring-amber-600/40 shadow-md"
-                    />
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden mb-3 ring-2 ring-amber-600/40 shadow-md flex-shrink-0 bg-slate-800">
+                      <img
+                        src={top3.coverImage}
+                        alt={top3.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=600&q=80';
+                        }}
+                      />
+                    </div>
                     <h3 className="text-base sm:text-lg font-bold dark:text-white text-slate-900 mb-0.5 truncate max-w-full">
                       {top3.name}
                     </h3>
@@ -381,6 +396,9 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                       className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover cursor-pointer hover:scale-105 transition-transform shadow-sm ${
                         isVoted ? 'ring-2 ring-blue-500' : ''
                       }`}
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=600&q=80';
+                      }}
                       onClick={() => onSelectProject(project)}
                     />
 

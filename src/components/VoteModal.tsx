@@ -141,6 +141,9 @@ export const VoteModal: React.FC<VoteModalProps> = ({
             <img
               src={project.coverImage}
               alt={project.name}
+              onError={(e) => {
+                e.currentTarget.src = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=600&q=80';
+              }}
               className="w-16 h-16 rounded-2xl object-cover ring-2 ring-blue-500/30"
             />
             <div className="flex-1 min-w-0">

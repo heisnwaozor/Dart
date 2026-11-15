@@ -42,6 +42,9 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           <img
             src={project.coverImage}
             alt={project.name}
+            onError={(e) => {
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=1200&q=80';
+            }}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t dark:from-[#0C1326] from-black/80 via-transparent to-black/30" />

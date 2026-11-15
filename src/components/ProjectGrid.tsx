@@ -224,6 +224,9 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                     <img
                       src={project.coverImage}
                       alt={project.name}
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=1200&q=80';
+                      }}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t dark:from-[#0E1527] from-black/80 via-black/20 to-transparent" />

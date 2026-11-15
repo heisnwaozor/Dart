@@ -127,7 +127,7 @@ Architecture:
     teamName: 'Sol Tech Colombia',
     teamAvatar: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=150&q=80',
     submittedBy: 'GC8891PX...55ZA',
-    coverImage: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=1200&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&w=1200&q=80',
     tags: ['IoT', 'DePIN', 'Renewable Energy', 'Hardware'],
     submittedAt: '2026-11-13T19:00:00Z',
     publicVotesCount: 64
