@@ -83,6 +83,94 @@ export async function handleApiRequest(req, res) {
     return true;
   }
 
+  // GitHub OAuth Code Exchange
+  if (pathname === '/api/auth/github' && method === 'POST') {
+    try {
+      const body = await parseBody(req);
+      const { code, redirect_uri } = body || {};
+      const clientId = process.env.VITE_GITHUB_CLIENT_ID || 'Ov23likydacnWhm2cBjL';
+      const clientSecret = process.env.GITHUB_CLIENT_SECRET || process.env.VITE_GITHUB_CLIENT_SECRET;
+
+      if (!code) {
+        sendJson(res, 400, { ok: false, error: 'Missing authorization code' });
+        return true;
+      }
+
+      if (!clientSecret) {
+        sendJson(res, 400, { ok: false, error: 'GITHUB_CLIENT_SECRET not configured on server' });
+        return true;
+      }
+
+      const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          client_id: clientId,
+          client_secret: clientSecret,
+          code: code,
+          redirect_uri: redirect_uri
+        })
+      });
+
+      const tokenData = await tokenRes.json();
+      if (tokenData.error || !tokenData.access_token) {
+        sendJson(res, 400, {
+          ok: false,
+          error: tokenData.error_description || tokenData.error || 'Failed to exchange token with GitHub'
+        });
+        return true;
+      }
+
+      const userRes = await fetch('https://api.github.com/user', {
+        headers: {
+          'Authorization': `Bearer ${tokenData.access_token}`,
+          'User-Agent': 'Dart-Hackathon-App'
+        }
+      });
+
+      if (!userRes.ok) {
+        sendJson(res, 400, { ok: false, error: 'Failed to fetch user profile from GitHub' });
+        return true;
+      }
+
+      const userData = await userRes.json();
+      let email = userData.email;
+
+      if (!email) {
+        try {
+          const emailsRes = await fetch('https://api.github.com/user/emails', {
+            headers: {
+              'Authorization': `Bearer ${tokenData.access_token}`,
+              'User-Agent': 'Dart-Hackathon-App'
+            }
+          });
+          const emails = await emailsRes.json();
+          if (Array.isArray(emails)) {
+            const primary = emails.find(e => e.primary) || emails[0];
+            if (primary) email = primary.email;
+          }
+        } catch (e) {}
+      }
+
+      sendJson(res, 200, {
+        ok: true,
+        user: {
+          name: userData.name || userData.login,
+          email: email || `${userData.login}@users.noreply.github.com`,
+          avatar: userData.avatar_url || `https://github.com/${userData.login}.png`,
+          githubLogin: userData.login
+        }
+      });
+      return true;
+    } catch (err) {
+      sendJson(res, 500, { ok: false, error: err.message });
+      return true;
+    }
+  }
+
   // User registration / login recording
   if ((pathname === '/api/users' || pathname === '/api/auth/register') && method === 'POST') {
     try {
