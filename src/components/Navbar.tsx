@@ -3,7 +3,6 @@ import {
   Flame, 
   Trophy, 
   SearchCode, 
-  Plus, 
   ChevronDown, 
   LogOut, 
   Copy,
@@ -11,10 +10,12 @@ import {
   Wallet,
   Sun,
   Moon,
-  User,
   Zap,
   CheckCircle,
-  ShieldCheck
+  ArrowLeft,
+  Code2,
+  Users,
+  Compass
 } from 'lucide-react';
 import { PollarUser, PublicVote } from '../types';
 import { PollarClientService } from '../lib/pollar';
@@ -23,6 +24,8 @@ import { DartLogo } from './DartLogo';
 import { usePollar } from '@pollar/react';
 
 interface NavbarProps {
+  currentView: 'portal' | 'voting' | 'builder';
+  setCurrentView: (view: 'portal' | 'voting' | 'builder') => void;
   activeTab: 'projects' | 'leaderboard' | 'audit';
   setActiveTab: (tab: 'projects' | 'leaderboard' | 'audit') => void;
   currentUser: PollarUser | null;
@@ -34,6 +37,8 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
+  currentView,
+  setCurrentView,
   activeTab,
   setActiveTab,
   currentUser,
@@ -82,24 +87,24 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-50 w-full border-b dark:border-white/[0.08] border-slate-200/80 dark:bg-[#070A13]/90 bg-white/90 backdrop-blur-2xl transition-colors duration-300">
       
-      {/* Top blue animated gradient beam */}
-      <div className="h-1 w-full bg-gradient-to-r from-blue-600 via-sky-400 to-white animate-gradient-x" />
+      {/* Top blue accent hairline */}
+      <div className="h-0.5 w-full bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-500" />
 
       <div className="motion-container">
         <div className="flex items-center justify-between h-20 sm:h-22">
           
           {/* Brand Identity: Standalone Bold Blue Hand Holding Dart Logo */}
           <div 
-            onClick={() => setActiveTab('projects')}
+            onClick={() => setCurrentView('portal')}
             className="flex items-center space-x-3 cursor-pointer select-none group"
           >
             <div className="relative flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <DartLogo size={42} animate />
+              <DartLogo size={40} animate />
             </div>
 
             <div>
               <div className="flex items-center space-x-2">
-                <span className="font-black text-xl sm:text-2xl dark:text-white text-slate-900 tracking-tight">
+                <span className="font-black text-xl sm:text-2xl dark:text-white text-slate-950 tracking-tight">
                   Dart
                 </span>
                 <span className="hidden sm:inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full dark:bg-blue-500/15 bg-blue-50 text-blue-600 dark:text-blue-400 font-mono font-bold border dark:border-blue-500/30 border-blue-200">
@@ -107,64 +112,132 @@ export const Navbar: React.FC<NavbarProps> = ({
                   Pollar SDK
                 </span>
               </div>
-              <p className="text-[11px] sm:text-xs dark:text-slate-400 text-slate-500 font-medium">
-                Cryptographic Stellar Voting
+              <p className="text-[10px] sm:text-[11px] dark:text-slate-400 text-slate-500 font-medium tracking-tight">
+                Stellar Governance
               </p>
             </div>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1.5 p-1.5 dark:bg-white/[0.04] bg-slate-100/80 border dark:border-white/[0.08] border-slate-200 rounded-2xl shadow-inner">
-            <button
-              onClick={() => setActiveTab('projects')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ${
-                activeTab === 'projects'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-[1.02]'
-                  : 'dark:text-slate-300 text-slate-600 hover:text-blue-600 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/[0.05]'
-              }`}
-            >
-              <Flame className={`w-4 h-4 ${activeTab === 'projects' ? 'animate-bounce text-white' : ''}`} />
-              <span>Projects</span>
-              <span className={`text-xs px-2 py-0.5 rounded-full font-mono ${
-                activeTab === 'projects' ? 'bg-white/20 text-white' : 'dark:bg-white/[0.08] bg-slate-200 text-slate-700 dark:text-slate-300'
-              }`}>
-                {projectsCount}
-              </span>
-            </button>
+          {/* Center Floating Pill Bar inspired by Ctrl.xyz */}
+          <nav className="hidden md:flex items-center px-4 py-2 rounded-full dark:bg-white/[0.06] bg-slate-100/90 border dark:border-white/[0.1] border-slate-200 shadow-sm text-xs font-semibold backdrop-blur-md">
+            
+            {currentView === 'portal' ? (
+              <div className="flex items-center space-x-3 text-slate-600 dark:text-slate-300">
+                <button
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="hover:text-blue-600 dark:hover:text-white transition-colors"
+                >
+                  Overview
+                </button>
+                <span className="text-slate-300 dark:text-white/20 select-none">|</span>
+                <button
+                  onClick={() => setCurrentView('voting')}
+                  className="hover:text-blue-600 dark:hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <Users className="w-3.5 h-3.5 text-blue-500" />
+                  <span>Voting Arena</span>
+                </button>
+                <span className="text-slate-300 dark:text-white/20 select-none">|</span>
+                <button
+                  onClick={() => setCurrentView('builder')}
+                  className="hover:text-blue-600 dark:hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <Code2 className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Submit Project</span>
+                </button>
+                <span className="text-slate-300 dark:text-white/20 select-none">|</span>
+                <button
+                  onClick={() => {
+                    setCurrentView('voting');
+                    setActiveTab('audit');
+                  }}
+                  className="hover:text-blue-600 dark:hover:text-white transition-colors"
+                >
+                  Audit Trail
+                </button>
+              </div>
+            ) : currentView === 'voting' ? (
+              <div className="flex items-center space-x-2.5">
+                <button
+                  onClick={() => setCurrentView('portal')}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/[0.1] text-slate-600 dark:text-slate-300 transition-colors"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Hub</span>
+                </button>
+                <span className="text-slate-300 dark:text-white/20 select-none">|</span>
+                <button
+                  onClick={() => setActiveTab('projects')}
+                  className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                    activeTab === 'projects'
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-500'
+                  }`}
+                >
+                  <Flame className="w-3.5 h-3.5" />
+                  <span>Projects ({projectsCount})</span>
+                </button>
+                <span className="text-slate-300 dark:text-white/20 select-none">|</span>
+                <button
+                  onClick={() => setActiveTab('leaderboard')}
+                  className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                    activeTab === 'leaderboard'
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-500'
+                  }`}
+                >
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Leaderboard</span>
+                </button>
+                <span className="text-slate-300 dark:text-white/20 select-none">|</span>
+                <button
+                  onClick={() => setActiveTab('audit')}
+                  className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                    activeTab === 'audit'
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-500'
+                  }`}
+                >
+                  <SearchCode className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Audit</span>
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-3 text-slate-600 dark:text-slate-300">
+                <button
+                  onClick={() => setCurrentView('portal')}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/[0.1] text-slate-600 dark:text-slate-300 transition-colors"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Back to Hub</span>
+                </button>
+                <span className="text-slate-300 dark:text-white/20 select-none">|</span>
+                <span className="font-bold text-emerald-500 flex items-center gap-1.5">
+                  <Code2 className="w-3.5 h-3.5" />
+                  Builder Portal
+                </span>
+                <span className="text-slate-300 dark:text-white/20 select-none">|</span>
+                <button
+                  onClick={() => setCurrentView('voting')}
+                  className="hover:text-blue-600 dark:hover:text-white transition-colors"
+                >
+                  Switch to Voting
+                </button>
+              </div>
+            )}
 
-            <button
-              onClick={() => setActiveTab('leaderboard')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ${
-                activeTab === 'leaderboard'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-[1.02]'
-                  : 'dark:text-slate-300 text-slate-600 hover:text-blue-600 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/[0.05]'
-              }`}
-            >
-              <Trophy className="w-4 h-4 text-amber-400" />
-              <span>Leaderboard</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('audit')}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ${
-                activeTab === 'audit'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-[1.02]'
-                  : 'dark:text-slate-300 text-slate-600 hover:text-blue-600 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/[0.05]'
-              }`}
-            >
-              <SearchCode className="w-4 h-4 text-sky-400" />
-              <span>Audit Ledger</span>
-            </button>
           </nav>
 
-          {/* Action CTAs, Dark/Light Toggle & User Login */}
+          {/* Right Action CTAs & User Controls */}
           <div className="flex items-center space-x-2.5 sm:space-x-3">
             
             {/* Check My Vote Quick Pill */}
             {userVote && onCheckMyVote && (
               <button
                 onClick={onCheckMyVote}
-                className="hidden sm:flex items-center space-x-1.5 px-3 py-2 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-bold transition-all shadow-sm group hover:scale-[1.02]"
+                className="hidden sm:flex items-center space-x-1.5 px-3.5 py-2 rounded-full bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-bold transition-all shadow-sm group hover:scale-105"
                 title="Check Your Verified SEP-53 Vote Receipt"
               >
                 <CheckCircle className="w-3.5 h-3.5 text-blue-500 group-hover:scale-110 transition-transform" />
@@ -176,7 +249,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="relative p-2.5 rounded-2xl dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] border dark:border-white/[0.1] border-slate-200 text-slate-700 dark:text-slate-200 transition-all duration-300 hover:rotate-45"
+              className="p-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] border dark:border-white/[0.1] border-slate-200 text-slate-700 dark:text-slate-200 transition-all duration-300 hover:rotate-45"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-300" />
@@ -185,26 +258,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </button>
 
-            {/* Submit Project CTA */}
-            <button
-              onClick={onOpenSubmit}
-              className="hidden lg:flex items-center space-x-1.5 px-4 py-2.5 rounded-2xl text-xs font-bold dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.1] dark:text-white text-slate-800 border dark:border-white/[0.1] border-slate-200 transition-all hover:scale-[1.02]"
-            >
-              <Plus className="w-4 h-4 text-blue-500" />
-              <span>Submit Project</span>
-            </button>
-
-            {/* User Profile or Connect Button */}
+            {/* User Profile or Connect Button (Ctrl.xyz pill button) */}
             {currentUser ? (
               <div className="relative">
                 <button
                   onClick={() => setShowMenu(!showMenu)}
-                  className="flex items-center space-x-2.5 p-1.5 pl-3 pr-2.5 rounded-2xl dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.1] border dark:border-white/[0.12] border-slate-200 transition-all shadow-sm"
+                  className="flex items-center space-x-2.5 p-1.5 pl-3 pr-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.1] border dark:border-white/[0.12] border-slate-200 transition-all shadow-sm"
                 >
                   <img
                     src={currentUser.avatar}
                     alt={currentUser.name}
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl object-cover ring-2 ring-blue-500/50"
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-blue-500/50"
                   />
                   <div className="text-left hidden sm:block">
                     <p className="text-xs font-bold dark:text-white text-slate-900 leading-tight">
@@ -239,73 +303,35 @@ export const Navbar: React.FC<NavbarProps> = ({
                             className="text-blue-500 hover:text-blue-600 p-1 rounded"
                             title="Copy Wallet Address"
                           >
-                            {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                           </button>
                         </div>
                       </div>
 
-                      {/* Active Vote Banner in Profile */}
-                      {userVote ? (
-                        <div className="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/25 mb-3">
-                          <div className="flex items-center justify-between text-xs text-blue-600 dark:text-blue-400 font-bold mb-1">
-                            <span className="flex items-center gap-1.5">
-                              <CheckCircle className="w-3.5 h-3.5" />
-                              Your Active Vote
-                            </span>
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20">SEP-53</span>
-                          </div>
-                          <p className="font-extrabold text-xs dark:text-white text-slate-900 truncate">{userVote.projectName}</p>
-                          {onCheckMyVote && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setShowMenu(false);
-                                onCheckMyVote();
-                              }}
-                              className="mt-2 w-full py-1.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] shadow-sm transition-all"
-                            >
-                              Check Vote Proof & Receipt
-                            </button>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="p-3 rounded-2xl dark:bg-white/[0.04] bg-slate-50 border dark:border-white/[0.06] border-slate-200 mb-3 text-center">
-                          <p className="text-[11px] dark:text-slate-400 text-slate-500">No active vote cast yet</p>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setShowMenu(false);
-                              setActiveTab('projects');
-                            }}
-                            className="mt-1 text-xs text-blue-500 hover:underline font-bold"
-                          >
-                            Browse Projects to Vote
-                          </button>
-                        </div>
-                      )}
-
-                      <div className="space-y-1">
+                      {userVote && onCheckMyVote && (
                         <button
                           type="button"
                           onClick={() => {
                             setShowMenu(false);
-                            onOpenAuth();
+                            onCheckMyVote();
                           }}
-                          className="w-full flex items-center space-x-2.5 px-3 py-2.5 text-xs font-semibold dark:text-slate-300 text-slate-700 hover:bg-blue-500/10 dark:hover:bg-white/[0.05] rounded-xl transition-colors cursor-pointer"
+                          className="w-full text-left px-3 py-2.5 rounded-2xl text-xs font-bold text-blue-500 dark:hover:bg-blue-950/40 hover:bg-blue-50 flex items-center justify-between mb-1"
                         >
-                          <User className="w-4 h-4 text-blue-500" />
-                          <span>Switch Persona</span>
+                          <span className="flex items-center gap-2">
+                            <CheckCircle className="w-4 h-4" />
+                            View Signed Receipt
+                          </span>
                         </button>
+                      )}
 
-                        <button
-                          type="button"
-                          onClick={handleLogout}
-                          className="w-full flex items-center space-x-2.5 px-3 py-2.5 text-xs font-semibold text-red-500 hover:bg-red-500/10 rounded-xl transition-colors cursor-pointer"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          <span>Disconnect</span>
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="w-full text-left px-3 py-2.5 rounded-2xl text-xs font-bold text-rose-500 dark:hover:bg-rose-950/30 hover:bg-rose-50 flex items-center space-x-2 transition-colors cursor-pointer"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Disconnect Wallet</span>
+                      </button>
                     </div>
                   </>
                 )}
@@ -313,10 +339,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             ) : (
               <button
                 onClick={onOpenAuth}
-                className="shimmer-sweep flex items-center space-x-2 px-4 sm:px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-extrabold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all hover:scale-105 active:scale-95"
+                className="px-5 sm:px-6 py-2.5 rounded-full dark:bg-white bg-slate-950 hover:dark:bg-slate-100 hover:bg-slate-900 dark:text-slate-950 text-white font-bold text-xs sm:text-sm shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
               >
-                <Wallet className="w-4 h-4 fill-white" />
-                <span>Connect Pollar</span>
+                Sign In
               </button>
             )}
 
@@ -324,53 +349,46 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         </div>
 
-        {/* Mobile Submenu Navigation */}
-        <div className="flex md:hidden items-center justify-around py-3 border-t dark:border-white/[0.08] border-slate-200 text-xs font-bold">
+        {/* Mobile Navigation Bar */}
+        <div className="md:hidden flex items-center justify-around py-2.5 border-t dark:border-white/[0.08] border-slate-200/80 text-xs font-bold">
           <button
-            onClick={() => setActiveTab('projects')}
-            className={`flex items-center space-x-1.5 py-1.5 px-3.5 rounded-xl transition-all ${
-              activeTab === 'projects' 
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25' 
-                : 'dark:text-slate-400 text-slate-600'
+            onClick={() => setCurrentView('portal')}
+            className={`py-1.5 px-3 rounded-full transition-all ${
+              currentView === 'portal' ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950' : 'text-slate-600 dark:text-slate-400'
             }`}
           >
-            <Flame className="w-3.5 h-3.5" />
-            <span>Projects ({projectsCount})</span>
+            Portal
           </button>
-          
           <button
-            onClick={() => setActiveTab('leaderboard')}
-            className={`flex items-center space-x-1.5 py-1.5 px-3.5 rounded-xl transition-all ${
-              activeTab === 'leaderboard' 
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25' 
-                : 'dark:text-slate-400 text-slate-600'
+            onClick={() => {
+              setCurrentView('voting');
+              setActiveTab('projects');
+            }}
+            className={`py-1.5 px-3 rounded-full transition-all ${
+              currentView === 'voting' && activeTab === 'projects' ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-400'
             }`}
           >
-            <Trophy className="w-3.5 h-3.5 text-amber-400" />
-            <span>Leaderboard</span>
+            Vote
           </button>
-          
           <button
-            onClick={() => setActiveTab('audit')}
-            className={`flex items-center space-x-1.5 py-1.5 px-3.5 rounded-xl transition-all ${
-              activeTab === 'audit' 
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25' 
-                : 'dark:text-slate-400 text-slate-600'
+            onClick={() => {
+              setCurrentView('voting');
+              setActiveTab('leaderboard');
+            }}
+            className={`py-1.5 px-3 rounded-full transition-all ${
+              currentView === 'voting' && activeTab === 'leaderboard' ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-400'
             }`}
           >
-            <SearchCode className="w-3.5 h-3.5 text-sky-400" />
-            <span>Audit</span>
+            Ranks
           </button>
-
-          {userVote && onCheckMyVote && (
-            <button
-              onClick={onCheckMyVote}
-              className="flex items-center space-x-1 py-1.5 px-2.5 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 font-bold"
-            >
-              <CheckCircle className="w-3.5 h-3.5 text-blue-500" />
-              <span>My Vote</span>
-            </button>
-          )}
+          <button
+            onClick={() => setCurrentView('builder')}
+            className={`py-1.5 px-3 rounded-full transition-all ${
+              currentView === 'builder' ? 'bg-emerald-600 text-white' : 'text-slate-600 dark:text-slate-400'
+            }`}
+          >
+            Submit
+          </button>
         </div>
 
       </div>
