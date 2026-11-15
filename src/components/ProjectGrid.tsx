@@ -21,6 +21,7 @@ interface ProjectGridProps {
   userVote: PublicVote | undefined;
   onSelectProject: (project: Project) => void;
   onInitiateVote: (project: Project) => void;
+  onCheckMyVote?: () => void;
 }
 
 export const ProjectGrid: React.FC<ProjectGridProps> = ({
@@ -29,17 +30,22 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
   userVote,
   onSelectProject,
   onInitiateVote,
+  onCheckMyVote,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTag, setSelectedTag] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'votes' | 'newest'>('votes');
 
-  // Extract all unique tags
+  // Extract all unique tags, including "My Vote" if user has voted
   const allTags = useMemo(() => {
     const set = new Set<string>();
     projects.forEach(p => p.tags.forEach(t => set.add(t)));
-    return ['All', ...Array.from(set)];
-  }, [projects]);
+    const tags = ['All', ...Array.from(set)];
+    if (userVote) {
+      tags.splice(1, 0, 'My Vote');
+    }
+    return tags;
+  }, [projects, userVote]);
 
   // Filter & Sort
   const filteredProjects = useMemo(() => {
@@ -51,7 +57,12 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
           p.teamName.toLowerCase().includes(searchQuery.toLowerCase()) ||
           p.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
 
-        const matchesTag = selectedTag === 'All' || p.tags.includes(selectedTag);
+        const matchesTag = 
+          selectedTag === 'All' 
+            ? true 
+            : selectedTag === 'My Vote' 
+            ? p.id === userVote?.projectId 
+            : p.tags.includes(selectedTag);
 
         return matchesQuery && matchesTag;
       })
@@ -59,7 +70,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
         if (sortBy === 'votes') return b.publicVotesCount - a.publicVotesCount;
         return new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime();
       });
-  }, [projects, searchQuery, selectedTag, sortBy]);
+  }, [projects, searchQuery, selectedTag, sortBy, userVote]);
 
   return (
     <section id="projects-section" className="py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -124,9 +135,9 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
 
       {/* User voting state notification banner if voted */}
       {userVote && (
-        <div className="mb-8 p-4 rounded-3xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-between text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-semibold shadow-sm">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+        <div className="mb-8 p-4 sm:p-5 rounded-3xl bg-blue-500/10 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-semibold shadow-sm">
+          <div className="flex items-center space-x-3.5">
+            <div className="w-9 h-9 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
               <CheckCircle className="w-5 h-5 text-blue-500" />
             </div>
             <div>
@@ -134,10 +145,18 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 You have recorded your SEP-53 verified vote for <strong className="dark:text-white text-slate-900 underline">{userVote.projectName}</strong>.
               </p>
               <p className="text-[11px] dark:text-slate-400 text-slate-500 mt-0.5">
-                Feel free to switch your vote anytime before the hackathon voting window concludes.
+                Feel free to inspect your cryptographic proof or switch your vote before the hackathon closes.
               </p>
             </div>
           </div>
+          {onCheckMyVote && (
+            <button
+              onClick={onCheckMyVote}
+              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md shadow-blue-600/25 transition-all whitespace-nowrap"
+            >
+              Check My Vote Receipt
+            </button>
+          )}
         </div>
       )}
 
@@ -236,7 +255,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </div>
 
                   {/* Actions Bar */}
-                  <div className="pt-4 border-t dark:border-white/[0.06] border-slate-200 flex items-center justify-between gap-3">
+                  <div className="pt-4 border-t dark:border-white/[0.06] border-slate-200 flex items-center justify-between gap-2">
                     <button
                       onClick={() => onSelectProject(project)}
                       className="text-xs font-bold dark:text-slate-300 text-slate-600 hover:text-blue-600 dark:hover:text-white transition-colors px-2 py-1.5"
@@ -244,25 +263,37 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       Pitch & Demo
                     </button>
 
-                    <button
-                      onClick={() => onInitiateVote(project)}
-                      className={`shimmer-sweep flex items-center space-x-2 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-extrabold transition-all duration-200 ${
-                        isUserVotedForThis
-                          ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
-                          : hasUserVotedElsewhere
-                          ? 'dark:bg-white/[0.08] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.14] dark:text-white text-slate-800 border dark:border-white/[0.1] border-slate-300'
-                          : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 hover:scale-105 active:scale-95'
-                      }`}
-                    >
-                      <ShieldCheck className="w-4 h-4" />
-                      <span>
-                        {isUserVotedForThis 
-                          ? 'Voted (Change)' 
-                          : hasUserVotedElsewhere 
-                          ? 'Switch Vote' 
-                          : 'Vote Free'}
-                      </span>
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      {isUserVotedForThis && onCheckMyVote && (
+                        <button
+                          onClick={onCheckMyVote}
+                          className="px-3 py-2 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 text-blue-600 dark:text-blue-400 border border-blue-500/30 text-xs font-bold transition-all shadow-sm"
+                          title="Check Cryptographic Proof"
+                        >
+                          Receipt
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() => onInitiateVote(project)}
+                        className={`shimmer-sweep flex items-center space-x-1.5 px-4 sm:px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-extrabold transition-all duration-200 ${
+                          isUserVotedForThis
+                            ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
+                            : hasUserVotedElsewhere
+                            ? 'dark:bg-white/[0.08] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.14] dark:text-white text-slate-800 border dark:border-white/[0.1] border-slate-300'
+                            : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 hover:scale-105 active:scale-95'
+                        }`}
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        <span>
+                          {isUserVotedForThis 
+                            ? 'Change' 
+                            : hasUserVotedElsewhere 
+                            ? 'Switch Vote' 
+                            : 'Vote Free'}
+                        </span>
+                      </button>
+                    </div>
                   </div>
 
                 </div>

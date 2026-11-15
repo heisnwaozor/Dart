@@ -7,22 +7,30 @@ import {
   ShieldCheck, 
   Sparkles,
   Medal,
-  Award
+  Award,
+  CheckCircle2,
+  CheckCircle
 } from 'lucide-react';
-import { Project, PublicVote } from '../types';
+import { Project, PublicVote, PollarUser } from '../types';
 
 interface LeaderboardProps {
   projects: Project[];
   publicVotes: PublicVote[];
+  currentUser?: PollarUser | null;
+  userVote?: PublicVote;
   onSelectProject: (project: Project) => void;
   onInitiateVote: (project: Project) => void;
+  onCheckMyVote?: () => void;
 }
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({
   projects,
   publicVotes,
+  currentUser,
+  userVote,
   onSelectProject,
   onInitiateVote,
+  onCheckMyVote,
 }) => {
   const sortedProjects = [...projects].sort((a, b) => (b.publicVotesCount || 0) - (a.publicVotesCount || 0));
 
@@ -48,129 +56,206 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
         </p>
       </div>
 
+      {/* User Active Vote Banner in Leaderboard */}
+      {userVote && (
+        <div className="mb-10 p-5 rounded-3xl bg-blue-500/10 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-4xl mx-auto shadow-sm">
+          <div className="flex items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-blue-500/20 text-blue-500 flex items-center justify-center flex-shrink-0">
+              <CheckCircle2 className="w-6 h-6 text-blue-500" />
+            </div>
+            <div>
+              <p className="text-sm font-bold dark:text-white text-slate-900">
+                Your Vote is Live: Supporting <strong className="text-blue-600 dark:text-blue-400 underline">{userVote.projectName}</strong>
+              </p>
+              <p className="text-xs dark:text-slate-400 text-slate-500 mt-0.5">
+                Current Rank: #{sortedProjects.findIndex(p => p.id === userVote.projectId) + 1} with {sortedProjects.find(p => p.id === userVote.projectId)?.publicVotesCount ?? 0} verified votes.
+              </p>
+            </div>
+          </div>
+          {onCheckMyVote && (
+            <button
+              onClick={onCheckMyVote}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all whitespace-nowrap"
+            >
+              Check My Vote Receipt
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Podium for Top 3 */}
       {sortedProjects.length >= 3 && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-end mb-16 pt-8">
           
           {/* 2nd Place */}
-          {top2 && (
-            <div className="order-2 md:order-1 rounded-3xl p-6 sm:p-7 dark:bg-[#0E1527] bg-white border dark:border-slate-700/60 border-slate-300 flex flex-col items-center text-center relative hover:scale-[1.02] transition-all shadow-xl hover:shadow-2xl">
-              <div className="absolute -top-5 w-11 h-11 rounded-2xl bg-gradient-to-tr from-slate-300 to-white text-slate-900 font-black flex items-center justify-center shadow-lg text-sm border-2 border-slate-400">
-                2
-              </div>
-              <img
-                src={top2.coverImage}
-                alt={top2.name}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover mb-4 ring-2 ring-slate-400/50 shadow-md"
-              />
-              <h3 className="text-base sm:text-lg font-bold dark:text-white text-slate-900">{top2.name}</h3>
-              <p className="text-xs dark:text-slate-400 text-slate-500 font-mono mb-4">{top2.teamName}</p>
-              
-              <div className="w-full py-2.5 px-3 rounded-2xl dark:bg-white/[0.04] bg-slate-100 text-xs font-mono font-bold dark:text-slate-200 text-slate-700 mb-5">
-                <span className="flex items-center justify-center gap-1.5 text-blue-500">
-                  <Flame className="w-4 h-4 fill-blue-500" />
-                  {top2.publicVotesCount} Verified Votes
-                </span>
-              </div>
+          {top2 && (() => {
+            const isUserVoteTop2 = userVote?.projectId === top2.id;
+            return (
+              <div className={`order-2 md:order-1 rounded-3xl p-6 sm:p-7 dark:bg-[#0E1527] bg-white border flex flex-col items-center text-center relative hover:scale-[1.02] transition-all shadow-xl hover:shadow-2xl ${
+                isUserVoteTop2 ? 'border-blue-500 ring-2 ring-blue-500/30' : 'dark:border-slate-700/60 border-slate-300'
+              }`}>
+                <div className="absolute -top-5 w-11 h-11 rounded-2xl bg-gradient-to-tr from-slate-300 to-white text-slate-900 font-black flex items-center justify-center shadow-lg text-sm border-2 border-slate-400">
+                  2
+                </div>
 
-              <div className="flex items-center space-x-2.5 w-full">
-                <button
-                  onClick={() => onSelectProject(top2)}
-                  className="flex-1 py-2.5 rounded-xl dark:bg-white/[0.08] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.14] text-xs font-bold dark:text-slate-200 text-slate-700 transition-colors"
-                >
-                  View Details
-                </button>
-                <button
-                  onClick={() => onInitiateVote(top2)}
-                  className="flex-1 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-colors shadow-md shadow-blue-600/20"
-                >
-                  Vote
-                </button>
+                {isUserVoteTop2 && (
+                  <span className="absolute top-3 right-3 text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-blue-600 text-white font-black flex items-center gap-1 shadow-md animate-pulse">
+                    <CheckCircle className="w-3 h-3" />
+                    YOUR VOTE
+                  </span>
+                )}
+
+                <img
+                  src={top2.coverImage}
+                  alt={top2.name}
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover mb-4 ring-2 ring-slate-400/50 shadow-md"
+                />
+                <h3 className="text-base sm:text-lg font-bold dark:text-white text-slate-900">{top2.name}</h3>
+                <p className="text-xs dark:text-slate-400 text-slate-500 font-mono mb-4">{top2.teamName}</p>
+                
+                <div className="w-full py-2.5 px-3 rounded-2xl dark:bg-white/[0.04] bg-slate-100 text-xs font-mono font-bold dark:text-slate-200 text-slate-700 mb-5">
+                  <span className="flex items-center justify-center gap-1.5 text-blue-500">
+                    <Flame className="w-4 h-4 fill-blue-500" />
+                    {top2.publicVotesCount} Verified Votes
+                  </span>
+                </div>
+
+                <div className="flex items-center space-x-2.5 w-full">
+                  <button
+                    onClick={() => onSelectProject(top2)}
+                    className="flex-1 py-2.5 rounded-xl dark:bg-white/[0.08] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.14] text-xs font-bold dark:text-slate-200 text-slate-700 transition-colors"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => isUserVoteTop2 && onCheckMyVote ? onCheckMyVote() : onInitiateVote(top2)}
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-colors shadow-md ${
+                      isUserVoteTop2
+                        ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
+                        : 'bg-blue-600 text-white hover:bg-blue-500 shadow-blue-600/20'
+                    }`}
+                  >
+                    {isUserVoteTop2 ? 'Your Pick' : 'Vote'}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* 1st Place (Center, Elevated) */}
-          {top1 && (
-            <div className="order-1 md:order-2 rounded-3xl p-7 sm:p-9 dark:bg-gradient-to-b dark:from-[#131D38] dark:to-[#0E1527] bg-white border-2 border-blue-500 shadow-2xl shadow-blue-500/20 flex flex-col items-center text-center relative -translate-y-4 hover:scale-[1.02] transition-all duration-300">
-              <div className="absolute -top-7 w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 via-yellow-300 to-white text-slate-900 font-black flex items-center justify-center shadow-xl text-lg border-2 border-white animate-float">
-                <Crown className="w-7 h-7 fill-slate-900 text-slate-900" />
-              </div>
+          {top1 && (() => {
+            const isUserVoteTop1 = userVote?.projectId === top1.id;
+            return (
+              <div className={`order-1 md:order-2 rounded-3xl p-7 sm:p-9 dark:bg-gradient-to-b dark:from-[#131D38] dark:to-[#0E1527] bg-white border-2 shadow-2xl flex flex-col items-center text-center relative -translate-y-4 hover:scale-[1.02] transition-all duration-300 ${
+                isUserVoteTop1 ? 'border-blue-400 ring-4 ring-blue-500/30 shadow-blue-500/35' : 'border-blue-500 shadow-blue-500/20'
+              }`}>
+                <div className="absolute -top-7 w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 via-yellow-300 to-white text-slate-900 font-black flex items-center justify-center shadow-xl text-lg border-2 border-white animate-float">
+                  <Crown className="w-7 h-7 fill-slate-900 text-slate-900" />
+                </div>
 
-              <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-500 text-[11px] font-mono font-bold mb-4">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>FIRST PLACE • LEADER</span>
-              </div>
+                <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-500 text-[11px] font-mono font-bold mb-4">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>FIRST PLACE • LEADER</span>
+                </div>
 
-              <img
-                src={top1.coverImage}
-                alt={top1.name}
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover mb-4 ring-4 ring-blue-500/50 shadow-2xl"
-              />
-              <h3 className="text-xl sm:text-2xl font-black dark:text-white text-slate-900 mb-1">{top1.name}</h3>
-              <p className="text-xs dark:text-slate-300 text-slate-600 font-mono mb-5">{top1.teamName}</p>
-              
-              <div className="w-full py-3 px-4 rounded-2xl bg-blue-500/15 border border-blue-500/30 text-sm font-mono font-black text-blue-600 dark:text-blue-400 mb-6 shadow-inner">
-                <span className="flex items-center justify-center gap-2">
-                  <Flame className="w-5 h-5 fill-current animate-bounce" />
-                  {top1.publicVotesCount} Verified Votes ({Math.round((top1.publicVotesCount / totalVotesAcrossAll) * 100)}%)
-                </span>
-              </div>
+                {isUserVoteTop1 && (
+                  <span className="absolute top-4 right-4 text-[10px] font-mono px-3 py-1 rounded-full bg-blue-600 text-white font-black flex items-center gap-1 shadow-lg animate-pulse">
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    YOUR VOTE
+                  </span>
+                )}
 
-              <div className="flex items-center space-x-3 w-full">
-                <button
-                  onClick={() => onSelectProject(top1)}
-                  className="flex-1 py-3 rounded-2xl dark:bg-white/[0.1] bg-slate-100 dark:text-white text-slate-800 hover:bg-slate-200 dark:hover:bg-white/[0.16] text-xs sm:text-sm font-bold transition-colors"
-                >
-                  View Pitch
-                </button>
-                <button
-                  onClick={() => onInitiateVote(top1)}
-                  className="shimmer-sweep flex-1 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-blue-600/35 transition-all"
-                >
-                  Vote for #1
-                </button>
+                <img
+                  src={top1.coverImage}
+                  alt={top1.name}
+                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover mb-4 ring-4 ring-blue-500/50 shadow-2xl"
+                />
+                <h3 className="text-xl sm:text-2xl font-black dark:text-white text-slate-900 mb-1">{top1.name}</h3>
+                <p className="text-xs dark:text-slate-300 text-slate-600 font-mono mb-5">{top1.teamName}</p>
+                
+                <div className="w-full py-3 px-4 rounded-2xl bg-blue-500/15 border border-blue-500/30 text-sm font-mono font-black text-blue-600 dark:text-blue-400 mb-6 shadow-inner">
+                  <span className="flex items-center justify-center gap-2">
+                    <Flame className="w-5 h-5 fill-current animate-bounce" />
+                    {top1.publicVotesCount} Verified Votes ({Math.round((top1.publicVotesCount / totalVotesAcrossAll) * 100)}%)
+                  </span>
+                </div>
+
+                <div className="flex items-center space-x-3 w-full">
+                  <button
+                    onClick={() => onSelectProject(top1)}
+                    className="flex-1 py-3 rounded-2xl dark:bg-white/[0.1] bg-slate-100 dark:text-white text-slate-800 hover:bg-slate-200 dark:hover:bg-white/[0.16] text-xs sm:text-sm font-bold transition-colors"
+                  >
+                    View Pitch
+                  </button>
+                  <button
+                    onClick={() => isUserVoteTop1 && onCheckMyVote ? onCheckMyVote() : onInitiateVote(top1)}
+                    className={`shimmer-sweep flex-1 py-3 rounded-2xl text-xs sm:text-sm font-extrabold shadow-lg transition-all ${
+                      isUserVoteTop1
+                        ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
+                        : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/35'
+                    }`}
+                  >
+                    {isUserVoteTop1 ? 'Your Pick (#1)' : 'Vote for #1'}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* 3rd Place */}
-          {top3 && (
-            <div className="order-3 md:order-3 rounded-3xl p-6 sm:p-7 dark:bg-[#0E1527] bg-white border dark:border-amber-900/40 border-amber-200 flex flex-col items-center text-center relative hover:scale-[1.02] transition-all shadow-xl hover:shadow-2xl">
-              <div className="absolute -top-5 w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-600 to-amber-400 text-white font-black flex items-center justify-center shadow-lg text-sm border-2 border-white">
-                3
-              </div>
-              <img
-                src={top3.coverImage}
-                alt={top3.name}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover mb-4 ring-2 ring-amber-600/50 shadow-md"
-              />
-              <h3 className="text-base sm:text-lg font-bold dark:text-white text-slate-900">{top3.name}</h3>
-              <p className="text-xs dark:text-slate-400 text-slate-500 font-mono mb-4">{top3.teamName}</p>
-              
-              <div className="w-full py-2.5 px-3 rounded-2xl dark:bg-white/[0.04] bg-slate-100 text-xs font-mono font-bold dark:text-slate-200 text-slate-700 mb-5">
-                <span className="flex items-center justify-center gap-1.5 text-amber-500">
-                  <Flame className="w-4 h-4 fill-amber-500" />
-                  {top3.publicVotesCount} Verified Votes
-                </span>
-              </div>
+          {top3 && (() => {
+            const isUserVoteTop3 = userVote?.projectId === top3.id;
+            return (
+              <div className={`order-3 md:order-3 rounded-3xl p-6 sm:p-7 dark:bg-[#0E1527] bg-white border flex flex-col items-center text-center relative hover:scale-[1.02] transition-all shadow-xl hover:shadow-2xl ${
+                isUserVoteTop3 ? 'border-blue-500 ring-2 ring-blue-500/30' : 'dark:border-amber-900/40 border-amber-200'
+              }`}>
+                <div className="absolute -top-5 w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-600 to-amber-400 text-white font-black flex items-center justify-center shadow-lg text-sm border-2 border-white">
+                  3
+                </div>
 
-              <div className="flex items-center space-x-2.5 w-full">
-                <button
-                  onClick={() => onSelectProject(top3)}
-                  className="flex-1 py-2.5 rounded-xl dark:bg-white/[0.08] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.14] text-xs font-bold dark:text-slate-200 text-slate-700 transition-colors"
-                >
-                  View Details
-                </button>
-                <button
-                  onClick={() => onInitiateVote(top3)}
-                  className="flex-1 py-2.5 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-500 transition-colors shadow-md shadow-amber-600/20"
-                >
-                  Vote
-                </button>
+                {isUserVoteTop3 && (
+                  <span className="absolute top-3 right-3 text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-blue-600 text-white font-black flex items-center gap-1 shadow-md animate-pulse">
+                    <CheckCircle className="w-3 h-3" />
+                    YOUR VOTE
+                  </span>
+                )}
+
+                <img
+                  src={top3.coverImage}
+                  alt={top3.name}
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover mb-4 ring-2 ring-amber-600/50 shadow-md"
+                />
+                <h3 className="text-base sm:text-lg font-bold dark:text-white text-slate-900">{top3.name}</h3>
+                <p className="text-xs dark:text-slate-400 text-slate-500 font-mono mb-4">{top3.teamName}</p>
+                
+                <div className="w-full py-2.5 px-3 rounded-2xl dark:bg-white/[0.04] bg-slate-100 text-xs font-mono font-bold dark:text-slate-200 text-slate-700 mb-5">
+                  <span className="flex items-center justify-center gap-1.5 text-amber-500">
+                    <Flame className="w-4 h-4 fill-amber-500" />
+                    {top3.publicVotesCount} Verified Votes
+                  </span>
+                </div>
+
+                <div className="flex items-center space-x-2.5 w-full">
+                  <button
+                    onClick={() => onSelectProject(top3)}
+                    className="flex-1 py-2.5 rounded-xl dark:bg-white/[0.08] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.14] text-xs font-bold dark:text-slate-200 text-slate-700 transition-colors"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => isUserVoteTop3 && onCheckMyVote ? onCheckMyVote() : onInitiateVote(top3)}
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-colors shadow-md ${
+                      isUserVoteTop3
+                        ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
+                        : 'bg-amber-600 text-white hover:bg-amber-500 shadow-amber-600/20'
+                    }`}
+                  >
+                    {isUserVoteTop3 ? 'Your Pick' : 'Vote'}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
         </div>
       )}
@@ -189,11 +274,16 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
         <div className="divide-y dark:divide-white/[0.06] divide-slate-100">
           {sortedProjects.map((project, index) => {
             const votePercent = Math.min(100, Math.round(((project.publicVotesCount || 0) / totalVotesAcrossAll) * 100));
+            const isVoted = userVote?.projectId === project.id;
 
             return (
               <div
                 key={project.id}
-                className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 dark:hover:bg-white/[0.02] hover:bg-slate-50 transition-colors"
+                className={`p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors ${
+                  isVoted
+                    ? 'dark:bg-blue-950/25 bg-blue-50/70 border-l-4 border-l-blue-500'
+                    : 'dark:hover:bg-white/[0.02] hover:bg-slate-50'
+                }`}
               >
                 <div className="flex items-center space-x-4">
                   <span className={`w-8 font-mono text-center font-extrabold text-sm ${
@@ -205,19 +295,29 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                   <img
                     src={project.coverImage}
                     alt={project.name}
-                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover cursor-pointer hover:scale-105 transition-transform"
+                    className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover cursor-pointer hover:scale-105 transition-transform ${
+                      isVoted ? 'ring-2 ring-blue-500' : ''
+                    }`}
                     onClick={() => onSelectProject(project)}
                   />
 
                   <div>
-                    <h5 
-                      onClick={() => onSelectProject(project)}
-                      className="text-sm sm:text-base font-bold dark:text-white text-slate-900 hover:text-blue-500 cursor-pointer flex items-center gap-1.5"
-                    >
-                      {project.name}
-                      <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
-                    </h5>
-                    <p className="text-xs dark:text-slate-400 text-slate-500 font-mono">
+                    <div className="flex items-center gap-2">
+                      <h5 
+                        onClick={() => onSelectProject(project)}
+                        className="text-sm sm:text-base font-bold dark:text-white text-slate-900 hover:text-blue-500 cursor-pointer flex items-center gap-1.5"
+                      >
+                        {project.name}
+                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
+                      </h5>
+                      {isVoted && (
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-black flex items-center gap-1 shadow-sm">
+                          <CheckCircle className="w-3 h-3" />
+                          YOUR VOTE
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs dark:text-slate-400 text-slate-500 font-mono mt-0.5">
                       {project.teamName} • {project.tags.slice(0, 2).join(', ')}
                     </p>
                   </div>
@@ -240,10 +340,14 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                   </div>
 
                   <button
-                    onClick={() => onInitiateVote(project)}
-                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-bold transition-all shadow-md shadow-blue-600/20 active:scale-95"
+                    onClick={() => isVoted && onCheckMyVote ? onCheckMyVote() : onInitiateVote(project)}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all shadow-md active:scale-95 whitespace-nowrap ${
+                      isVoted
+                        ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
+                        : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'
+                    }`}
                   >
-                    Vote
+                    {isVoted ? 'Your Pick' : 'Vote'}
                   </button>
                 </div>
               </div>

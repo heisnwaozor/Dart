@@ -24,6 +24,8 @@ interface VoteModalProps {
   onClose: () => void;
   onOpenAuth: () => void;
   onSuccess: () => void;
+  onViewLeaderboard?: () => void;
+  onViewReceipt?: () => void;
 }
 
 export const VoteModal: React.FC<VoteModalProps> = ({
@@ -33,6 +35,8 @@ export const VoteModal: React.FC<VoteModalProps> = ({
   onClose,
   onOpenAuth,
   onSuccess,
+  onViewLeaderboard,
+  onViewReceipt,
 }) => {
   const [step, setStep] = useState<'review' | 'signing' | 'confirmed'>('review');
   const [structuredMessage, setStructuredMessage] = useState('');
@@ -167,6 +171,19 @@ export const VoteModal: React.FC<VoteModalProps> = ({
             /* Review Payload Step */
             <div className="space-y-4">
               
+              {/* Vote Selection Status Notice */}
+              {currentVote && (
+                currentVote.projectId === project.id ? (
+                  <div className="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/25 text-xs text-blue-600 dark:text-blue-400 font-medium">
+                    <strong>Active Pick:</strong> You have already recorded a vote for this project. Re-signing will update your cryptographic timestamp.
+                  </div>
+                ) : (
+                  <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-xs text-amber-600 dark:text-amber-400 font-medium">
+                    <strong>Switching Pick:</strong> Your vote will be reassigned from <strong>{currentVote.projectName}</strong> to <strong>{project.name}</strong> upon signature.
+                  </div>
+                )
+              )}
+
               {/* Voter Identity Callout */}
               <div className="flex items-center justify-between px-4 py-2.5 rounded-2xl dark:bg-white/[0.04] bg-slate-50 border dark:border-white/[0.06] border-slate-200 text-xs">
                 <div className="flex items-center space-x-2.5">
@@ -279,12 +296,28 @@ export const VoteModal: React.FC<VoteModalProps> = ({
         {/* Footer Actions */}
         <div className="p-5 sm:p-6 border-t dark:border-white/[0.08] border-slate-200 dark:bg-black/40 bg-slate-50 flex items-center justify-end space-x-3">
           {step === 'confirmed' ? (
-            <button
-              onClick={onClose}
-              className="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-sm shadow-xl shadow-blue-600/30 hover:scale-[1.02] transition-all"
-            >
-              Done & View Leaderboard
-            </button>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full">
+              {onViewReceipt && (
+                <button
+                  onClick={() => {
+                    onClose();
+                    onViewReceipt();
+                  }}
+                  className="w-full sm:flex-1 py-3.5 rounded-2xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/30 text-blue-600 dark:text-blue-400 font-extrabold text-xs transition-all shadow-sm"
+                >
+                  Check My Vote Receipt
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  onClose();
+                  if (onViewLeaderboard) onViewLeaderboard();
+                }}
+                className="w-full sm:flex-1 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-xl shadow-blue-600/30 hover:scale-[1.02] transition-all"
+              >
+                Done & View Leaderboard
+              </button>
+            </div>
           ) : step === 'review' && currentUser ? (
             <>
               <button

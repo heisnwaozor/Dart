@@ -12,9 +12,11 @@ import {
   Sun,
   Moon,
   User,
-  Zap
+  Zap,
+  CheckCircle,
+  ShieldCheck
 } from 'lucide-react';
-import { PollarUser } from '../types';
+import { PollarUser, PublicVote } from '../types';
 import { PollarClientService } from '../lib/pollar';
 import { useTheme } from '../context/ThemeContext';
 import { DartLogo } from './DartLogo';
@@ -24,18 +26,22 @@ interface NavbarProps {
   activeTab: 'projects' | 'leaderboard' | 'audit';
   setActiveTab: (tab: 'projects' | 'leaderboard' | 'audit') => void;
   currentUser: PollarUser | null;
+  userVote?: PublicVote;
   projectsCount: number;
   onOpenSubmit: () => void;
   onOpenAuth: () => void;
+  onCheckMyVote?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
   currentUser,
+  userVote,
   projectsCount,
   onOpenSubmit,
   onOpenAuth,
+  onCheckMyVote,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -162,6 +168,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Action CTAs, Dark/Light Toggle & User Login */}
           <div className="flex items-center space-x-2.5 sm:space-x-3">
             
+            {/* Check My Vote Quick Pill */}
+            {userVote && onCheckMyVote && (
+              <button
+                onClick={onCheckMyVote}
+                className="hidden sm:flex items-center space-x-1.5 px-3 py-2 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-bold transition-all shadow-sm group hover:scale-[1.02]"
+                title="Check Your Verified SEP-53 Vote Receipt"
+              >
+                <CheckCircle className="w-3.5 h-3.5 text-blue-500 group-hover:scale-110 transition-transform" />
+                <span className="max-w-[120px] md:max-w-[160px] truncate">My Vote: {userVote.projectName}</span>
+              </button>
+            )}
+
             {/* Dark / Light Mode Switcher */}
             <button
               onClick={toggleTheme}
@@ -233,6 +251,46 @@ export const Navbar: React.FC<NavbarProps> = ({
                           </button>
                         </div>
                       </div>
+
+                      {/* Active Vote Banner in Profile */}
+                      {userVote ? (
+                        <div className="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/25 mb-3">
+                          <div className="flex items-center justify-between text-xs text-blue-600 dark:text-blue-400 font-bold mb-1">
+                            <span className="flex items-center gap-1.5">
+                              <CheckCircle className="w-3.5 h-3.5" />
+                              Your Active Vote
+                            </span>
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20">SEP-53</span>
+                          </div>
+                          <p className="font-extrabold text-xs dark:text-white text-slate-900 truncate">{userVote.projectName}</p>
+                          {onCheckMyVote && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowMenu(false);
+                                onCheckMyVote();
+                              }}
+                              className="mt-2 w-full py-1.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] shadow-sm transition-all"
+                            >
+                              Check Vote Proof & Receipt
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="p-3 rounded-2xl dark:bg-white/[0.04] bg-slate-50 border dark:border-white/[0.06] border-slate-200 mb-3 text-center">
+                          <p className="text-[11px] dark:text-slate-400 text-slate-500">No active vote cast yet</p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowMenu(false);
+                              setActiveTab('projects');
+                            }}
+                            className="mt-1 text-xs text-blue-500 hover:underline font-bold"
+                          >
+                            Browse Projects to Vote
+                          </button>
+                        </div>
+                      )}
 
                       <div className="space-y-1">
                         <button
@@ -311,6 +369,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             <SearchCode className="w-3.5 h-3.5 text-sky-400" />
             <span>Audit</span>
           </button>
+
+          {userVote && onCheckMyVote && (
+            <button
+              onClick={onCheckMyVote}
+              className="flex items-center space-x-1 py-1.5 px-2.5 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 font-bold"
+            >
+              <CheckCircle className="w-3.5 h-3.5 text-blue-500" />
+              <span>My Vote</span>
+            </button>
+          )}
         </div>
 
       </div>

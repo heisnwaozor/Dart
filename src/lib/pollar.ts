@@ -141,9 +141,11 @@ export class PollarClientService {
     localStorage.setItem(this.STORAGE_KEY_VOTES, JSON.stringify(votes));
   }
 
-  public static getUserActiveVote(walletAddress: string): PublicVote | undefined {
+  public static getUserActiveVote(walletAddress?: string): PublicVote | undefined {
+    if (!walletAddress) return undefined;
+    const clean = walletAddress.trim().toLowerCase();
     const votes = this.getPublicVotes();
-    return votes.find(v => v.voterWallet === walletAddress);
+    return votes.find(v => (v.voterWallet || '').trim().toLowerCase() === clean);
   }
 
   /**
@@ -216,7 +218,8 @@ export class PollarClientService {
     proof: SignatureProof
   ): { success: boolean; vote: PublicVote; message: string } {
     const votes = this.getPublicVotes();
-    const existingIndex = votes.findIndex(v => v.voterWallet === user.walletAddress);
+    const cleanWallet = (user.walletAddress || '').trim().toLowerCase();
+    const existingIndex = votes.findIndex(v => (v.voterWallet || '').trim().toLowerCase() === cleanWallet);
     const existingVote = existingIndex >= 0 ? votes[existingIndex] : null;
 
     const voteRecord: PublicVote = {

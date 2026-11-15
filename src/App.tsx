@@ -8,6 +8,7 @@ import { VoteModal } from './components/VoteModal';
 import { ProjectDetailModal } from './components/ProjectDetailModal';
 import { SubmitProjectModal } from './components/SubmitProjectModal';
 import { PollarAuthModal } from './components/PollarAuthModal';
+import { VoteReceiptModal } from './components/VoteReceiptModal';
 import { Project, PublicVote, PollarUser } from './types';
 import { PollarClientService } from './lib/pollar';
 import { INITIAL_HACKATHON } from './data/mockData';
@@ -27,6 +28,7 @@ const MainApp: React.FC = () => {
   const [inspectingProject, setInspectingProject] = useState<Project | null>(null);
   const [isSubmitOpen, setIsSubmitOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isReceiptOpen, setIsReceiptOpen] = useState(false);
 
   // Sync state on events
   useEffect(() => {
@@ -37,6 +39,7 @@ const MainApp: React.FC = () => {
 
     const handleAuthChange = () => {
       setCurrentUser(PollarClientService.getActiveUser());
+      setPublicVotes(PollarClientService.getPublicVotes());
     };
 
     window.addEventListener('pollar_data_changed', handleDataChange);
@@ -49,7 +52,11 @@ const MainApp: React.FC = () => {
   }, []);
 
   const activeUserVote = currentUser 
-    ? publicVotes.find(v => v.voterWallet === currentUser.walletAddress)
+    ? publicVotes.find(v => (v.voterWallet || '').trim().toLowerCase() === (currentUser.walletAddress || '').trim().toLowerCase())
+    : undefined;
+
+  const activeVotedProject = activeUserVote
+    ? projects.find(p => p.id === activeUserVote.projectId)
     : undefined;
 
   const totalVotesCount = projects.reduce((sum, p) => sum + (p.publicVotesCount || 0), 0);
@@ -72,9 +79,11 @@ const MainApp: React.FC = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         currentUser={currentUser}
+        userVote={activeUserVote}
         projectsCount={projects.length}
         onOpenSubmit={() => setIsSubmitOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
+        onCheckMyVote={() => setIsReceiptOpen(true)}
       />
 
       {/* Main Content View */}
@@ -98,6 +107,7 @@ const MainApp: React.FC = () => {
               userVote={activeUserVote}
               onSelectProject={project => setInspectingProject(project)}
               onInitiateVote={project => setVotingProject(project)}
+              onCheckMyVote={() => setIsReceiptOpen(true)}
             />
           </>
         )}
@@ -106,13 +116,20 @@ const MainApp: React.FC = () => {
           <Leaderboard
             projects={projects}
             publicVotes={publicVotes}
+            currentUser={currentUser}
+            userVote={activeUserVote}
             onSelectProject={project => setInspectingProject(project)}
             onInitiateVote={project => setVotingProject(project)}
+            onCheckMyVote={() => setIsReceiptOpen(true)}
           />
         )}
 
         {activeTab === 'audit' && (
-          <AuditExplorer votes={publicVotes} />
+          <AuditExplorer 
+            votes={publicVotes}
+            currentUser={currentUser}
+            userVote={activeUserVote}
+          />
         )}
       </main>
 
@@ -183,6 +200,8 @@ const MainApp: React.FC = () => {
           setProjects(PollarClientService.getProjects());
           setPublicVotes(PollarClientService.getPublicVotes());
         }}
+        onViewLeaderboard={() => setActiveTab('leaderboard')}
+        onViewReceipt={() => setIsReceiptOpen(true)}
       />
 
       <ProjectDetailModal
@@ -191,7 +210,27 @@ const MainApp: React.FC = () => {
         userVote={activeUserVote}
         onClose={() => setInspectingProject(null)}
         onInitiateVote={project => setVotingProject(project)}
+        onCheckMyVote={() => setIsReceiptOpen(true)}
       />
+
+      {isReceiptOpen && activeUserVote && (
+        <VoteReceiptModal
+          vote={activeUserVote}
+          project={activeVotedProject}
+          currentUser={currentUser}
+          onClose={() => setIsReceiptOpen(false)}
+          onChangeVote={() => {
+            setIsReceiptOpen(false);
+            setActiveTab('projects');
+            const el = document.getElementById('projects-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+          onViewAuditLedger={() => {
+            setIsReceiptOpen(false);
+            setActiveTab('audit');
+          }}
+        />
+      )}
 
       {isSubmitOpen && (
         <SubmitProjectModal

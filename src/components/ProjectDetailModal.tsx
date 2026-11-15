@@ -4,7 +4,9 @@ import {
   ExternalLink, 
   ShieldCheck, 
   Flame, 
-  Code2
+  Code2,
+  CheckCircle2,
+  CheckCircle
 } from 'lucide-react';
 import { Project, PollarUser, PublicVote } from '../types';
 
@@ -14,6 +16,7 @@ interface ProjectDetailModalProps {
   userVote: PublicVote | undefined;
   onClose: () => void;
   onInitiateVote: (project: Project) => void;
+  onCheckMyVote?: () => void;
 }
 
 export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
@@ -22,6 +25,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
   userVote,
   onClose,
   onInitiateVote,
+  onCheckMyVote,
 }) => {
   if (!project) return null;
 
@@ -77,6 +81,36 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
         {/* Content Body */}
         <div className="p-6 sm:p-8 space-y-6 overflow-y-auto flex-1">
           
+          {/* User Active Vote Spotlight if voted for this project */}
+          {isUserVotedForThis && userVote && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-500 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 className="w-6 h-6 text-blue-500" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold dark:text-white text-slate-900">
+                    You Voted For This Project!
+                  </p>
+                  <p className="text-xs font-mono dark:text-slate-400 text-slate-500 mt-0.5">
+                    Stellar SEP-53 Verified • Recorded at {new Date(userVote.votedAt).toLocaleTimeString()}
+                  </p>
+                </div>
+              </div>
+              {onCheckMyVote && (
+                <button
+                  onClick={() => {
+                    onClose();
+                    onCheckMyVote();
+                  }}
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all whitespace-nowrap"
+                >
+                  View Full Receipt
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Quick Stats & Action Ribbon */}
           <div className="p-4 rounded-2xl dark:bg-white/[0.03] bg-slate-50 border dark:border-white/[0.06] border-slate-200 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center space-x-2 text-xs font-mono">
@@ -106,20 +140,29 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                 <span>GitHub</span>
               </a>
 
-              <button
-                onClick={() => {
-                  onClose();
-                  onInitiateVote(project);
-                }}
-                className={`shimmer-sweep flex items-center space-x-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold transition-all ${
-                  isUserVotedForThis
-                    ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40'
-                    : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 hover:scale-105'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4" />
-                <span>{isUserVotedForThis ? 'You Voted For This' : 'Cast Vote (SEP-53)'}</span>
-              </button>
+              {isUserVotedForThis && onCheckMyVote ? (
+                <button
+                  onClick={() => {
+                    onClose();
+                    onCheckMyVote();
+                  }}
+                  className="flex items-center space-x-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30 transition-all"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Check Receipt</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    onClose();
+                    onInitiateVote(project);
+                  }}
+                  className="shimmer-sweep flex items-center space-x-2 px-5 py-2.5 rounded-2xl text-xs font-extrabold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 hover:scale-105 transition-all"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Cast Vote (SEP-53)</span>
+                </button>
+              )}
             </div>
           </div>
 

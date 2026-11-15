@@ -11,24 +11,45 @@ import {
   Search,
   ExternalLink
 } from 'lucide-react';
-import { PublicVote } from '../types';
+import { PublicVote, PollarUser } from '../types';
 import { PollarClientService } from '../lib/pollar';
 
 interface AuditExplorerProps {
   votes: PublicVote[];
+  currentUser?: PollarUser | null;
+  userVote?: PublicVote;
 }
 
-export const AuditExplorer: React.FC<AuditExplorerProps> = ({ votes }) => {
+export const AuditExplorer: React.FC<AuditExplorerProps> = ({ 
+  votes,
+  currentUser,
+  userVote,
+}) => {
   const [search, setSearch] = useState('');
+  const [scope, setScope] = useState<'all' | 'my'>('all');
   const [selectedVote, setSelectedVote] = useState<PublicVote | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const filteredVotes = votes.filter(v => 
-    v.projectName.toLowerCase().includes(search.toLowerCase()) ||
-    v.voterWallet.toLowerCase().includes(search.toLowerCase()) ||
-    v.voterName.toLowerCase().includes(search.toLowerCase()) ||
-    v.signature.toLowerCase().includes(search.toLowerCase())
-  );
+  const cleanUserWallet = (currentUser?.walletAddress || userVote?.voterWallet || '').trim().toLowerCase();
+
+  const filteredVotes = votes
+    .filter(v => {
+      if (scope === 'my') {
+        const matchesWallet = cleanUserWallet && (v.voterWallet || '').trim().toLowerCase() === cleanUserWallet;
+        const matchesId = userVote && v.id === userVote.id;
+        if (!matchesWallet && !matchesId) return false;
+      }
+
+      if (!search.trim()) return true;
+
+      const q = search.toLowerCase();
+      return (
+        v.projectName.toLowerCase().includes(q) ||
+        v.voterWallet.toLowerCase().includes(q) ||
+        v.voterName.toLowerCase().includes(q) ||
+        v.signature.toLowerCase().includes(q)
+      );
+    });
 
   const copyText = (txt: string) => {
     navigator.clipboard.writeText(txt);
@@ -99,16 +120,70 @@ export const AuditExplorer: React.FC<AuditExplorerProps> = ({ votes }) => {
         </div>
       </div>
 
-      {/* Search Bar */}
-      <div className="mb-6 relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Filter audit log by project, voter name, Stellar wallet address, or signature hash..."
-          className="w-full pl-11 pr-4 py-3.5 rounded-2xl dark:bg-[#0E1527] bg-white border dark:border-white/[0.1] border-slate-200 text-xs dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-all font-mono shadow-sm"
-        />
+      {/* User Active Vote Banner in Audit Explorer */}
+      {userVote && (
+        <div className="mb-6 p-4 sm:p-5 rounded-3xl bg-blue-500/10 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+          <div className="flex items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-blue-500/20 text-blue-500 flex items-center justify-center flex-shrink-0">
+              <CheckCircle2 className="w-5 h-5 text-blue-500" />
+            </div>
+            <div>
+              <p className="text-sm font-bold dark:text-white text-slate-900">
+                Your Vote: <strong className="text-blue-600 dark:text-blue-400 underline">{userVote.projectName}</strong>
+              </p>
+              <p className="text-xs font-mono dark:text-slate-400 text-slate-500 mt-0.5 truncate max-w-lg">
+                Signer: {userVote.voterWallet}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setSelectedVote(userVote)}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all whitespace-nowrap"
+          >
+            Inspect My Proof
+          </button>
+        </div>
+      )}
+
+      {/* Scope Controls & Search Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 mb-6">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setScope('all')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              scope === 'all'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
+                : 'dark:bg-white/[0.04] bg-slate-100 dark:text-slate-300 text-slate-600 hover:text-blue-600'
+            }`}
+          >
+            All Ledger Proofs ({votes.length})
+          </button>
+          {userVote && (
+            <button
+              onClick={() => setScope('my')}
+              className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                scope === 'my'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
+                  : 'dark:bg-white/[0.04] bg-slate-100 text-blue-500 hover:bg-blue-500/10'
+              }`}
+            >
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>My Verified Vote (1)</span>
+            </button>
+          )}
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search by project, wallet, or voter name..."
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl dark:bg-[#0E1527] bg-white border dark:border-white/[0.1] border-slate-200 text-xs dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-all font-mono shadow-sm"
+          />
+        </div>
       </div>
 
       {/* Table of Votes */}
@@ -125,58 +200,85 @@ export const AuditExplorer: React.FC<AuditExplorerProps> = ({ votes }) => {
               </tr>
             </thead>
             <tbody className="divide-y dark:divide-white/[0.04] divide-slate-100 font-mono">
-              {filteredVotes.map(vote => (
-                <tr key={vote.id} className="dark:hover:bg-white/[0.02] hover:bg-slate-50 transition-colors">
-                  
-                  {/* Project Name */}
-                  <td className="py-4 px-4 sm:px-6 font-sans font-bold dark:text-white text-slate-900 whitespace-nowrap">
-                    {vote.projectName}
-                  </td>
+              {filteredVotes.map(vote => {
+                const isMyVote = (userVote && (vote.id === userVote.id || (vote.voterWallet || '').toLowerCase() === userVote.voterWallet.toLowerCase())) || (cleanUserWallet && (vote.voterWallet || '').toLowerCase() === cleanUserWallet);
 
-                  {/* Voter */}
-                  <td className="py-4 px-4 sm:px-6 whitespace-nowrap font-sans">
-                    <div className="flex items-center space-x-2">
-                      {vote.voterAvatar && (
-                        <img
-                          src={vote.voterAvatar}
-                          alt={vote.voterName}
-                          className="w-6 h-6 rounded-full object-cover ring-1 ring-blue-500"
-                        />
-                      )}
-                      <span className="dark:text-slate-200 text-slate-800 font-medium">{vote.voterName}</span>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full dark:bg-white/[0.08] bg-slate-100 dark:text-slate-300 text-slate-600 uppercase font-mono font-bold">
-                        {vote.voterProvider}
+                return (
+                  <tr 
+                    key={vote.id} 
+                    className={`transition-colors ${
+                      isMyVote 
+                        ? 'dark:bg-blue-950/25 bg-blue-50/70 border-l-4 border-l-blue-500' 
+                        : 'dark:hover:bg-white/[0.02] hover:bg-slate-50'
+                    }`}
+                  >
+                    
+                    {/* Project Name */}
+                    <td className="py-4 px-4 sm:px-6 font-sans font-bold dark:text-white text-slate-900 whitespace-nowrap">
+                      <div className="flex items-center gap-1.5">
+                        <span>{vote.projectName}</span>
+                        {isMyVote && (
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-black">
+                            YOUR PICK
+                          </span>
+                        )}
+                      </div>
+                    </td>
+
+                    {/* Voter */}
+                    <td className="py-4 px-4 sm:px-6 whitespace-nowrap font-sans">
+                      <div className="flex items-center space-x-2">
+                        {vote.voterAvatar && (
+                          <img
+                            src={vote.voterAvatar}
+                            alt={vote.voterName}
+                            className="w-6 h-6 rounded-full object-cover ring-1 ring-blue-500"
+                          />
+                        )}
+                        <span className="dark:text-slate-200 text-slate-800 font-medium">{vote.voterName}</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full dark:bg-white/[0.08] bg-slate-100 dark:text-slate-300 text-slate-600 uppercase font-mono font-bold">
+                          {vote.voterProvider}
+                        </span>
+                        {isMyVote && (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-600 dark:text-blue-400 font-mono font-black">
+                            YOU
+                          </span>
+                        )}
+                      </div>
+                    </td>
+
+                    {/* Wallet Address */}
+                    <td className="py-4 px-4 sm:px-6 text-blue-500 font-bold whitespace-nowrap">
+                      {vote.voterWallet.substring(0, 6)}...{vote.voterWallet.slice(-6)}
+                    </td>
+
+                    {/* Timestamp */}
+                    <td className="py-4 px-4 sm:px-6 dark:text-slate-400 text-slate-500 whitespace-nowrap">
+                      {new Date(vote.votedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}{' '}
+                      <span className="text-[10px] opacity-70">
+                        {new Date(vote.votedAt).toLocaleDateString()}
                       </span>
-                    </div>
-                  </td>
+                    </td>
 
-                  {/* Wallet Address */}
-                  <td className="py-4 px-4 sm:px-6 text-blue-500 font-bold whitespace-nowrap">
-                    {vote.voterWallet.substring(0, 6)}...{vote.voterWallet.slice(-6)}
-                  </td>
+                    {/* Inspect Proof Button */}
+                    <td className="py-4 px-4 sm:px-6 whitespace-nowrap">
+                      <button
+                        onClick={() => setSelectedVote(vote)}
+                        className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl border text-[11px] font-bold transition-colors ${
+                          isMyVote
+                            ? 'bg-blue-600 hover:bg-blue-500 text-white border-blue-600 shadow-sm'
+                            : 'bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border-blue-500/30'
+                        }`}
+                      >
+                        <Fingerprint className="w-3.5 h-3.5" />
+                        <span>{isMyVote ? 'Your Proof' : 'Inspect Proof'}</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 ml-1" />
+                      </button>
+                    </td>
 
-                  {/* Timestamp */}
-                  <td className="py-4 px-4 sm:px-6 dark:text-slate-400 text-slate-500 whitespace-nowrap">
-                    {new Date(vote.votedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}{' '}
-                    <span className="text-[10px] opacity-70">
-                      {new Date(vote.votedAt).toLocaleDateString()}
-                    </span>
-                  </td>
-
-                  {/* Inspect Proof Button */}
-                  <td className="py-4 px-4 sm:px-6 whitespace-nowrap">
-                    <button
-                      onClick={() => setSelectedVote(vote)}
-                      className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 text-[11px] font-bold transition-colors"
-                    >
-                      <Fingerprint className="w-3.5 h-3.5" />
-                      <span>Inspect Proof</span>
-                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 ml-1" />
-                    </button>
-                  </td>
-
-                </tr>
-              ))}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
