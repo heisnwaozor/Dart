@@ -20,7 +20,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px;
     }
     .auth-card {
       background: #1e1f20;
@@ -32,6 +32,7 @@
       box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
       position: relative;
       overflow: hidden;
+      text-align: center;
     }
     .progress-bar {
       position: absolute;
@@ -42,23 +43,16 @@
       background: linear-gradient(90deg, #4285F4 25%, #EA4335 50%, #FBBC05 75%, #34A853 100%);
       background-size: 200% 100%;
       animation: progressMove 1.2s linear infinite;
-      display: none;
     }
     @keyframes progressMove {
       0% { background-position: 200% 0; }
       100% { background-position: 0% 0; }
     }
-    .google-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin-bottom: 24px;
-    }
     .google-logo {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 14px;
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 16px auto;
+      display: block;
     }
     h1 {
       font-size: 22px;
@@ -70,148 +64,49 @@
     .subtitle {
       font-size: 14px;
       color: #c4c7c5;
+      margin-bottom: 24px;
+      line-height: 1.5;
     }
-    .account-list {
-      border: 1px solid #444746;
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-    .account-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 16px;
-      cursor: pointer;
-      border-bottom: 1px solid #333538;
-      transition: background 0.15s ease;
-      text-align: left;
-    }
-    .account-row:last-child {
-      border-bottom: none;
-    }
-    .account-row:hover {
-      background: #2a2b2d;
-    }
-    .avatar-circle {
+    .spinner {
       width: 40px;
       height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      border-top-color: #4285F4;
       border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .btn-action {
+      display: inline-block;
+      width: 100%;
+      padding: 12px 20px;
+      border-radius: 12px;
       background: #a8c7fa;
       color: #041e49;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
       font-size: 14px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .avatar-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .account-info {
-      flex: 1;
-      min-width: 0;
-    }
-    .account-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: #ffffff;
-      margin-bottom: 2px;
-    }
-    .account-email {
-      font-size: 12px;
-      color: #c4c7c5;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .signed-badge {
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 10px;
-      background: #1e3a5f;
-      color: #a8c7fa;
-      font-weight: 500;
-    }
-    .use-another-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 16px;
-      cursor: pointer;
-      transition: background 0.15s ease;
-      text-align: left;
-    }
-    .use-another-row:hover {
-      background: #2a2b2d;
-    }
-    .user-icon-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #282a2c;
-      color: #c4c7c5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .custom-account-box {
-      display: none;
-      margin-top: 14px;
-      padding: 16px;
-      border-radius: 16px;
-      background: #282a2c;
-      border: 1px solid #444746;
-      text-align: left;
-    }
-    .input-field {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid #444746;
-      background: #131314;
-      color: #ffffff;
-      font-size: 13px;
-      margin-top: 6px;
-      margin-bottom: 12px;
-      outline: none;
-    }
-    .input-field:focus {
-      border-color: #a8c7fa;
-    }
-    .btn-submit {
-      width: 100%;
-      padding: 10px 16px;
-      border-radius: 10px;
-      background: #a8c7fa;
-      color: #041e49;
-      font-size: 13px;
       font-weight: 600;
       border: none;
       cursor: pointer;
+      text-decoration: none;
       transition: background 0.15s;
+      margin-top: 14px;
     }
-    .btn-submit:hover {
+    .btn-action:hover {
       background: #d3e3fd;
     }
-    .footer-terms {
-      margin-top: 24px;
+    .error-box {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(234, 67, 53, 0.15);
+      border: 1px solid rgba(234, 67, 53, 0.35);
+      color: #f28b82;
       font-size: 12px;
-      color: #8e918f;
       line-height: 1.5;
       text-align: left;
-    }
-    .footer-terms a {
-      color: #a8c7fa;
-      text-decoration: none;
-    }
-    .footer-terms a:hover {
-      text-decoration: underline;
     }
     .bottom-bar {
       margin-top: 24px;
@@ -239,65 +134,18 @@
   <div class="auth-card" id="card">
     <div class="progress-bar" id="progressBar"></div>
 
-    <div class="google-header" id="headerArea">
-      <svg class="google-logo" viewBox="0 0 24 24">
-        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-      </svg>
-      <h1 id="titleText">Choose an account</h1>
-      <p class="subtitle" id="subtitleText">to continue to Dart (Pollar Voting)</p>
-    </div>
+    <svg class="google-logo" id="logo" viewBox="0 0 24 24">
+      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+    </svg>
 
-    <div id="selectorArea">
-      <div class="account-list">
-        
-        <div class="account-row" onclick="selectAccount('Agbo Chidera', 'agbochidera95@gmail.com', 'https://api.dicebear.com/7.x/identicon/svg?seed=agbochidera95')">
-          <div class="avatar-circle">
-            <span>AC</span>
-          </div>
-          <div class="account-info">
-            <div class="account-name">Agbo Chidera</div>
-            <div class="account-email">agbochidera95@gmail.com</div>
-          </div>
-          <span class="signed-badge">Signed in</span>
-        </div>
+    <h1 id="titleText">Connecting to Google</h1>
+    <p class="subtitle" id="subtitleText">Opening your browser Google account chooser...</p>
 
-        <div class="use-another-row" onclick="toggleCustomForm()">
-          <div class="user-icon-circle">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </div>
-          <div class="account-info">
-            <div class="account-name">Use another Google account</div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="custom-account-box" id="customBox">
-        <label style="font-size: 11px; font-weight: 600; color: #c4c7c5;">Full Name</label>
-        <input type="text" id="custName" class="input-field" placeholder="e.g. Agbo Chidera">
-
-        <label style="font-size: 11px; font-weight: 600; color: #c4c7c5;">Google Email Address</label>
-        <input type="email" id="custEmail" class="input-field" placeholder="agbochidera95@gmail.com">
-
-        <button type="button" class="btn-submit" onclick="submitCustomAccount()">Continue with this account</button>
-      </div>
-
-      <div class="footer-terms">
-        To continue, Google will share your name and email address with Dart. Review Dart's <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
-      </div>
-    </div>
-
-    <div id="loadingArea" style="display: none; padding: 24px 0; text-align: center;">
-      <h2 style="font-size: 16px; font-weight: 600; color: #ffffff; margin-bottom: 8px;" id="statusTitle">Connecting as Agbo Chidera...</h2>
-      <p style="font-size: 12px; color: #a8c7fa; font-family: monospace;">Provisioning Stellar keypair and recording in SQLite</p>
-    </div>
-
+    <div class="spinner" id="spinner"></div>
+    <div id="actionArea"></div>
   </div>
 
   <div class="bottom-bar">
@@ -310,6 +158,7 @@
   </div>
 
   <script>
+    const CLIENT_ID = '892650901835-atcmdam7hmktaps9d52kfreij87ghu0p.apps.googleusercontent.com';
     const searchParams = new URLSearchParams(window.location.search);
     const hash = window.location.hash.substring(1);
 
@@ -322,11 +171,10 @@
       return addr;
     }
 
-    function completeAuth(name, email, avatar) {
-      document.getElementById('selectorArea').style.display = 'none';
-      document.getElementById('loadingArea').style.display = 'block';
-      document.getElementById('progressBar').style.display = 'block';
-      document.getElementById('statusTitle').innerText = 'Signing in as ' + name + '...';
+    function completeAuth(name, email, avatar, googleSub) {
+      document.getElementById('titleText').innerText = 'Signed in successfully';
+      document.getElementById('subtitleText').innerText = 'Welcome ' + name + ' (' + email + ')! Syncing account...';
+      document.getElementById('spinner').style.display = 'none';
 
       const payload = {
         type: 'POLLAR_OAUTH_SUCCESS',
@@ -334,7 +182,8 @@
         name: name,
         email: email,
         avatar: avatar || ('https://api.dicebear.com/7.x/identicon/svg?seed=' + encodeURIComponent(email)),
-        walletAddress: generateStellarAddress()
+        walletAddress: generateStellarAddress(),
+        googleSub: googleSub || ''
       };
 
       try {
@@ -350,47 +199,119 @@
             window.close();
           }, 350);
         } else {
-          alert('Signed in as ' + email + '! You can return to Dart.');
+          document.getElementById('actionArea').innerHTML = `
+            <p style="font-size: 13px; color: #a8c7fa; margin-bottom: 12px;">Authentication complete. You can close this window and return to Dart.</p>
+            <button class="btn-action" onclick="window.close()">Close Window</button>
+          `;
         }
       }, 500);
     }
 
-    function selectAccount(name, email, avatar) {
-      completeAuth(name, email, avatar);
+    function parseJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
     }
 
-    function toggleCustomForm() {
-      const box = document.getElementById('customBox');
-      box.style.display = box.style.display === 'block' ? 'none' : 'block';
-      if (box.style.display === 'block') {
-        document.getElementById('custEmail').focus();
+    if (hash) {
+      const hashParams = new URLSearchParams(hash);
+      const idToken = hashParams.get('id_token');
+      const accessToken = hashParams.get('access_token');
+      const error = hashParams.get('error');
+
+      if (error) {
+        document.getElementById('titleText').innerText = 'Google Authentication Notice';
+        document.getElementById('subtitleText').innerText = 'Google reported: ' + error;
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('actionArea').innerHTML = `
+          <div class="error-box">Google authentication was cancelled or returned an error: ${error}</div>
+          <button class="btn-action" onclick="startGoogleOAuth()">Try Again</button>
+        `;
+      } else if (idToken) {
+        try {
+          const data = parseJwt(idToken);
+          const name = data.name || data.given_name || (data.email ? data.email.split('@')[0] : 'Google User');
+          const email = data.email || 'user@gmail.com';
+          const avatar = data.picture || ('https://api.dicebear.com/7.x/identicon/svg?seed=' + encodeURIComponent(email));
+          completeAuth(name, email, avatar, data.sub);
+        } catch (e) {
+          console.error(e);
+          if (accessToken) {
+            fetchGoogleUserInfo(accessToken);
+          }
+        }
+      } else if (accessToken) {
+        fetchGoogleUserInfo(accessToken);
+      }
+    } else {
+      const provider = searchParams.get('provider') || 'google';
+
+      if (provider === 'google') {
+        startGoogleOAuth();
+      } else if (provider === 'github') {
+        handleGithub();
       }
     }
 
-    function submitCustomAccount() {
-      const email = document.getElementById('custEmail').value.trim();
-      const name = document.getElementById('custName').value.trim() || email.split('@')[0];
-      if (!email) {
-        alert('Please enter a valid Google email address.');
-        return;
-      }
-      const avatar = 'https://api.dicebear.com/7.x/identicon/svg?seed=' + encodeURIComponent(email);
-      completeAuth(name, email, avatar);
+    function startGoogleOAuth() {
+      const redirectUri = window.location.origin + '/oauth.html';
+      const clientId = searchParams.get('client_id') || CLIENT_ID;
+
+      const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
+        'client_id=' + encodeURIComponent(clientId) +
+        '&redirect_uri=' + encodeURIComponent(redirectUri) +
+        '&response_type=' + encodeURIComponent('token id_token') +
+        '&scope=' + encodeURIComponent('openid email profile') +
+        '&prompt=select_account' +
+        '&nonce=' + Date.now();
+
+      window.location.href = authUrl;
     }
 
-    if (searchParams.get('provider') === 'github') {
-      document.getElementById('titleText').innerText = 'Sign in with GitHub';
-      document.getElementById('subtitleText').innerText = 'to continue to Dart';
-      document.querySelector('.google-logo').outerHTML = `
+    function fetchGoogleUserInfo(token) {
+      fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: 'Bearer ' + token }
+      })
+        .then(r => r.json())
+        .then(data => {
+          const name = data.name || data.email.split('@')[0];
+          completeAuth(name, data.email, data.picture, data.sub);
+        })
+        .catch(err => {
+          document.getElementById('titleText').innerText = 'Error Loading Profile';
+          document.getElementById('subtitleText').innerText = err.message;
+          document.getElementById('spinner').style.display = 'none';
+        });
+    }
+
+    function handleGithub() {
+      document.getElementById('logo').outerHTML = `
         <svg class="google-logo" viewBox="0 0 24 24" fill="#ffffff">
           <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
         </svg>
       `;
-      document.querySelector('.account-name').innerText = 'heisnwaozor';
-      document.querySelector('.account-email').innerText = 'heisnwaozor@users.noreply.github.com';
-      document.querySelector('.account-row').setAttribute('onclick', "selectAccount('heisnwaozor', 'heisnwaozor@users.noreply.github.com', 'https://github.com/heisnwaozor.png')");
-      document.querySelector('.avatar-circle').innerHTML = '<img src="https://github.com/heisnwaozor.png" alt="heisnwaozor">';
-      document.querySelector('.use-another-row .account-name').innerText = 'Use another GitHub handle';
+      document.getElementById('titleText').innerText = 'GitHub Authentication';
+      document.getElementById('subtitleText').innerText = 'Sign in with your GitHub username';
+      document.getElementById('spinner').style.display = 'none';
+
+      document.getElementById('actionArea').innerHTML = `
+        <div style="text-align: left; margin-top: 10px;">
+          <label style="font-size: 11px; font-weight: 600; color: #c4c7c5;">GitHub Username</label>
+          <input type="text" id="ghHandle" value="heisnwaozor" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid #444746; background: #131314; color: #ffffff; font-size: 13px; margin-top: 6px; margin-bottom: 12px; outline: none;">
+          <button class="btn-action" onclick="submitGithub()">Continue with GitHub</button>
+        </div>
+      `;
+
+      window.submitGithub = function() {
+        const handle = document.getElementById('ghHandle').value.trim() || 'heisnwaozor';
+        completeAuth(handle, handle + '@users.noreply.github.com', 'https://github.com/' + handle + '.png', handle);
+      };
     }
   </script>
 </body>

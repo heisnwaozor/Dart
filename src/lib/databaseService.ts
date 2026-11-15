@@ -46,6 +46,18 @@ export class DatabaseService {
     }
   }
 
+  public static async getUserByEmail(email: string): Promise<PollarUser | null> {
+    try {
+      if (!email) return null;
+      const res = await fetch(`${this.BASE_URL}/api/users/${encodeURIComponent(email)}`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.user || null;
+    } catch {
+      return null;
+    }
+  }
+
   public static async registerUser(user: Partial<PollarUser>): Promise<PollarUser | null> {
     try {
       const res = await fetch(`${this.BASE_URL}/api/users`, {

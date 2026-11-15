@@ -33,12 +33,12 @@ const MainApp: React.FC = () => {
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
   const [authConfig, setAuthConfig] = useState<{
     isOpen: boolean;
-    initialTab?: 'create' | 'social' | 'presets' | 'apikey';
+    initialTab?: 'signup' | 'signin' | 'presets';
     defaultRole?: 'voter' | 'builder';
-  }>({ isOpen: false, initialTab: 'create', defaultRole: 'voter' });
+  }>({ isOpen: false, initialTab: 'signup', defaultRole: 'voter' });
 
   const handleOpenAuth = (
-    initialTab: 'create' | 'social' | 'presets' | 'apikey' = 'create',
+    initialTab: 'signup' | 'signin' | 'presets' = 'signup',
     defaultRole: 'voter' | 'builder' = 'voter'
   ) => {
     setAuthConfig({ isOpen: true, initialTab, defaultRole });
@@ -101,7 +101,7 @@ const MainApp: React.FC = () => {
         userVote={activeUserVote}
         projectsCount={projects.length}
         onOpenSubmit={() => setCurrentView('builder')}
-        onOpenAuth={() => handleOpenAuth('create', 'voter')}
+        onOpenAuth={(tab) => handleOpenAuth(tab || 'signup', 'voter')}
         onCheckMyVote={() => setIsReceiptOpen(true)}
       />
 
@@ -116,7 +116,7 @@ const MainApp: React.FC = () => {
             totalVotes={totalVotesCount}
             onEnterVoting={() => setCurrentView('voting')}
             onEnterBuilder={() => setCurrentView('builder')}
-            onOpenAuth={() => handleOpenAuth('create', 'voter')}
+            onOpenAuth={() => handleOpenAuth('signup', 'voter')}
           />
         )}
 
@@ -129,7 +129,7 @@ const MainApp: React.FC = () => {
               setCurrentView('voting');
               setActiveTab('leaderboard');
             }}
-            onOpenAuth={() => handleOpenAuth('create', 'builder')}
+            onOpenAuth={() => handleOpenAuth('signup', 'builder')}
           />
         )}
 
@@ -257,7 +257,7 @@ const MainApp: React.FC = () => {
           onClose={() => setVotingProject(null)}
           onOpenAuth={() => {
             setVotingProject(null);
-            handleOpenAuth('create', 'voter');
+            handleOpenAuth('signup', 'voter');
           }}
           onSuccess={() => {
             setVotingProject(null);
@@ -304,7 +304,7 @@ const MainApp: React.FC = () => {
             setCurrentView('voting');
             setActiveTab('projects');
           }}
-          onOpenAuth={() => handleOpenAuth('create', 'builder')}
+          onOpenAuth={() => handleOpenAuth('signup', 'builder')}
         />
       )}
 

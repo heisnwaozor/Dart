@@ -29,7 +29,7 @@ interface NavbarProps {
   userVote?: PublicVote;
   projectsCount: number;
   onOpenSubmit: () => void;
-  onOpenAuth: () => void;
+  onOpenAuth: (initialTab?: 'signup' | 'signin', defaultRole?: 'voter' | 'builder') => void;
   onCheckMyVote?: () => void;
 }
 
@@ -318,21 +318,29 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3 py-2.5 rounded-2xl text-xs font-bold text-rose-500 dark:hover:bg-rose-950/30 hover:bg-rose-50 flex items-center space-x-2 transition-colors cursor-pointer"
                       >
                         <LogOut className="w-4 h-4" />
-                        <span>Disconnect Wallet</span>
+                        <span>Sign Out</span>
                       </button>
                     </div>
                   </>
                 )}
               </div>
             ) : (
-              <button
-                onClick={currentView === 'portal' ? () => setCurrentView('voting') : onOpenAuth}
-                className="ctrl-roll-button px-6 sm:px-7 py-2.5 rounded-full dark:bg-white bg-slate-950 hover:dark:bg-slate-100 hover:bg-slate-900 dark:text-slate-950 text-white font-bold text-xs sm:text-sm shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
-              >
-                <span className="ctrl-roll-label">
-                  {currentView === 'portal' ? 'Enter App' : 'Sign In'}
-                </span>
-              </button>
+              <div className="flex items-center space-x-2 sm:space-x-2.5">
+                <button
+                  type="button"
+                  onClick={() => onOpenAuth('signin')}
+                  className="px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white transition-colors"
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onOpenAuth('signup')}
+                  className="ctrl-roll-button px-5 sm:px-6 py-2.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
+                >
+                  <span className="ctrl-roll-label">Create Account</span>
+                </button>
+              </div>
             )}
 
           </div>
