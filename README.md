@@ -1,14 +1,12 @@
-# Dart — Cryptographic Hackathon Voting on Pollar & Stellar
+# Dart: Cryptographic Hackathon Voting on Pollar & Stellar
 
 Dart is a decentralized, gasless community voting platform built for Web3 and AI hackathons (such as the LATAM Builders Summit). It integrates with the **Pollar network** (`@pollar/react` and `@pollar/core`) to provide frictionless social login, instant non-custodial Stellar wallet provisioning, and cryptographic non-repudiation using **Stellar SEP-53 message signing**.
-
-![Dart Logo](https://raw.githubusercontent.com/heisnwaozor/Dart/main/public/dart-butterfly-logo.png)
 
 ---
 
 ## 🌟 Key Features
 
-* **Cybernetic Butterfly & Dart Aesthetic**: Electric Royal Blue and Pure White high-tech UI with custom geometric SVG branding.
+* **Sketchy Hand Holding a Dart Aesthetic**: Hand-drawn architectural concept art logo with electric royal blue, cyan, and pure white accents.
 * **Frictionless Social Onboarding**: One-click Google, GitHub, or Email login via Pollar with automatic gas-sponsored Stellar wallet keypair derivation.
 * **Stellar SEP-53 Cryptographic Non-Repudiation**: Every vote is signed with an Ed25519 keypair and canonical SEP-53 payload (`Stellar Signed Message: HackathonVote`), ensuring auditable, tamper-proof voting records.
 * **Anti-Sybil Defense**: Strict 1-vote-per-wallet rule with the flexibility to switch or update votes before the deadline.

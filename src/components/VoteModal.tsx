@@ -233,10 +233,10 @@ export const VoteModal: React.FC<VoteModalProps> = ({
               )}
             </div>
           ) : step === 'signing' ? (
-            /* Standalone Dart Butterfly Holographic Signing Ceremony */
+            /* Standalone Dart Holographic Signing Ceremony */
             <div className="py-12 flex flex-col items-center justify-center text-center space-y-6">
               <div className="relative flex items-center justify-center">
-                {/* Center Dart Butterfly Emblem */}
+                {/* Center Dart Emblem: Sketchy Hand Holding a Dart */}
                 <div className="w-28 h-28 rounded-3xl dark:bg-[#070A13] bg-blue-50 border-2 border-blue-500 flex items-center justify-center z-10 shadow-2xl shadow-blue-500/40 p-2">
                   <DartLogo size={70} animate />
                 </div>

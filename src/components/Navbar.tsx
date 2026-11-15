@@ -88,7 +88,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="motion-container">
         <div className="flex items-center justify-between h-20 sm:h-22">
           
-          {/* Brand Identity - Dart with Butterfly Holding a Dart Logo */}
+          {/* Brand Identity: Dart with Sketchy Hand Holding a Dart Logo */}
           <div 
             onClick={() => setActiveTab('projects')}
             className="flex items-center space-x-3 cursor-pointer select-none group"
