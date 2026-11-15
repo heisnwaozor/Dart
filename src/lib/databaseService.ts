@@ -58,6 +58,39 @@ export class DatabaseService {
     }
   }
 
+  public static async sendVerificationCode(
+    email: string,
+    name: string
+  ): Promise<{ ok: boolean; message?: string; verificationToken?: string; devCode?: string; error?: string }> {
+    try {
+      const res = await fetch(`${this.BASE_URL}/api/auth/send-verification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name })
+      });
+      return await res.json();
+    } catch (err: any) {
+      return { ok: false, error: err.message || 'Failed to connect to verification service' };
+    }
+  }
+
+  public static async verifyCode(
+    email: string,
+    code: string,
+    verificationToken?: string
+  ): Promise<{ ok: boolean; verified?: boolean; error?: string }> {
+    try {
+      const res = await fetch(`${this.BASE_URL}/api/auth/verify-code`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code, verificationToken })
+      });
+      return await res.json();
+    } catch (err: any) {
+      return { ok: false, error: err.message || 'Failed to verify code' };
+    }
+  }
+
   public static async registerUser(user: Partial<PollarUser>): Promise<PollarUser | null> {
     try {
       const res = await fetch(`${this.BASE_URL}/api/users`, {

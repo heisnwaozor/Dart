@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import {
   getAllUsers,
   getUserByWallet,
@@ -12,6 +13,28 @@ import {
   getDatabaseStats,
   resetDatabase
 } from './db.js';
+
+const VERIFICATION_SECRET = process.env.SESSION_SECRET || 'dart-verification-secret-2026';
+
+function generateVerificationToken(email, code, expiresAt) {
+  const data = `${email.toLowerCase().trim()}:${code.trim()}:${expiresAt}`;
+  const hmac = crypto.createHmac('sha256', VERIFICATION_SECRET).update(data).digest('hex');
+  return `${expiresAt}.${hmac}`;
+}
+
+function verifyVerificationToken(email, code, token) {
+  if (!token || typeof token !== 'string' || !token.includes('.')) return false;
+  const [expiresAtStr, hmac] = token.split('.');
+  const expiresAt = parseInt(expiresAtStr, 10);
+  if (isNaN(expiresAt) || Date.now() > expiresAt) return false;
+  const data = `${email.toLowerCase().trim()}:${code.trim()}:${expiresAt}`;
+  const expectedHmac = crypto.createHmac('sha256', VERIFICATION_SECRET).update(data).digest('hex');
+  try {
+    return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(expectedHmac));
+  } catch {
+    return false;
+  }
+}
 
 function sendJson(res, statusCode, data) {
   res.statusCode = statusCode;
@@ -163,6 +186,102 @@ export async function handleApiRequest(req, res) {
           avatar: userData.avatar_url || `https://github.com/${userData.login}.png`,
           githubLogin: userData.login
         }
+      });
+      return true;
+    } catch (err) {
+      sendJson(res, 500, { ok: false, error: err.message });
+      return true;
+    }
+  }
+
+  // Send email verification code
+  if (pathname === '/api/auth/send-verification' && method === 'POST') {
+    try {
+      const body = await parseBody(req);
+      const email = (body.email || '').trim().toLowerCase();
+      const name = (body.name || '').trim();
+
+      if (!email || !email.includes('@')) {
+        sendJson(res, 400, { ok: false, error: 'Please provide a valid email address.' });
+        return true;
+      }
+
+      // Generate 6-digit OTP code
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+      const verificationToken = generateVerificationToken(email, code, expiresAt);
+
+      if (process.env.RESEND_API_KEY) {
+        try {
+          await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              from: 'Dart Verification <onboarding@resend.dev>',
+              to: [email],
+              subject: `${code} is your Dart verification code`,
+              html: `
+                <div style="font-family: Arial, sans-serif; padding: 24px; background: #0f172a; color: #ffffff; border-radius: 12px;">
+                  <h2 style="color: #05c92f; margin-bottom: 8px;">Dart Hackathon Platform</h2>
+                  <p style="color: #94a3b8; font-size: 14px;">Hello ${name || 'Builder'},</p>
+                  <p style="font-size: 14px; color: #e2e8f0;">Your verification code is:</p>
+                  <div style="margin: 20px 0; padding: 16px; background: #1e293b; border: 2px solid #05c92f; border-radius: 10px; font-size: 32px; font-weight: bold; letter-spacing: 8px; text-align: center; color: #ffffff;">
+                    ${code}
+                  </div>
+                  <p style="color: #64748b; font-size: 12px;">This code will expire in 10 minutes. If you did not request this, please ignore this email.</p>
+                </div>
+              `
+            })
+          });
+        } catch (mailErr) {
+          console.warn('[Email] Resend dispatch notice:', mailErr);
+        }
+      }
+
+      console.log(`[Email Verification] Code for ${email} (${name}): ${code}`);
+
+      sendJson(res, 200, {
+        ok: true,
+        message: `Verification code sent to ${email}`,
+        verificationToken,
+        devCode: code
+      });
+      return true;
+    } catch (err) {
+      sendJson(res, 500, { ok: false, error: err.message });
+      return true;
+    }
+  }
+
+  // Verify email verification code
+  if (pathname === '/api/auth/verify-code' && method === 'POST') {
+    try {
+      const body = await parseBody(req);
+      const email = (body.email || '').trim().toLowerCase();
+      const code = (body.code || '').trim();
+      const verificationToken = body.verificationToken;
+
+      if (!email || !code) {
+        sendJson(res, 400, { ok: false, error: 'Email and 6-digit code are required.' });
+        return true;
+      }
+
+      const isValid = verifyVerificationToken(email, code, verificationToken);
+      if (!isValid) {
+        sendJson(res, 400, {
+          ok: false,
+          error: 'Invalid or expired verification code. Please check your email or request a new code.'
+        });
+        return true;
+      }
+
+      sendJson(res, 200, {
+        ok: true,
+        verified: true,
+        message: 'Email verified successfully!'
       });
       return true;
     } catch (err) {
