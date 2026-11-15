@@ -150,3 +150,81 @@
     linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
+
+/* 7. MotionSites AI Interactive Spotlight & Spatial Glass */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.4s ease, 
+              box-shadow 0.4s ease;
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    650px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(59, 130, 246, 0.12),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+.spotlight-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(59, 130, 246, 0.55);
+  box-shadow: 0 30px 70px -15px rgba(37, 99, 235, 0.28);
+}
+
+.dark .spotlight-card:hover {
+  box-shadow: 0 30px 80px -12px rgba(37, 99, 235, 0.42), 0 0 25px rgba(56, 189, 248, 0.2);
+}
+
+/* Fluid negative space container with expansive MotionSites AI margins */
+.motion-container {
+  max-width: 1420px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+}
+
+@media (min-width: 640px) {
+  .motion-container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .motion-container {
+    padding-left: 4.5rem;
+    padding-right: 4.5rem;
+  }
+}
+
+/* MotionSites Glass Panels */
+.motion-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .motion-glass {
+  background: rgba(13, 19, 36, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}

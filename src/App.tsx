@@ -134,8 +134,8 @@ const MainApp: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t dark:border-white/[0.08] border-slate-200 dark:bg-[#0A0E1A] bg-white py-10 sm:py-12 mt-16 text-xs dark:text-slate-400 text-slate-500 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <footer className="border-t dark:border-white/[0.08] border-slate-200 dark:bg-[#0A0E1A] bg-white py-16 sm:py-20 mt-28 text-xs sm:text-sm dark:text-slate-400 text-slate-500 transition-colors">
+        <div className="motion-container flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center space-x-3.5">
             <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center p-1 shadow-sm">
               <DartLogo size={32} />

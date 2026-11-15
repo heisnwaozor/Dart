@@ -37,11 +37,45 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
   const [googleName, setGoogleName] = useState('');
 
   // GitHub interactive form states
-  const [githubUsername, setGithubUsername] = useState('');
-  const [githubAvatarUrl, setGithubAvatarUrl] = useState('');
+  const [githubUsername, setGithubUsername] = useState('heisnwaozor');
+  const [githubAvatarUrl, setGithubAvatarUrl] = useState('https://github.com/heisnwaozor.png');
+  const [githubProfile, setGithubProfile] = useState<{ name?: string; bio?: string; repos?: number; followers?: number } | null>({
+    name: 'heisnwaozor',
+    bio: 'Verified GitHub Account • Live Sync',
+    repos: 12,
+    followers: 8
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState('');
+
+  // Fetch GitHub live API data
+  const fetchGithubData = (username: string) => {
+    const trimmed = username.trim();
+    if (!trimmed) return;
+    setGithubAvatarUrl(`https://github.com/${encodeURIComponent(trimmed)}.png`);
+
+    fetch(`https://api.github.com/users/${encodeURIComponent(trimmed)}`)
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data) {
+          setGithubProfile({
+            name: data.name || trimmed,
+            bio: data.bio || '',
+            repos: data.public_repos,
+            followers: data.followers
+          });
+          if (data.avatar_url) {
+            setGithubAvatarUrl(data.avatar_url);
+          }
+        }
+      })
+      .catch(() => {});
+  };
+
+  useEffect(() => {
+    fetchGithubData('heisnwaozor');
+  }, []);
 
   // Generate random 56-char base32 Stellar address
   const generateStellarAddress = () => {
@@ -99,6 +133,36 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
 
   const handleStartSocial = (provider: 'google' | 'github') => {
     setActiveProviderPrompt(provider);
+    if (provider === 'google') {
+      if (typeof (window as any).google !== 'undefined' && (window as any).google?.accounts?.id) {
+        try {
+          (window as any).google.accounts.id.initialize({
+            client_id: '1067577884102-p5j7c65k0c3t245qj96k8fbl4v36q0i4.apps.googleusercontent.com',
+            callback: (res: any) => {
+              if (res?.credential) {
+                try {
+                  const base64Url = res.credential.split('.')[1];
+                  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                  const jsonPayload = decodeURIComponent(
+                    atob(base64)
+                      .split('')
+                      .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                      .join('')
+                  );
+                  const data = JSON.parse(jsonPayload);
+                  handleSelectGoogleAccount(data.name || 'Google User', data.email, data.picture);
+                } catch (e) {
+                  // ignore
+                }
+              }
+            }
+          });
+          (window as any).google.accounts.id.prompt();
+        } catch (e) {
+          // ignore
+        }
+      }
+    }
     openOAuthPopup(provider);
   };
 
@@ -156,14 +220,15 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
     }, 600);
   };
 
-  // Live update GitHub avatar preview
+  // Live update GitHub avatar preview & API profile
   const handleGithubUsernameChange = (val: string) => {
     setGithubUsername(val);
     const trimmed = val.trim();
     if (trimmed) {
-      setGithubAvatarUrl(`https://github.com/${encodeURIComponent(trimmed)}.png`);
+      fetchGithubData(trimmed);
     } else {
       setGithubAvatarUrl('');
+      setGithubProfile(null);
     }
   };
 
@@ -176,13 +241,14 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
     setLoadingMsg(`Verifying @${githubUsername.trim()} with GitHub...`);
 
     const username = githubUsername.trim();
-    const avatar = `https://github.com/${encodeURIComponent(username)}.png`;
+    const displayName = githubProfile?.name || username;
+    const avatar = githubAvatarUrl || `https://github.com/${encodeURIComponent(username)}.png`;
     const email = `${username}@users.noreply.github.com`;
 
     setTimeout(() => {
       const newUser: PollarUser = {
         id: `pollar_usr_${Date.now()}`,
-        name: username,
+        name: displayName,
         email: email,
         avatar: avatar,
         walletAddress: generateStellarAddress(),
@@ -320,6 +386,25 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                 <div className="space-y-1.5">
                   <button
                     type="button"
+                    onClick={() => handleSelectGoogleAccount('Heis Nwaozor', 'heisnwaozor@gmail.com', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80')}
+                    className="w-full flex items-center space-x-3 p-2.5 rounded-xl dark:bg-white/[0.04] bg-white border dark:border-white/[0.06] border-slate-200 hover:border-blue-500 transition-all text-left shadow-sm group"
+                  >
+                    <img
+                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
+                      alt="Heis"
+                      className="w-8 h-8 rounded-full object-cover ring-2 ring-blue-500"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <p className="text-xs font-bold dark:text-white text-slate-900">Heis Nwaozor</p>
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-blue-500/15 text-blue-500 font-mono font-bold">Active</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 font-mono truncate">heisnwaozor@gmail.com</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => handleSelectGoogleAccount('Mateo Silva', 'mateo.silva@gmail.com', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80')}
                     className="w-full flex items-center space-x-3 p-2.5 rounded-xl dark:bg-white/[0.04] bg-white border dark:border-white/[0.06] border-slate-200 hover:border-blue-500 transition-all text-left shadow-sm"
                   >
@@ -444,11 +529,18 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                       onError={e => {
                         (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/identicon/svg?seed=${githubUsername}`;
                       }}
-                      className="w-10 h-10 rounded-full object-cover ring-2 ring-blue-500 shadow-md"
+                      className="w-11 h-11 rounded-full object-cover ring-2 ring-blue-500 shadow-md"
                     />
-                    <div>
-                      <p className="text-xs font-bold dark:text-white text-slate-900">@{githubUsername}</p>
-                      <p className="text-[11px] text-blue-500 font-mono">Verified GitHub Account</p>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <p className="text-xs font-bold dark:text-white text-slate-900 truncate">
+                          {githubProfile?.name ? `${githubProfile.name} (@${githubUsername})` : `@${githubUsername}`}
+                        </p>
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-500 font-mono font-bold">Connected</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 font-mono mt-0.5 truncate">
+                        {githubProfile?.repos !== undefined ? `${githubProfile.repos} repos • ${githubProfile.followers ?? 0} followers` : 'Verified GitHub Account'}
+                      </p>
                     </div>
                   </div>
                 )}

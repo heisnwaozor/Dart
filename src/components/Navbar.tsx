@@ -85,8 +85,8 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Top blue animated gradient beam */}
       <div className="h-1 w-full bg-gradient-to-r from-blue-600 via-sky-400 to-white animate-gradient-x" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18 sm:h-20">
+      <div className="motion-container">
+        <div className="flex items-center justify-between h-20 sm:h-22">
           
           {/* Brand Identity - Dart with Butterfly Holding a Dart Logo */}
           <div 

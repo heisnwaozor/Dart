@@ -263,15 +263,22 @@
 
       contentArea.innerHTML = `
         <div class="account-picker">
+          <div class="account-item" onclick="chooseAccount('Heis Nwaozor', 'heisnwaozor@gmail.com', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80')">
+            <img class="avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Heis">
+            <div>
+              <div class="account-name">Heis Nwaozor</div>
+              <div class="account-email">heisnwaozor@gmail.com (Active Browser Account)</div>
+            </div>
+          </div>
           <div class="account-item" onclick="chooseAccount('Mateo Silva', 'mateo.silva@gmail.com', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80')">
-            <img class="avatar-img" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" alt="Avatar">
+            <img class="avatar-img" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" alt="Mateo">
             <div>
               <div class="account-name">Mateo Silva</div>
               <div class="account-email">mateo.silva@gmail.com</div>
             </div>
           </div>
           <div class="account-item" onclick="chooseAccount('Alex Rivera', 'alex.rivera@gmail.com', 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80')">
-            <img class="avatar-img" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80" alt="Avatar">
+            <img class="avatar-img" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80" alt="Alex">
             <div>
               <div class="account-name">Alex Rivera</div>
               <div class="account-email">alex.rivera@gmail.com</div>
@@ -316,21 +323,21 @@
           <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
         </svg>
       `;
-      titleText.innerText = 'Sign in to GitHub';
-      subtitleText.innerText = 'to authorize Dart & Pollar Social Wallet';
+      titleText.innerText = 'Sign in with GitHub';
+      subtitleText.innerText = 'Connect straight to your GitHub account';
 
       contentArea.innerHTML = `
         <form id="githubForm" onsubmit="handleGithubAuth(event)">
           <div class="input-group">
-            <label for="githubUsername">GitHub Username</label>
-            <input type="text" id="githubUsername" placeholder="e.g. heisnwaozor, torvalds, octocat" oninput="previewGithubAvatar(this.value)" required>
+            <label for="githubUsername">GitHub Handle or Username</label>
+            <input type="text" id="githubUsername" value="heisnwaozor" placeholder="e.g. heisnwaozor, torvalds, octocat" oninput="previewGithubProfile(this.value)" required>
           </div>
 
-          <div id="githubAvatarBox" class="avatar-preview" style="display: none;">
-            <img id="githubAvatarImg" class="avatar-img" src="" alt="Avatar">
+          <div id="githubAvatarBox" class="avatar-preview" style="display: flex;">
+            <img id="githubAvatarImg" class="avatar-img" src="https://github.com/heisnwaozor.png" alt="Avatar">
             <div>
-              <div id="githubUserLabel" style="font-weight: 700; font-size: 13px;"></div>
-              <div style="font-size: 11px; color: #64748b;">Verified GitHub Account</div>
+              <div id="githubUserLabel" style="font-weight: 700; font-size: 13px;">@heisnwaozor</div>
+              <div id="githubBioLabel" style="font-size: 11px; color: #64748b;">Verified GitHub Account • Live Sync</div>
             </div>
           </div>
 
@@ -344,7 +351,10 @@
       `;
 
       let timer = null;
-      window.previewGithubAvatar = function(val) {
+      let cachedName = 'heisnwaozor';
+      let cachedAvatar = 'https://github.com/heisnwaozor.png';
+
+      window.previewGithubProfile = function(val) {
         clearTimeout(timer);
         const trimmed = val.trim();
         if (!trimmed) {
@@ -357,15 +367,40 @@
           img.src = avatarUrl;
           document.getElementById('githubUserLabel').innerText = `@${trimmed}`;
           document.getElementById('githubAvatarBox').style.display = 'flex';
+          cachedAvatar = avatarUrl;
+          cachedName = trimmed;
+
+          // Attempt live query to GitHub public API
+          fetch(`https://api.github.com/users/${encodeURIComponent(trimmed)}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+              if (data) {
+                if (data.name) {
+                  document.getElementById('githubUserLabel').innerText = `${data.name} (@${trimmed})`;
+                  cachedName = data.name;
+                }
+                if (data.avatar_url) {
+                  img.src = data.avatar_url;
+                  cachedAvatar = data.avatar_url;
+                }
+                const meta = [];
+                if (data.public_repos !== undefined) meta.push(`${data.public_repos} repos`);
+                if (data.followers !== undefined) meta.push(`${data.followers} followers`);
+                document.getElementById('githubBioLabel').innerText = meta.join(' • ') || 'Verified GitHub Account';
+              }
+            })
+            .catch(() => {});
         }, 300);
       };
 
+      // Trigger initial profile fetch for default
+      window.previewGithubProfile('heisnwaozor');
+
       window.handleGithubAuth = function(e) {
         e.preventDefault();
-        const username = document.getElementById('githubUsername').value.trim();
-        const avatarUrl = `https://github.com/${encodeURIComponent(username)}.png`;
+        const username = document.getElementById('githubUsername').value.trim() || 'heisnwaozor';
         const email = `${username}@users.noreply.github.com`;
-        completeAuth(username, email, avatarUrl);
+        completeAuth(cachedName || username, email, cachedAvatar);
       };
     }
   </script>
