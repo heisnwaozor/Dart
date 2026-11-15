@@ -235,15 +235,11 @@ export const VoteModal: React.FC<VoteModalProps> = ({
           ) : step === 'signing' ? (
             /* Standalone Dart Holographic Signing Ceremony */
             <div className="py-12 flex flex-col items-center justify-center text-center space-y-6">
-              <div className="relative flex items-center justify-center">
-                {/* Center Dart Emblem: Sketchy Hand Holding a Dart */}
-                <div className="w-28 h-28 rounded-3xl dark:bg-[#070A13] bg-blue-50 border-2 border-blue-500 flex items-center justify-center z-10 shadow-2xl shadow-blue-500/40 p-2">
-                  <DartLogo size={70} animate />
+              <div className="relative flex items-center justify-center py-4">
+                {/* Standalone Bold Blue Hand Holding Dart Emblem */}
+                <div className="flex items-center justify-center z-10">
+                  <DartLogo size={96} animate />
                 </div>
-                {/* Concentric Rotating Holographic Rings */}
-                <div className="absolute w-40 h-40 rounded-full border border-dashed border-blue-400/60 animate-spin-slow pointer-events-none" />
-                <div className="absolute w-48 h-48 rounded-full border border-sky-400/40 spin-counter pointer-events-none" />
-                <div className="absolute inset-0 rounded-3xl border-2 border-blue-500/40 animate-radar-sweep pointer-events-none" />
               </div>
 
               <div className="space-y-1">

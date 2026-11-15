@@ -63,8 +63,8 @@ export const VoteReceiptModal: React.FC<VoteReceiptModalProps> = ({
         {/* Top Header */}
         <div className="flex items-center justify-between p-5 sm:p-6 border-b dark:border-white/[0.08] border-slate-200 bg-gradient-to-r dark:from-blue-950/40 dark:to-transparent from-blue-50/70 to-transparent">
           <div className="flex items-center space-x-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center p-1.5 shadow-sm">
-              <DartLogo size={32} animate />
+            <div className="flex items-center justify-center">
+              <DartLogo size={38} animate />
             </div>
             <div>
               <div className="flex items-center space-x-2">

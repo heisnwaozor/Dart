@@ -10,274 +10,258 @@ interface DartLogoProps {
 export const DartLogo: React.FC<DartLogoProps> = ({ 
   className = '', 
   size = 40,
-  animate = false,
-  withContainer = false
+  animate = false
 }) => {
-  const svgContent = (
+  return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 120 120"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`select-none ${animate ? 'hover:scale-105 transition-all duration-300' : ''} ${className}`}
+      className={`select-none ${animate ? 'hover:scale-110 transition-transform duration-300' : ''} ${className}`}
     >
       <defs>
-        {/* Sketch Hand Gradients */}
-        <linearGradient id="sketchHandGrad" x1="20" y1="100" x2="80" y2="40" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#2563EB" />
-          <stop offset="55%" stopColor="#38BDF8" />
-          <stop offset="100%" stopColor="#FFFFFF" />
+        {/* Bold Blue Gradients */}
+        <linearGradient id="boldBlueDartGrad" x1="20" y1="100" x2="100" y2="20" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#1D4ED8" />
+          <stop offset="45%" stopColor="#2563EB" />
+          <stop offset="100%" stopColor="#38BDF8" />
         </linearGradient>
 
-        <linearGradient id="sketchDartGrad" x1="22" y1="96" x2="102" y2="18" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#00E5FF" />
-          <stop offset="35%" stopColor="#3B82F6" />
-          <stop offset="70%" stopColor="#60A5FA" />
-          <stop offset="100%" stopColor="#FFFFFF" />
+        <linearGradient id="boldBlueHandGrad" x1="16" y1="110" x2="80" y2="35" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#1D4ED8" />
+          <stop offset="40%" stopColor="#2563EB" />
+          <stop offset="85%" stopColor="#3B82F6" />
+          <stop offset="100%" stopColor="#60A5FA" />
         </linearGradient>
 
-        <linearGradient id="sketchFlightGrad" x1="16" y1="84" x2="36" y2="104" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.45" />
+        <linearGradient id="boldBlueFinGrad" x1="15" y1="80" x2="35" y2="105" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.4" />
           <stop offset="100%" stopColor="#1D4ED8" stopOpacity="0.15" />
         </linearGradient>
-
-        {/* Sketch Glow Filter */}
-        <filter id="sketchGlow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2.5" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
       </defs>
 
-      {/* 1. Drafting and Sketch Construction Guide Rings */}
-      <circle 
-        cx="60" 
-        cy="60" 
-        r="52" 
-        stroke="#38BDF8" 
-        strokeWidth="0.8" 
-        strokeDasharray="3 5" 
-        opacity="0.3" 
-        className={animate ? 'animate-spin-slow origin-center' : ''} 
-      />
-      <circle 
-        cx="96" 
-        cy="24" 
-        r="14" 
-        stroke="#60A5FA" 
-        strokeWidth="0.6" 
-        strokeDasharray="2 3" 
-        opacity="0.35" 
-      />
-
-      {/* Sketchy aim vector lines towards the bullseye */}
-      <line x1="86" y1="34" x2="114" y2="6" stroke="#FFFFFF" strokeWidth="1" strokeDasharray="4 3" opacity="0.5" />
-      <line x1="92" y1="40" x2="112" y2="20" stroke="#38BDF8" strokeWidth="0.75" strokeDasharray="2 2" opacity="0.4" />
-
-      {/* 2. Dart Assembly (Tail at bottom-left, needle aimed at top-right) */}
+      {/* 1. Tournament Dart (Tail bottom left to needle top right) */}
       
-      {/* Flight Fins (Stabilizer Tail) */}
-      <g id="dart-flight">
+      {/* Flight Stabilizer Fins */}
+      <g id="dart-fins">
+        {/* Top-left stabilizer wing */}
         <path
-          d="M 27 93 L 15 85 L 20 75 L 31 87 Z"
-          fill="url(#sketchFlightGrad)"
-          stroke="url(#sketchDartGrad)"
-          strokeWidth="1.3"
+          d="M 24 96 L 12 85 L 18 73 L 30 87 Z"
+          fill="url(#boldBlueFinGrad)"
+          stroke="#2563EB"
+          strokeWidth="3.2"
           strokeLinejoin="round"
         />
+        {/* Bottom-right stabilizer wing */}
         <path
-          d="M 27 93 L 23 105 L 34 102 L 35 91 Z"
-          fill="url(#sketchFlightGrad)"
-          stroke="url(#sketchDartGrad)"
-          strokeWidth="1.3"
+          d="M 24 96 L 19 108 L 32 105 L 34 91 Z"
+          fill="url(#boldBlueFinGrad)"
+          stroke="#2563EB"
+          strokeWidth="3.2"
           strokeLinejoin="round"
         />
-        {/* Sketchy inner fin rib lines */}
-        <line x1="21" y1="80" x2="28" y2="89" stroke="#38BDF8" strokeWidth="0.8" opacity="0.7" />
-        <line x1="28" y1="103" x2="31" y2="93" stroke="#38BDF8" strokeWidth="0.8" opacity="0.7" />
-        <line x1="14" y1="84" x2="27" y2="92" stroke="#FFFFFF" strokeWidth="0.6" opacity="0.5" strokeDasharray="2 1" />
+        {/* Internal aerodynamic fin ribs */}
+        <line x1="17" y1="79" x2="25" y2="89" stroke="#38BDF8" strokeWidth="2.2" strokeLinecap="round" />
+        <line x1="25" y1="104" x2="29" y2="93" stroke="#38BDF8" strokeWidth="2.2" strokeLinecap="round" />
       </g>
 
-      {/* Dart Shaft (Slim connector stem) */}
-      <line x1="26" y1="94" x2="48" y2="72" stroke="url(#sketchDartGrad)" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="27" y1="96" x2="49" y2="74" stroke="#38BDF8" strokeWidth="1" strokeLinecap="round" opacity="0.6" />
+      {/* Dart Shaft (Connecting stem) */}
+      <line 
+        x1="24" 
+        y1="96" 
+        x2="46" 
+        y2="74" 
+        stroke="url(#boldBlueDartGrad)" 
+        strokeWidth="4.8" 
+        strokeLinecap="round" 
+      />
+      <line 
+        x1="25" 
+        y1="97" 
+        x2="47" 
+        y2="75" 
+        stroke="#38BDF8" 
+        strokeWidth="1.8" 
+        strokeLinecap="round" 
+        opacity="0.8" 
+      />
 
-      {/* Dart Barrel (Precision Knurled Grip Zone) */}
-      <line x1="48" y1="72" x2="78" y2="42" stroke="url(#sketchDartGrad)" strokeWidth="4.2" strokeLinecap="round" />
-      <line x1="47" y1="70" x2="77" y2="40" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" opacity="0.85" />
-      <line x1="49" y1="74" x2="79" y2="44" stroke="#1D4ED8" strokeWidth="1" strokeLinecap="round" opacity="0.6" />
+      {/* Dart Barrel (Bold Precision Knurled Core) */}
+      <line 
+        x1="46" 
+        y1="74" 
+        x2="78" 
+        y2="42" 
+        stroke="#1D4ED8" 
+        strokeWidth="7.8" 
+        strokeLinecap="round" 
+      />
+      <line 
+        x1="45" 
+        y1="73" 
+        x2="77" 
+        y2="41" 
+        stroke="#3B82F6" 
+        strokeWidth="4.5" 
+        strokeLinecap="round" 
+      />
+      <line 
+        x1="44" 
+        y1="72" 
+        x2="76" 
+        y2="40" 
+        stroke="#60A5FA" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+      />
 
-      {/* Knurling Texture Rings on Dart Barrel */}
-      <line x1="52" y1="66" x2="55" y2="69" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="56" y1="62" x2="59" y2="65" stroke="#38BDF8" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="60" y1="58" x2="63" y2="61" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="64" y1="54" x2="67" y2="57" stroke="#38BDF8" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="68" y1="50" x2="71" y2="53" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" />
+      {/* Knurled Grip Texture Ribs on Dart Barrel */}
+      <line x1="50" y1="67" x2="54" y2="71" stroke="#38BDF8" strokeWidth="2.8" strokeLinecap="round" />
+      <line x1="55" y1="62" x2="59" y2="66" stroke="#93C5FD" strokeWidth="2.8" strokeLinecap="round" />
+      <line x1="60" y1="57" x2="64" y2="61" stroke="#38BDF8" strokeWidth="2.8" strokeLinecap="round" />
+      <line x1="65" y1="52" x2="69" y2="56" stroke="#93C5FD" strokeWidth="2.8" strokeLinecap="round" />
+      <line x1="70" y1="47" x2="74" y2="51" stroke="#38BDF8" strokeWidth="2.8" strokeLinecap="round" />
 
-      {/* Dart Needle Point (Steel Tip) */}
-      <line x1="78" y1="42" x2="96" y2="24" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
-      <line x1="79" y1="41" x2="97" y2="23" stroke="#38BDF8" strokeWidth="1" strokeLinecap="round" opacity="0.85" />
-      
-      {/* Needle Tip Energy Beacon */}
-      <circle cx="96" cy="24" r="2.8" fill="#FFFFFF" filter="url(#sketchGlow)" />
-      <circle cx="96" cy="24" r="1.3" fill="#38BDF8" />
+      {/* Steel Dart Needle Point */}
+      <line 
+        x1="78" 
+        y1="42" 
+        x2="100" 
+        y2="20" 
+        stroke="#2563EB" 
+        strokeWidth="4" 
+        strokeLinecap="round" 
+      />
+      <line 
+        x1="79" 
+        y1="41" 
+        x2="99" 
+        y2="21" 
+        stroke="#60A5FA" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+      />
 
-      {/* 3. The Sketchy Hand Holding the Dart */}
-      <g id="sketchy-hand">
-        {/* Palm & Wrist Hatch Shading */}
-        <g opacity="0.35" stroke="#38BDF8" strokeWidth="0.8">
-          <line x1="34" y1="84" x2="40" y2="80" />
-          <line x1="36" y1="87" x2="42" y2="83" />
-          <line x1="38" y1="90" x2="44" y2="86" />
-          <line x1="41" y1="93" x2="47" y2="89" />
-          <line x1="28" y1="98" x2="34" y2="94" />
-          <line x1="30" y1="101" x2="36" y2="97" />
-        </g>
+      {/* Needle Apex Point & Target Ticks */}
+      <circle cx="100" cy="20" r="3" fill="#2563EB" />
+      <circle cx="100" cy="20" r="1.5" fill="#38BDF8" />
+      <line x1="104" y1="16" x2="111" y2="9" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="106" y1="22" x2="113" y2="22" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" />
+      <line x1="98" y1="12" x2="98" y2="5" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" />
 
-        {/* Wrist & Forearm Contours (Sketchy double line) */}
+      {/* 2. Bold Blue Hand Pinching the Dart */}
+      <g id="bold-blue-hand">
+        {/* Palm & Wrist Hatch Lines */}
+        <line x1="28" y1="102" x2="35" y2="97" stroke="#3B82F6" strokeWidth="2.2" strokeLinecap="round" />
+        <line x1="32" y1="96" x2="39" y2="91" stroke="#3B82F6" strokeWidth="2.2" strokeLinecap="round" />
+        <line x1="36" y1="90" x2="43" y2="85" stroke="#3B82F6" strokeWidth="2.2" strokeLinecap="round" />
+
+        {/* Wrist & Forearm Outer Contour */}
         <path
-          d="M 18 106 C 24 100, 28 92, 34 84 C 38 78, 42 74, 46 72"
-          stroke="url(#sketchHandGrad)"
-          strokeWidth="1.8"
+          d="M 16 110 C 23 103, 28 95, 34 86 C 38 80, 42 75, 46 72"
+          stroke="url(#boldBlueHandGrad)"
+          strokeWidth="4.4"
           strokeLinecap="round"
           fill="none"
         />
         <path
-          d="M 16 109 C 22 103, 26 95, 32 87"
+          d="M 13 112 C 20 105, 25 97, 31 89"
           stroke="#38BDF8"
-          strokeWidth="0.8"
-          strokeLinecap="round"
-          strokeDasharray="4 2"
-          opacity="0.5"
-          fill="none"
-        />
-
-        {/* Curled Pinky and Ring Fingers (Tucked gracefully into palm) */}
-        <path
-          d="M 33 85 C 38 88, 44 88, 48 83 C 51 79, 49 75, 46 73"
-          stroke="url(#sketchHandGrad)"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          fill="none"
-        />
-        <path
-          d="M 39 80 C 44 83, 50 82, 53 77 C 55 73, 52 70, 48 68"
-          stroke="url(#sketchHandGrad)"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          fill="none"
-        />
-
-        {/* Middle Finger (Supporting the dart barrel from below) */}
-        <path
-          d="M 45 72 C 50 76, 56 75, 60 70 C 63 66, 61 62, 57 62"
-          stroke="#FFFFFF"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          fill="none"
-        />
-        <path
-          d="M 46 74 C 51 78, 57 77, 61 72"
-          stroke="#38BDF8"
-          strokeWidth="0.8"
-          strokeLinecap="round"
-          opacity="0.6"
-          fill="none"
-        />
-
-        {/* Thumb (Curving up to pinch the dart barrel) */}
-        <path
-          d="M 34 84 C 38 78, 44 72, 48 65 C 51 60, 54 58, 58 60 C 60 61, 60 65, 56 68 C 52 71, 48 76, 44 82"
-          stroke="url(#sketchHandGrad)"
           strokeWidth="2"
           strokeLinecap="round"
-          strokeLinejoin="round"
           fill="none"
+          opacity="0.8"
         />
-        {/* Thumb Tendon Guide Mark */}
+
+        {/* Folded Pinky and Ring Fingers */}
         <path
-          d="M 40 76 C 44 71, 48 67, 52 64"
-          stroke="#FFFFFF"
-          strokeWidth="1"
+          d="M 33 86 C 39 90, 47 89, 50 84 C 53 79, 50 74, 46 72"
+          stroke="url(#boldBlueHandGrad)"
+          strokeWidth="3.8"
           strokeLinecap="round"
-          opacity="0.75"
           fill="none"
         />
-        {/* Thumb Contact Pad on Barrel */}
         <path
-          d="M 54 62 C 56 60, 59 61, 60 63 C 60 66, 57 68, 55 67"
-          stroke="#FFFFFF"
-          strokeWidth="1.6"
+          d="M 39 81 C 45 84, 53 83, 56 77 C 58 73, 54 69, 49 67"
+          stroke="url(#boldBlueHandGrad)"
+          strokeWidth="3.8"
           strokeLinecap="round"
           fill="none"
         />
 
-        {/* Index Finger (Poised on top of the dart barrel in precision throwing grip) */}
+        {/* Middle Finger (Underside support on barrel) */}
         <path
-          d="M 36 68 C 40 56, 48 44, 56 38 C 64 32, 70 34, 73 39 C 76 44, 74 50, 71 54 C 69 57, 65 57, 62 55"
-          stroke="url(#sketchHandGrad)"
+          d="M 45 72 C 51 77, 58 76, 62 70 C 65 65, 62 61, 57 61"
+          stroke="#2563EB"
+          strokeWidth="4"
+          strokeLinecap="round"
+          fill="none"
+        />
+        <path
+          d="M 47 74 C 53 79, 59 78, 63 72"
+          stroke="#38BDF8"
           strokeWidth="2.2"
           strokeLinecap="round"
+          fill="none"
+        />
+
+        {/* Thumb (Curving up from heel of hand to pinch the barrel) */}
+        <path
+          d="M 34 86 C 39 79, 45 73, 49 66 C 52 61, 55 59, 59 61 C 62 63, 61 67, 57 70 C 53 73, 48 78, 44 84"
+          stroke="url(#boldBlueHandGrad)"
+          strokeWidth="4.4"
+          strokeLinecap="round"
           strokeLinejoin="round"
           fill="none"
         />
-        {/* Sketchy secondary guide stroke over the index knuckle curve */}
+        {/* Thumb contact pad on barrel */}
         <path
-          d="M 46 48 C 52 40, 59 36, 66 34 C 71 33, 75 36, 76 41 C 77 46, 74 51, 70 55"
-          stroke="#FFFFFF"
-          strokeWidth="1"
-          strokeLinecap="round"
-          strokeDasharray="6 3"
-          opacity="0.8"
-          fill="none"
-        />
-        {/* Index Fingertip Contact Pad */}
-        <path
-          d="M 68 48 C 71 49, 73 52, 71 55 C 69 57, 66 57, 64 54"
-          stroke="#FFFFFF"
-          strokeWidth="1.8"
+          d="M 53 63 C 56 61, 60 62, 61 65 C 61 68, 58 70, 55 69"
+          stroke="#3B82F6"
+          strokeWidth="3.4"
           strokeLinecap="round"
           fill="none"
         />
-        {/* Knuckle Sketch Creases */}
-        <line x1="56" y1="40" x2="60" y2="43" stroke="#38BDF8" strokeWidth="1.2" strokeLinecap="round" />
-        <line x1="65" y1="38" x2="68" y2="42" stroke="#38BDF8" strokeWidth="1.2" strokeLinecap="round" />
-      </g>
+        {/* Thumb tendon contour */}
+        <path
+          d="M 39 78 C 43 72, 47 68, 51 65"
+          stroke="#60A5FA"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          fill="none"
+        />
 
-      {/* 4. Release Trajectory Energy and Focus Accents */}
-      <g id="aim-accents">
+        {/* Index Finger (Arched over top of barrel in precision grip) */}
         <path
-          d="M 92 16 C 100 20, 106 28, 106 36"
+          d="M 36 68 C 40 54, 49 42, 57 36 C 66 30, 72 32, 75 38 C 78 44, 76 50, 72 54 C 69 57, 65 57, 62 55"
+          stroke="url(#boldBlueHandGrad)"
+          strokeWidth="4.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+        {/* Secondary sketch accent along the index arch */}
+        <path
+          d="M 45 47 C 52 38, 60 34, 68 32 C 73 31, 78 34, 79 40 C 80 46, 76 52, 71 56"
           stroke="#38BDF8"
-          strokeWidth="1.2"
-          strokeDasharray="3 2"
+          strokeWidth="2.2"
           strokeLinecap="round"
-          opacity="0.75"
+          fill="none"
         />
+        {/* Index fingertip contact pad clamping barrel */}
         <path
-          d="M 96 12 C 105 17, 112 26, 112 36"
-          stroke="#FFFFFF"
-          strokeWidth="0.8"
-          strokeDasharray="2 3"
+          d="M 68 47 C 72 49, 74 53, 72 56 C 70 58, 66 58, 64 55"
+          stroke="#3B82F6"
+          strokeWidth="3.6"
           strokeLinecap="round"
-          opacity="0.5"
+          fill="none"
         />
-        {/* Micro Focus Crosshair at Tip */}
-        <line x1="96" y1="19" x2="96" y2="29" stroke="#38BDF8" strokeWidth="0.8" opacity="0.6" />
-        <line x1="91" y1="24" x2="101" y2="24" stroke="#38BDF8" strokeWidth="0.8" opacity="0.6" />
+        {/* Index knuckle creases */}
+        <line x1="56" y1="39" x2="61" y2="43" stroke="#38BDF8" strokeWidth="2.6" strokeLinecap="round" />
+        <line x1="66" y1="37" x2="70" y2="42" stroke="#38BDF8" strokeWidth="2.6" strokeLinecap="round" />
       </g>
     </svg>
   );
-
-  if (withContainer) {
-    return (
-      <div className={`relative inline-flex items-center justify-center rounded-2xl p-2 bg-gradient-to-tr from-blue-600 via-sky-400 to-white shadow-xl shadow-blue-500/20 ${className}`}>
-        <div className="rounded-[14px] dark:bg-[#070A13] bg-white p-1">
-          {svgContent}
-        </div>
-      </div>
-    );
-  }
-
-  return svgContent;
 };

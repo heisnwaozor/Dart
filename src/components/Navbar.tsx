@@ -88,21 +88,13 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="motion-container">
         <div className="flex items-center justify-between h-20 sm:h-22">
           
-          {/* Brand Identity: Dart with Sketchy Hand Holding a Dart Logo */}
+          {/* Brand Identity: Standalone Bold Blue Hand Holding Dart Logo */}
           <div 
             onClick={() => setActiveTab('projects')}
             className="flex items-center space-x-3 cursor-pointer select-none group"
           >
-            <div className="relative">
-              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-400 to-white p-[1.5px] shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/50 group-hover:scale-105 transition-all duration-300">
-                <div className="w-full h-full dark:bg-[#0B101E] bg-white rounded-[14px] flex items-center justify-center p-1">
-                  <DartLogo size={36} animate />
-                </div>
-              </div>
-              <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-80"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
-              </span>
+            <div className="relative flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <DartLogo size={42} animate />
             </div>
 
             <div>

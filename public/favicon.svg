@@ -1,65 +1,57 @@
 <svg width="48" height="48" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="favHand" x1="20" y1="100" x2="80" y2="40" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#2563EB" />
-      <stop offset="60%" stop-color="#38BDF8" />
-      <stop offset="100%" stop-color="#FFFFFF" />
+    <linearGradient id="favBoldDart" x1="20" y1="100" x2="100" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1D4ED8" />
+      <stop offset="50%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#38BDF8" />
     </linearGradient>
-    <linearGradient id="favDart" x1="22" y1="96" x2="102" y2="18" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#00E5FF" />
-      <stop offset="40%" stop-color="#3B82F6" />
-      <stop offset="70%" stop-color="#60A5FA" />
-      <stop offset="100%" stop-color="#FFFFFF" />
+    <linearGradient id="favBoldHand" x1="16" y1="110" x2="80" y2="35" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1D4ED8" />
+      <stop offset="45%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#3B82F6" />
     </linearGradient>
-    <linearGradient id="favFlight" x1="16" y1="84" x2="36" y2="104" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.6" />
+    <linearGradient id="favBoldFin" x1="15" y1="80" x2="35" y2="105" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.5" />
       <stop offset="100%" stop-color="#1D4ED8" stop-opacity="0.2" />
     </linearGradient>
   </defs>
 
-  <!-- Background circle badge -->
-  <rect width="120" height="120" rx="32" fill="#070A13" />
-  <rect width="118" height="118" x="1" y="1" rx="31" stroke="#38BDF8" stroke-width="1.5" stroke-opacity="0.4" />
+  <path d="M 24 96 L 12 85 L 18 73 L 30 87 Z" fill="url(#favBoldFin)" stroke="#2563EB" stroke-width="3.5" stroke-linejoin="round" />
+  <path d="M 24 96 L 19 108 L 32 105 L 34 91 Z" fill="url(#favBoldFin)" stroke="#2563EB" stroke-width="3.5" stroke-linejoin="round" />
+  <line x1="17" y1="79" x2="25" y2="89" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="25" y1="104" x2="29" y2="93" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" />
 
-  <!-- Aim circle -->
-  <circle cx="60" cy="60" r="48" stroke="#38BDF8" stroke-width="1" stroke-dasharray="3 5" opacity="0.3" />
+  <line x1="24" y1="96" x2="46" y2="74" stroke="url(#favBoldDart)" stroke-width="5" stroke-linecap="round" />
+  <line x1="46" y1="74" x2="78" y2="42" stroke="#1D4ED8" stroke-width="8.5" stroke-linecap="round" />
+  <line x1="45" y1="73" x2="77" y2="41" stroke="#3B82F6" stroke-width="4.5" stroke-linecap="round" />
 
-  <!-- Flight Fins -->
-  <path d="M 27 93 L 15 85 L 20 75 L 31 87 Z" fill="url(#favFlight)" stroke="url(#favDart)" stroke-width="1.8" />
-  <path d="M 27 93 L 23 105 L 34 102 L 35 91 Z" fill="url(#favFlight)" stroke="url(#favDart)" stroke-width="1.8" />
+  <line x1="50" y1="67" x2="54" y2="71" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" />
+  <line x1="55" y1="62" x2="59" y2="66" stroke="#93C5FD" stroke-width="3" stroke-linecap="round" />
+  <line x1="60" y1="57" x2="64" y2="61" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" />
+  <line x1="65" y1="52" x2="69" y2="56" stroke="#93C5FD" stroke-width="3" stroke-linecap="round" />
+  <line x1="70" y1="47" x2="74" y2="51" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" />
 
-  <!-- Dart Shaft & Barrel -->
-  <line x1="26" y1="94" x2="48" y2="72" stroke="url(#favDart)" stroke-width="3" stroke-linecap="round" />
-  <line x1="48" y1="72" x2="78" y2="42" stroke="url(#favDart)" stroke-width="5" stroke-linecap="round" />
-  <line x1="47" y1="70" x2="77" y2="40" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" opacity="0.9" />
+  <line x1="78" y1="42" x2="100" y2="20" stroke="#2563EB" stroke-width="4.5" stroke-linecap="round" />
+  <circle cx="100" cy="20" r="3.5" fill="#2563EB" />
+  <circle cx="100" cy="20" r="1.8" fill="#38BDF8" />
+  <line x1="104" y1="16" x2="111" y2="9" stroke="#2563EB" stroke-width="3" stroke-linecap="round" />
 
-  <!-- Barrel Hatch Rings -->
-  <line x1="53" y1="65" x2="56" y2="68" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
-  <line x1="59" y1="59" x2="62" y2="62" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" />
-  <line x1="65" y1="53" x2="68" y2="56" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
-
-  <!-- Needle Point -->
-  <line x1="78" y1="42" x2="98" y2="22" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" />
-  <circle cx="98" cy="22" r="3.5" fill="#FFFFFF" />
-
-  <!-- Hand Contours (Sketchy Grip) -->
-  <!-- Wrist -->
-  <path d="M 18 106 C 24 100, 28 92, 34 84 C 38 78, 42 74, 46 72" stroke="url(#favHand)" stroke-width="2.2" stroke-linecap="round" fill="none" />
+  <line x1="28" y1="102" x2="35" y2="97" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="32" y1="96" x2="39" y2="91" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
   
-  <!-- Fingers folded -->
-  <path d="M 33 85 C 38 88, 44 88, 48 83 C 51 79, 49 75, 46 73" stroke="url(#favHand)" stroke-width="2" stroke-linecap="round" fill="none" />
-  <path d="M 45 72 C 50 76, 56 75, 60 70 C 63 66, 61 62, 57 62" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" fill="none" />
+  <path d="M 16 110 C 23 103, 28 95, 34 86 C 38 80, 42 75, 46 72" stroke="url(#favBoldHand)" stroke-width="4.8" stroke-linecap="round" fill="none" />
+  
+  <path d="M 33 86 C 39 90, 47 89, 50 84 C 53 79, 50 74, 46 72" stroke="url(#favBoldHand)" stroke-width="4" stroke-linecap="round" fill="none" />
+  <path d="M 39 81 C 45 84, 53 83, 56 77 C 58 73, 54 69, 49 67" stroke="url(#favBoldHand)" stroke-width="4" stroke-linecap="round" fill="none" />
+  <path d="M 45 72 C 51 77, 58 76, 62 70 C 65 65, 62 61, 57 61" stroke="#2563EB" stroke-width="4.2" stroke-linecap="round" fill="none" />
 
-  <!-- Thumb Pinch -->
-  <path d="M 34 84 C 38 78, 44 72, 48 65 C 51 60, 54 58, 58 60 C 60 61, 60 65, 56 68 C 52 71, 48 76, 44 82" stroke="url(#favHand)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-  <path d="M 54 62 C 56 60, 59 61, 60 63 C 60 66, 57 68, 55 67" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" fill="none" />
+  <path d="M 34 86 C 39 79, 45 73, 49 66 C 52 61, 55 59, 59 61 C 62 63, 61 67, 57 70 C 53 73, 48 78, 44 84" stroke="url(#favBoldHand)" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <path d="M 53 63 C 56 61, 60 62, 61 65 C 61 68, 58 70, 55 69" stroke="#3B82F6" stroke-width="3.6" stroke-linecap="round" fill="none" />
 
-  <!-- Index Finger Arch -->
-  <path d="M 36 68 C 40 56, 48 44, 56 38 C 64 32, 70 34, 73 39 C 76 44, 74 50, 71 54 C 69 57, 65 57, 62 55" stroke="url(#favHand)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-  <path d="M 46 48 C 52 40, 59 36, 66 34 C 71 33, 75 36, 76 41 C 77 46, 74 51, 70 55" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="6 3" opacity="0.8" fill="none" />
-  <path d="M 68 48 C 71 49, 73 52, 71 55 C 69 57, 66 57, 64 54" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" fill="none" />
+  <path d="M 36 68 C 40 54, 49 42, 57 36 C 66 30, 72 32, 75 38 C 78 44, 76 50, 72 54 C 69 57, 65 57, 62 55" stroke="url(#favBoldHand)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <path d="M 45 47 C 52 38, 60 34, 68 32 C 73 31, 78 34, 79 40 C 80 46, 76 52, 71 56" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" fill="none" />
+  <path d="M 68 47 C 72 49, 74 53, 72 56 C 70 58, 66 58, 64 55" stroke="#3B82F6" stroke-width="3.8" stroke-linecap="round" fill="none" />
 
-  <!-- Knuckle marks -->
-  <line x1="56" y1="40" x2="60" y2="43" stroke="#38BDF8" stroke-width="1.5" stroke-linecap="round" />
-  <line x1="65" y1="38" x2="68" y2="42" stroke="#38BDF8" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="56" y1="39" x2="61" y2="43" stroke="#38BDF8" stroke-width="2.8" stroke-linecap="round" />
+  <line x1="66" y1="37" x2="70" y2="42" stroke="#38BDF8" stroke-width="2.8" stroke-linecap="round" />
 </svg>

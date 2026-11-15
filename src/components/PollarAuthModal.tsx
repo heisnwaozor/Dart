@@ -286,8 +286,8 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between p-5 sm:p-6 border-b dark:border-white/[0.08] border-slate-200">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center p-1">
-              <DartLogo size={30} />
+            <div className="flex items-center justify-center">
+              <DartLogo size={36} />
             </div>
             <div>
               <h3 className="text-base font-bold dark:text-white text-slate-900">
