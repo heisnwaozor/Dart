@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign in - Pollar Social Auth</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Sign in with Google - Dart</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M58 48 L22 22 C16 38, 20 54, 38 62 L56 54 Z' fill='%232563EB' stroke='%23FFFFFF' stroke-width='1.5'/%3E%3Cpath d='M62 48 L98 22 C104 38, 100 54, 82 62 L64 54 Z' fill='%2360A5FA' stroke='%23FFFFFF' stroke-width='1.5'/%3E%3C/svg%3E" />
   <style>
     * {
       box-sizing: border-box;
@@ -13,206 +13,132 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
     body {
-      background: #f8fafc;
-      color: #1e293b;
+      background: #0b101b;
+      color: #f8fafc;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-    }
-    .dark body {
-      background: #0f172a;
-      color: #f8fafc;
+      padding: 24px;
     }
     .card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 24px;
-      padding: 32px 28px;
+      background: #141c2e;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 28px;
+      padding: 36px 30px;
       width: 100%;
       max-width: 440px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      text-align: center;
     }
-    .logo-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #05c92f;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 18px auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
     h1 {
-      font-size: 22px;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 6px;
-      color: #0f172a;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #ffffff;
     }
-    p.subtitle {
+    p {
       font-size: 13px;
-      color: #64748b;
-      text-align: center;
-      margin-bottom: 24px;
+      color: #94a3b8;
+      line-height: 1.5;
     }
-    .input-group {
-      margin-bottom: 18px;
-    }
-    label {
-      display: block;
+    .error-box {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
       font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #475569;
+      text-align: left;
     }
-    input[type="text"], input[type="email"], input[type="password"] {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid #cbd5e1;
-      font-size: 14px;
-      outline: none;
-      transition: all 0.2s;
+    .guide-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+      font-size: 12px;
+      color: #cbd5e1;
     }
-    input:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    .guide-box code {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-family: monospace;
+      color: #38bdf8;
+      word-break: break-all;
     }
     .btn {
       width: 100%;
       padding: 12px 20px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 800;
       border: none;
       cursor: pointer;
-      display: flex;
+      margin-top: 16px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       transition: all 0.2s;
     }
-    .btn-primary {
-      background: #2563eb;
+    .btn-green {
+      background: #05c92f;
+      color: #070a13;
+    }
+    .btn-green:hover {
+      background: #04b82a;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
       color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
-    .btn-primary:hover {
-      background: #1d4ed8;
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
     }
-    .btn-github {
-      background: #24292f;
+    input {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.3);
       color: #ffffff;
+      font-size: 12px;
+      outline: none;
+      margin-top: 8px;
     }
-    .btn-github:hover {
-      background: #1a1e22;
-    }
-    .footer-note {
-      margin-top: 24px;
-      font-size: 11px;
-      color: #94a3b8;
-      text-align: center;
-      line-height: 1.5;
-    }
-    .avatar-preview {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 14px;
-      background: #f1f5f9;
-      margin-bottom: 18px;
-    }
-    .avatar-img {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #2563eb;
-    }
-    .account-picker {
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-    .account-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      cursor: pointer;
-      border-bottom: 1px solid #f1f5f9;
-      transition: background 0.15s;
-    }
-    .account-item:last-child {
-      border-bottom: none;
-    }
-    .account-item:hover {
-      background: #f8fafc;
-    }
-    .account-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: #0f172a;
-    }
-    .account-email {
-      font-size: 11px;
-      color: #64748b;
-    }
-    .loader {
-      display: none;
-      text-align: center;
-      padding: 20px;
-    }
-    .spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid #e2e8f0;
-      border-top-color: #2563eb;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 14px auto;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    input:focus {
+      border-color: #05c92f;
     }
   </style>
 </head>
 <body>
 
-  <div class="card" id="mainCard">
-    <div class="logo-container" id="logoContainer">
-      <!-- Will be injected by script based on provider -->
-    </div>
-    <h1 id="titleText">Sign in to continue</h1>
-    <p class="subtitle" id="subtitleText">to Dart (Pollar Network Social Wallet)</p>
-
-    <div id="contentArea">
-      <!-- Will be injected -->
-    </div>
-
-    <div class="loader" id="loaderArea">
-      <div class="spinner"></div>
-      <p style="font-size: 13px; font-weight: 600; color: #0f172a;" id="loaderText">Securing your session with Pollar...</p>
-      <p style="font-size: 11px; color: #64748b; margin-top: 4px;">Provisioning your gas-sponsored Stellar wallet keypair</p>
-    </div>
-
-    <p class="footer-note">
-      Protected by Pollar Cryptographic Social Auth.<br>
-      One unique Stellar wallet provisioned per verified account.
-    </p>
+  <div class="card" id="card">
+    <div class="spinner" id="spinner"></div>
+    <h1 id="title">Connecting to Google...</h1>
+    <p id="desc">Opening Google Account selection screen.</p>
+    <div id="dynamicArea"></div>
   </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const provider = params.get('provider') || 'google';
-    const targetOrigin = params.get('origin') || window.location.origin;
-
-    const logoContainer = document.getElementById('logoContainer');
-    const titleText = document.getElementById('titleText');
-    const subtitleText = document.getElementById('subtitleText');
-    const contentArea = document.getElementById('contentArea');
-    const loaderArea = document.getElementById('loaderArea');
-    const mainCard = document.getElementById('mainCard');
-
     function generateStellarAddress() {
       const chars = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
       let addr = 'G';
@@ -222,185 +148,180 @@
       return addr;
     }
 
-    function completeAuth(name, email, avatar) {
-      contentArea.style.display = 'none';
-      loaderArea.style.display = 'block';
+    function notifyOpenerAndClose(payload) {
+      document.getElementById('spinner').style.borderTopColor = '#05c92f';
+      document.getElementById('title').innerText = 'Connected as ' + (payload.name || payload.email);
+      document.getElementById('desc').innerText = 'Registering your Stellar wallet in database...';
 
-      setTimeout(() => {
-        const payload = {
-          type: 'POLLAR_OAUTH_SUCCESS',
-          provider: provider,
-          name: name,
-          email: email,
-          avatar: avatar,
-          walletAddress: generateStellarAddress()
-        };
-
-        if (window.opener) {
-          window.opener.postMessage(payload, '*');
-          setTimeout(() => {
-            window.close();
-          }, 400);
-        } else {
-          // Fallback if opened standalone
-          localStorage.setItem('pollar_oauth_pending', JSON.stringify(payload));
-          alert('Authentication successful! You can close this window.');
-        }
-      }, 700);
+      if (window.opener) {
+        window.opener.postMessage(payload, '*');
+        setTimeout(() => {
+          window.close();
+        }, 700);
+      } else {
+        localStorage.setItem('pollar_oauth_success', JSON.stringify(payload));
+        document.getElementById('desc').innerText = 'Success! You can now close this tab and return to Dart.';
+      }
     }
 
-    if (provider === 'google') {
-      logoContainer.innerHTML = `
-        <svg width="40" height="40" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-        </svg>
-      `;
-      titleText.innerText = 'Sign in with Google';
-      subtitleText.innerText = 'Choose an account to continue to Dart';
+    // 1. Check if returning from Google OAuth redirect (URL Fragment Hash)
+    const hash = window.location.hash.substring(1);
+    const searchParams = new URLSearchParams(window.location.search);
 
-      contentArea.innerHTML = `
-        <div class="account-picker">
-          <div class="account-item" onclick="chooseAccount('Heis Nwaozor', 'heisnwaozor@gmail.com', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80')">
-            <img class="avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Heis">
-            <div>
-              <div class="account-name">Heis Nwaozor</div>
-              <div class="account-email">heisnwaozor@gmail.com (Active Browser Account)</div>
-            </div>
-          </div>
-          <div class="account-item" onclick="chooseAccount('Mateo Silva', 'mateo.silva@gmail.com', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80')">
-            <img class="avatar-img" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" alt="Mateo">
-            <div>
-              <div class="account-name">Mateo Silva</div>
-              <div class="account-email">mateo.silva@gmail.com</div>
-            </div>
-          </div>
-          <div class="account-item" onclick="chooseAccount('Alex Rivera', 'alex.rivera@gmail.com', 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80')">
-            <img class="avatar-img" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80" alt="Alex">
-            <div>
-              <div class="account-name">Alex Rivera</div>
-              <div class="account-email">alex.rivera@gmail.com</div>
-            </div>
-          </div>
-        </div>
+    if (hash) {
+      const hashParams = new URLSearchParams(hash);
+      const idToken = hashParams.get('id_token');
+      const accessToken = hashParams.get('access_token');
+      const error = hashParams.get('error');
 
-        <div style="margin-bottom: 16px; text-align: center; font-size: 11px; color: #94a3b8; font-weight: 600;">
-          OR USE ANOTHER GOOGLE ACCOUNT
-        </div>
-
-        <form id="googleCustomForm" onsubmit="handleGoogleCustom(event)">
-          <div class="input-group">
-            <label for="googleName">Your Full Name</label>
-            <input type="text" id="googleName" placeholder="e.g. David Morales" required>
-          </div>
-          <div class="input-group">
-            <label for="googleEmail">Google Email Address</label>
-            <input type="email" id="googleEmail" placeholder="your.name@gmail.com" required>
-          </div>
-          <button type="submit" class="btn btn-primary">
-            <span>Continue to Dart</span>
-          </button>
-        </form>
-      `;
-
-      window.chooseAccount = function(name, email, avatar) {
-        completeAuth(name, email, avatar);
-      };
-
-      window.handleGoogleCustom = function(e) {
-        e.preventDefault();
-        const name = document.getElementById('googleName').value.trim();
-        const email = document.getElementById('googleEmail').value.trim();
-        const avatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(email)}`;
-        completeAuth(name, email, avatar);
-      };
-
-    } else if (provider === 'github') {
-      logoContainer.innerHTML = `
-        <svg width="42" height="42" viewBox="0 0 24 24" fill="#24292f">
-          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-        </svg>
-      `;
-      titleText.innerText = 'Sign in with GitHub';
-      subtitleText.innerText = 'Connect straight to your GitHub account';
-
-      contentArea.innerHTML = `
-        <form id="githubForm" onsubmit="handleGithubAuth(event)">
-          <div class="input-group">
-            <label for="githubUsername">GitHub Handle or Username</label>
-            <input type="text" id="githubUsername" value="heisnwaozor" placeholder="e.g. heisnwaozor, torvalds, octocat" oninput="previewGithubProfile(this.value)" required>
-          </div>
-
-          <div id="githubAvatarBox" class="avatar-preview" style="display: flex;">
-            <img id="githubAvatarImg" class="avatar-img" src="https://github.com/heisnwaozor.png" alt="Avatar">
-            <div>
-              <div id="githubUserLabel" style="font-weight: 700; font-size: 13px;">@heisnwaozor</div>
-              <div id="githubBioLabel" style="font-size: 11px; color: #64748b;">Verified GitHub Account • Live Sync</div>
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-github">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-            </svg>
-            <span>Authorize with GitHub</span>
-          </button>
-        </form>
-      `;
-
-      let timer = null;
-      let cachedName = 'heisnwaozor';
-      let cachedAvatar = 'https://github.com/heisnwaozor.png';
-
-      window.previewGithubProfile = function(val) {
-        clearTimeout(timer);
-        const trimmed = val.trim();
-        if (!trimmed) {
-          document.getElementById('githubAvatarBox').style.display = 'none';
-          return;
+      if (error) {
+        showError('Google Authorization Error: ' + error);
+      } else if (idToken) {
+        try {
+          const base64Url = idToken.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = decodeURIComponent(
+            atob(base64)
+              .split('')
+              .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+              .join('')
+          );
+          const data = JSON.parse(jsonPayload);
+          notifyOpenerAndClose({
+            type: 'POLLAR_OAUTH_SUCCESS',
+            provider: 'google',
+            name: data.name || data.given_name || data.email.split('@')[0],
+            email: data.email,
+            avatar: data.picture || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(data.email)}`,
+            walletAddress: generateStellarAddress()
+          });
+        } catch (e) {
+          showError('Failed to parse Google ID token: ' + e.message);
         }
-        timer = setTimeout(() => {
-          const avatarUrl = `https://github.com/${encodeURIComponent(trimmed)}.png`;
-          const img = document.getElementById('githubAvatarImg');
-          img.src = avatarUrl;
-          document.getElementById('githubUserLabel').innerText = `@${trimmed}`;
-          document.getElementById('githubAvatarBox').style.display = 'flex';
-          cachedAvatar = avatarUrl;
-          cachedName = trimmed;
+      } else if (accessToken) {
+        fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        })
+          .then(r => r.json())
+          .then(data => {
+            notifyOpenerAndClose({
+              type: 'POLLAR_OAUTH_SUCCESS',
+              provider: 'google',
+              name: data.name || data.email.split('@')[0],
+              email: data.email,
+              avatar: data.picture || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(data.email)}`,
+              walletAddress: generateStellarAddress()
+            });
+          })
+          .catch(err => {
+            showError('Failed to fetch Google profile: ' + err.message);
+          });
+      }
+    } else if (searchParams.get('error')) {
+      showError('Google OAuth Error: ' + searchParams.get('error'));
+    } else {
+      // 2. Initial Launch: Redirect to Google's official authorization endpoint
+      const provider = searchParams.get('provider') || 'google';
 
-          // Attempt live query to GitHub public API
-          fetch(`https://api.github.com/users/${encodeURIComponent(trimmed)}`)
-            .then(res => res.ok ? res.json() : null)
+      if (provider === 'google') {
+        const storedClientId = localStorage.getItem('pollar_google_client_id');
+        const defaultClientId = '1067577884102-p5j7c65k0c3t245qj96k8fbl4v36q0i4.apps.googleusercontent.com';
+        const clientId = searchParams.get('client_id') || storedClientId || defaultClientId;
+
+        const redirectUri = window.location.origin + '/oauth.html';
+        const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
+          'client_id=' + encodeURIComponent(clientId) +
+          '&redirect_uri=' + encodeURIComponent(redirectUri) +
+          '&response_type=' + encodeURIComponent('token id_token') +
+          '&scope=' + encodeURIComponent('openid email profile') +
+          '&prompt=select_account' +
+          '&nonce=' + Date.now();
+
+        // Redirect popup window to Google accounts chooser
+        window.location.href = authUrl;
+      } else if (provider === 'github') {
+        // GitHub direct auth prompt
+        document.getElementById('title').innerText = 'GitHub Authentication';
+        document.getElementById('desc').innerText = 'Enter your GitHub username to sync profile';
+        document.getElementById('spinner').style.display = 'none';
+
+        const area = document.getElementById('dynamicArea');
+        area.innerHTML = `
+          <div style="margin-top: 16px; text-align: left;">
+            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase;">GitHub Username</label>
+            <input type="text" id="ghUser" placeholder="e.g. heisnwaozor" value="heisnwaozor">
+            <button onclick="handleGithub()" class="btn btn-green">Connect GitHub Account</button>
+          </div>
+        `;
+
+        window.handleGithub = function() {
+          const user = document.getElementById('ghUser').value.trim() || 'heisnwaozor';
+          fetch('https://api.github.com/users/' + encodeURIComponent(user))
+            .then(r => r.ok ? r.json() : null)
             .then(data => {
-              if (data) {
-                if (data.name) {
-                  document.getElementById('githubUserLabel').innerText = `${data.name} (@${trimmed})`;
-                  cachedName = data.name;
-                }
-                if (data.avatar_url) {
-                  img.src = data.avatar_url;
-                  cachedAvatar = data.avatar_url;
-                }
-                const meta = [];
-                if (data.public_repos !== undefined) meta.push(`${data.public_repos} repos`);
-                if (data.followers !== undefined) meta.push(`${data.followers} followers`);
-                document.getElementById('githubBioLabel').innerText = meta.join(' • ') || 'Verified GitHub Account';
-              }
+              const name = data?.name || user;
+              const avatar = data?.avatar_url || `https://github.com/${user}.png`;
+              const email = `${user}@users.noreply.github.com`;
+              notifyOpenerAndClose({
+                type: 'POLLAR_OAUTH_SUCCESS',
+                provider: 'github',
+                name: name,
+                email: email,
+                avatar: avatar,
+                walletAddress: generateStellarAddress()
+              });
             })
-            .catch(() => {});
-        }, 300);
-      };
+            .catch(() => {
+              notifyOpenerAndClose({
+                type: 'POLLAR_OAUTH_SUCCESS',
+                provider: 'github',
+                name: user,
+                email: `${user}@users.noreply.github.com`,
+                avatar: `https://github.com/${user}.png`,
+                walletAddress: generateStellarAddress()
+              });
+            });
+        };
+      }
+    }
 
-      // Trigger initial profile fetch for default
-      window.previewGithubProfile('heisnwaozor');
+    function showError(msg) {
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('title').innerText = 'Google Connection Setup';
+      document.getElementById('desc').innerText = 'Google requires your exact local URL to be authorized in Google Cloud Console.';
 
-      window.handleGithubAuth = function(e) {
-        e.preventDefault();
-        const username = document.getElementById('githubUsername').value.trim() || 'heisnwaozor';
-        const email = `${username}@users.noreply.github.com`;
-        completeAuth(cachedName || username, email, cachedAvatar);
+      const redirectUri = window.location.origin + '/oauth.html';
+      const origin = window.location.origin;
+
+      const area = document.getElementById('dynamicArea');
+      area.innerHTML = `
+        <div class="error-box">${msg}</div>
+        <div class="guide-box">
+          <strong>How to whitelist your local project in Google Cloud:</strong>
+          <ol style="margin-left: 18px; margin-top: 8px; line-height: 1.6;">
+            <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color: #38bdf8;">Google Cloud Console &gt; Credentials</a></li>
+            <li>Select your OAuth 2.0 Web Client ID</li>
+            <li>Add to <strong>Authorized JavaScript origins</strong>: <code>${origin}</code></li>
+            <li>Add to <strong>Authorized redirect URIs</strong>: <code>${redirectUri}</code></li>
+            <li>Click <strong>Save</strong></li>
+          </ol>
+        </div>
+
+        <div style="margin-top: 16px; text-align: left;">
+          <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Or Enter Your Custom Google Client ID:</label>
+          <input type="text" id="customClientId" placeholder="e.g. 123456-abcdef.apps.googleusercontent.com">
+          <button onclick="saveClientIdAndRetry()" class="btn btn-green">Save Client ID &amp; Retry Google Login</button>
+        </div>
+
+        <button onclick="window.close()" class="btn btn-secondary" style="margin-top: 8px;">Cancel &amp; Close</button>
+      `;
+
+      window.saveClientIdAndRetry = function() {
+        const id = document.getElementById('customClientId').value.trim();
+        if (id) {
+          localStorage.setItem('pollar_google_client_id', id);
+          window.location.href = window.location.origin + '/oauth.html?provider=google&client_id=' + encodeURIComponent(id);
+        }
       };
     }
   </script>

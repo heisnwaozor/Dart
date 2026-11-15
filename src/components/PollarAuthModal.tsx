@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   X, 
   ShieldCheck, 
   Key, 
   CheckCircle2, 
   ArrowRight, 
-  ArrowLeft,
-  User, 
-  Wallet,
   ExternalLink,
   Sparkles,
   Lock,
@@ -37,7 +34,6 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
   defaultRole = 'voter',
 }) => {
   const [activeTab, setActiveTab] = useState<'create' | 'social' | 'presets' | 'apikey'>(initialTab);
-  const [activeProviderPrompt, setActiveProviderPrompt] = useState<'none' | 'google' | 'github'>('none');
   const [apiKey, setApiKey] = useState(PollarClientService.getApiKey());
   const [savedKeySuccess, setSavedKeySuccess] = useState(false);
 
@@ -48,50 +44,18 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
   const [signupWallet, setSignupWallet] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
 
-  // Google interactive form states
-  const [googleEmail, setGoogleEmail] = useState('');
-  const [googleName, setGoogleName] = useState('');
-
-  // GitHub interactive form states
-  const [githubUsername, setGithubUsername] = useState('heisnwaozor');
-  const [githubAvatarUrl, setGithubAvatarUrl] = useState('https://github.com/heisnwaozor.png');
-  const [githubProfile, setGithubProfile] = useState<{ name?: string; bio?: string; repos?: number; followers?: number } | null>({
-    name: 'heisnwaozor',
-    bio: 'Verified GitHub Account • Live Sync',
-    repos: 12,
-    followers: 8
-  });
+  // Google OAuth Client ID state
+  const [googleClientId, setGoogleClientId] = useState<string>(
+    localStorage.getItem('pollar_google_client_id') ||
+    (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID ||
+    '1067577884102-p5j7c65k0c3t245qj96k8fbl4v36q0i4.apps.googleusercontent.com'
+  );
+  const [showGoogleConfig, setShowGoogleConfig] = useState(false);
+  const [savedGoogleIdMsg, setSavedGoogleIdMsg] = useState(false);
+  const googleButtonContainerRef = useRef<HTMLDivElement | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState('');
-
-  // Fetch GitHub live API data
-  const fetchGithubData = (username: string) => {
-    const trimmed = username.trim();
-    if (!trimmed) return;
-    setGithubAvatarUrl(`https://github.com/${encodeURIComponent(trimmed)}.png`);
-
-    fetch(`https://api.github.com/users/${encodeURIComponent(trimmed)}`)
-      .then(res => res.ok ? res.json() : null)
-      .then(data => {
-        if (data) {
-          setGithubProfile({
-            name: data.name || trimmed,
-            bio: data.bio || '',
-            repos: data.public_repos,
-            followers: data.followers
-          });
-          if (data.avatar_url) {
-            setGithubAvatarUrl(data.avatar_url);
-          }
-        }
-      })
-      .catch(() => {});
-  };
-
-  useEffect(() => {
-    fetchGithubData('heisnwaozor');
-  }, []);
 
   // Generate random 56-char base32 Stellar address
   const generateStellarAddress = () => {
@@ -157,14 +121,101 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
     }, 600);
   };
 
+  const handleGoogleSuccess = async (googleUser: { name: string; email: string; avatar?: string }) => {
+    setIsLoading(true);
+    setLoadingMsg(`Signed in as ${googleUser.name}! Registering in SQLite database...`);
+
+    const newUser: PollarUser = {
+      id: `pollar_usr_${Date.now()}`,
+      name: googleUser.name,
+      email: googleUser.email,
+      avatar: googleUser.avatar || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(googleUser.email)}`,
+      walletAddress: generateStellarAddress(),
+      chain: 'stellar',
+      provider: 'google',
+      role: 'voter'
+    };
+
+    try {
+      await DatabaseService.registerUser(newUser);
+    } catch (err) {
+      console.warn('Database user registration notice:', err);
+    }
+
+    setTimeout(() => {
+      PollarClientService.setActiveUser(newUser);
+      onLogin(newUser);
+      setIsLoading(false);
+      onClose();
+    }, 500);
+  };
+
+  // Mount Google Identity Services button if available
+  useEffect(() => {
+    if (activeTab === 'social') {
+      const timer = setTimeout(() => {
+        if (typeof (window as any).google !== 'undefined' && (window as any).google?.accounts?.id) {
+          try {
+            (window as any).google.accounts.id.initialize({
+              client_id: googleClientId,
+              callback: (res: any) => {
+                if (res?.credential) {
+                  try {
+                    const base64Url = res.credential.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    const jsonPayload = decodeURIComponent(
+                      atob(base64)
+                        .split('')
+                        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                        .join('')
+                    );
+                    const data = JSON.parse(jsonPayload);
+                    handleGoogleSuccess({
+                      name: data.name || data.given_name || data.email.split('@')[0],
+                      email: data.email,
+                      avatar: data.picture
+                    });
+                  } catch (e) {
+                    console.error('Credential decode error', e);
+                  }
+                }
+              },
+              auto_select: false,
+              cancel_on_tap_outside: true,
+            });
+
+            if (googleButtonContainerRef.current) {
+              googleButtonContainerRef.current.innerHTML = '';
+              (window as any).google.accounts.id.renderButton(googleButtonContainerRef.current, {
+                theme: 'outline',
+                size: 'large',
+                text: 'continue_with',
+                shape: 'pill',
+                width: 320,
+                logo_alignment: 'left'
+              });
+            }
+          } catch (e) {
+            console.warn('Google Identity error', e);
+          }
+        }
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [activeTab, googleClientId]);
+
   // Listen for OAuth messages from the popup window
   useEffect(() => {
-    const handleOAuthMessage = (event: MessageEvent) => {
+    const handleOAuthMessage = async (event: MessageEvent) => {
       if (event.data && event.data.type === 'POLLAR_OAUTH_SUCCESS') {
         const { provider, name, email, avatar, walletAddress } = event.data;
+        setIsLoading(true);
+        setLoadingMsg(`Signed in as ${name}! Registering in SQLite database...`);
+
         const newUser: PollarUser = {
           id: `pollar_usr_${Date.now()}`,
-          name: name || 'Pollar Voter',
+          name: name || 'Google Voter',
           email: email || `${provider}_voter@example.com`,
           avatar: avatar || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(name || 'user')}`,
           walletAddress: walletAddress || generateStellarAddress(),
@@ -173,9 +224,18 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
           role: 'voter'
         };
 
-        PollarClientService.setActiveUser(newUser);
-        onLogin(newUser);
-        onClose();
+        try {
+          await DatabaseService.registerUser(newUser);
+        } catch (err) {
+          console.warn('Database user registration notice:', err);
+        }
+
+        setTimeout(() => {
+          PollarClientService.setActiveUser(newUser);
+          onLogin(newUser);
+          setIsLoading(false);
+          onClose();
+        }, 500);
       }
     };
 
@@ -183,155 +243,59 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
     return () => window.removeEventListener('message', handleOAuthMessage);
   }, [onLogin, onClose]);
 
-  // Open centered OAuth popup window
-  const openOAuthPopup = (provider: 'google' | 'github') => {
-    const width = 480;
-    const height = 660;
-    const left = window.screenX + (window.outerWidth - width) / 2;
-    const top = window.screenY + (window.outerHeight - height) / 2;
-    
-    try {
-      window.open(
-        `/oauth.html?provider=${provider}&origin=${encodeURIComponent(window.location.origin)}`,
-        `pollar_${provider}_auth_popup`,
-        `width=${width},height=${height},left=${left},top=${top},status=no,toolbar=no,menubar=no`
-      );
-    } catch {
-      // If window.open fails, in-modal prompt handles it
-    }
-  };
+  // Start Direct Google OAuth
+  const handleStartGoogle = () => {
+    setIsLoading(true);
+    setLoadingMsg('Connecting to Google accounts...');
 
-  const handleStartSocial = (provider: 'google' | 'github') => {
-    setActiveProviderPrompt(provider);
-    if (provider === 'google') {
-      if (typeof (window as any).google !== 'undefined' && (window as any).google?.accounts?.id) {
-        try {
-          (window as any).google.accounts.id.initialize({
-            client_id: '1067577884102-p5j7c65k0c3t245qj96k8fbl4v36q0i4.apps.googleusercontent.com',
-            callback: (res: any) => {
-              if (res?.credential) {
-                try {
-                  const base64Url = res.credential.split('.')[1];
-                  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                  const jsonPayload = decodeURIComponent(
-                    atob(base64)
-                      .split('')
-                      .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                      .join('')
-                  );
-                  const data = JSON.parse(jsonPayload);
-                  handleSelectGoogleAccount(data.name || 'Google User', data.email, data.picture);
-                } catch (e) {
-                  // ignore
-                }
-              }
-            }
-          });
-          (window as any).google.accounts.id.prompt();
-        } catch (e) {
-          // ignore
-        }
+    // 1. Try Google Identity Services One Tap prompt if loaded
+    if (typeof (window as any).google !== 'undefined' && (window as any).google?.accounts?.id) {
+      try {
+        (window as any).google.accounts.id.prompt();
+      } catch (err) {
+        console.warn('One Tap notice:', err);
       }
     }
-    openOAuthPopup(provider);
-  };
 
-  // Complete in-modal Google sign in
-  const handleGoogleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!googleEmail.trim()) return;
+    // 2. Open centered popup directly to Google OAuth 2.0 authorization endpoint
+    const width = 500;
+    const height = 650;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
 
-    setIsLoading(true);
-    setLoadingMsg('Signing in with Google & provisioning Pollar wallet...');
+    const popupUrl = `/oauth.html?provider=google&client_id=${encodeURIComponent(googleClientId)}&origin=${encodeURIComponent(window.location.origin)}`;
 
-    const name = googleName.trim() || googleEmail.split('@')[0];
-    const avatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(googleEmail)}`;
-
-    setTimeout(() => {
-      const newUser: PollarUser = {
-        id: `pollar_usr_${Date.now()}`,
-        name: name,
-        email: googleEmail.trim(),
-        avatar: avatar,
-        walletAddress: generateStellarAddress(),
-        chain: 'stellar',
-        provider: 'google',
-        role: 'voter'
-      };
-
-      PollarClientService.setActiveUser(newUser);
-      onLogin(newUser);
-      setIsLoading(false);
-      onClose();
-    }, 800);
-  };
-
-  // Quick select an existing Google account
-  const handleSelectGoogleAccount = (name: string, email: string, avatar: string) => {
-    setIsLoading(true);
-    setLoadingMsg(`Authenticating as ${name}...`);
-
-    setTimeout(() => {
-      const newUser: PollarUser = {
-        id: `pollar_usr_${Date.now()}`,
-        name,
-        email,
-        avatar,
-        walletAddress: generateStellarAddress(),
-        chain: 'stellar',
-        provider: 'google',
-        role: 'voter'
-      };
-
-      PollarClientService.setActiveUser(newUser);
-      onLogin(newUser);
-      setIsLoading(false);
-      onClose();
-    }, 600);
-  };
-
-  // Live update GitHub avatar preview & API profile
-  const handleGithubUsernameChange = (val: string) => {
-    setGithubUsername(val);
-    const trimmed = val.trim();
-    if (trimmed) {
-      fetchGithubData(trimmed);
-    } else {
-      setGithubAvatarUrl('');
-      setGithubProfile(null);
+    try {
+      window.open(
+        popupUrl,
+        'pollar_google_auth_popup',
+        `width=${width},height=${height},left=${left},top=${top},status=no,toolbar=no,menubar=no`
+      );
+    } catch (e) {
+      console.warn('Window open notice:', e);
     }
-  };
-
-  // Complete in-modal GitHub sign in
-  const handleGithubSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!githubUsername.trim()) return;
-
-    setIsLoading(true);
-    setLoadingMsg(`Verifying @${githubUsername.trim()} with GitHub...`);
-
-    const username = githubUsername.trim();
-    const displayName = githubProfile?.name || username;
-    const avatar = githubAvatarUrl || `https://github.com/${encodeURIComponent(username)}.png`;
-    const email = `${username}@users.noreply.github.com`;
 
     setTimeout(() => {
-      const newUser: PollarUser = {
-        id: `pollar_usr_${Date.now()}`,
-        name: displayName,
-        email: email,
-        avatar: avatar,
-        walletAddress: generateStellarAddress(),
-        chain: 'stellar',
-        provider: 'github',
-        role: 'voter'
-      };
-
-      PollarClientService.setActiveUser(newUser);
-      onLogin(newUser);
       setIsLoading(false);
-      onClose();
-    }, 800);
+    }, 1500);
+  };
+
+  // Start GitHub OAuth
+  const handleStartGithub = () => {
+    const width = 480;
+    const height = 620;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+
+    try {
+      window.open(
+        `/oauth.html?provider=github&origin=${encodeURIComponent(window.location.origin)}`,
+        'pollar_github_auth_popup',
+        `width=${width},height=${height},left=${left},top=${top},status=no,toolbar=no,menubar=no`
+      );
+    } catch (e) {
+      console.warn('Window open notice:', e);
+    }
   };
 
   const handleSelectPreset = (user: PollarUser) => {
@@ -361,11 +325,7 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
             </div>
             <div>
               <h3 className="text-base font-black dark:text-white text-slate-950">
-                {activeProviderPrompt === 'google' 
-                  ? 'Sign in with Google' 
-                  : activeProviderPrompt === 'github' 
-                  ? 'Sign in with GitHub' 
-                  : 'Sign In with Pollar'}
+                Sign In with Pollar
               </h3>
               <p className="text-xs dark:text-slate-400 text-slate-500">
                 1 wallet per voter • Zero gas fees on Stellar
@@ -381,49 +341,47 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
           </button>
         </div>
 
-        {/* Tab Switchers (only visible if not in interactive OAuth prompt) */}
-        {activeProviderPrompt === 'none' && (
-          <div className="p-2 border-b dark:border-white/[0.06] border-slate-200">
-            <div className="grid grid-cols-4 p-1 rounded-full ctrl-pill-nav text-[11px] font-semibold gap-1">
-              <button
-                type="button"
-                onClick={() => setActiveTab('create')}
-                className={`py-2 rounded-full font-bold transition-all text-center ${
-                  activeTab === 'create' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
-                }`}
-              >
-                Create
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('social')}
-                className={`py-2 rounded-full font-bold transition-all text-center ${
-                  activeTab === 'social' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
-                }`}
-              >
-                Social
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('presets')}
-                className={`py-2 rounded-full font-bold transition-all text-center ${
-                  activeTab === 'presets' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
-                }`}
-              >
-                Presets
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('apikey')}
-                className={`py-2 rounded-full font-bold transition-all text-center ${
-                  activeTab === 'apikey' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
-                }`}
-              >
-                API Key
-              </button>
-            </div>
+        {/* Tab Switchers */}
+        <div className="p-2 border-b dark:border-white/[0.06] border-slate-200">
+          <div className="grid grid-cols-4 p-1 rounded-full ctrl-pill-nav text-[11px] font-semibold gap-1">
+            <button
+              type="button"
+              onClick={() => setActiveTab('create')}
+              className={`py-2 rounded-full font-bold transition-all text-center ${
+                activeTab === 'create' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
+              }`}
+            >
+              Create
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('social')}
+              className={`py-2 rounded-full font-bold transition-all text-center ${
+                activeTab === 'social' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
+              }`}
+            >
+              Social
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('presets')}
+              className={`py-2 rounded-full font-bold transition-all text-center ${
+                activeTab === 'presets' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
+              }`}
+            >
+              Presets
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('apikey')}
+              className={`py-2 rounded-full font-bold transition-all text-center ${
+                activeTab === 'apikey' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
+              }`}
+            >
+              API Key
+            </button>
           </div>
-        )}
+        </div>
 
         {/* Modal Body */}
         <div className="p-6">
@@ -431,218 +389,15 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
           {/* Loading Animation Overlay */}
           {isLoading ? (
             <div className="py-12 flex flex-col items-center justify-center text-center space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border-2 border-blue-500 flex items-center justify-center animate-spin">
-                <ShieldCheck className="w-7 h-7 text-blue-500" />
+              <div className="w-14 h-14 rounded-2xl bg-[#05c92f]/10 border-2 border-[#05c92f] flex items-center justify-center animate-spin">
+                <ShieldCheck className="w-7 h-7 text-[#05c92f]" />
               </div>
               <div>
                 <h4 className="text-sm font-bold dark:text-white text-slate-900">{loadingMsg}</h4>
-                <p className="text-xs dark:text-slate-400 text-slate-500 mt-1">Generating sponsored Stellar keypair</p>
-              </div>
-            </div>
-          ) : activeProviderPrompt === 'google' ? (
-            /* Interactive Google Sign-In Prompt */
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => setActiveProviderPrompt('none')}
-                  className="flex items-center space-x-1 text-xs text-blue-500 hover:underline font-bold"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Choose another provider</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => openOAuthPopup('google')}
-                  className="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 font-mono"
-                  title="Open in separate popup window"
-                >
-                  <span>Open Window</span>
-                  <ExternalLink className="w-3 h-3" />
-                </button>
-              </div>
-
-              <div className="p-4 rounded-2xl dark:bg-black/40 bg-slate-50 border dark:border-white/[0.08] border-slate-200 space-y-2.5">
-                <p className="text-xs font-bold dark:text-slate-300 text-slate-700">
-                  Select an account for Google Sign-In:
+                <p className="text-xs dark:text-slate-400 text-slate-500 mt-1 font-mono">
+                  Connecting and provisioning Stellar keypair
                 </p>
-
-                <div className="space-y-1.5">
-                  <button
-                    type="button"
-                    onClick={() => handleSelectGoogleAccount('Heis Nwaozor', 'heisnwaozor@gmail.com', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80')}
-                    className="w-full flex items-center space-x-3 p-2.5 rounded-xl dark:bg-white/[0.04] bg-white border dark:border-white/[0.06] border-slate-200 hover:border-blue-500 transition-all text-left shadow-sm group"
-                  >
-                    <img
-                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
-                      alt="Heis"
-                      className="w-8 h-8 rounded-full object-cover ring-2 ring-blue-500"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <p className="text-xs font-bold dark:text-white text-slate-900">Heis Nwaozor</p>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-blue-500/15 text-blue-500 font-mono font-bold">Active</span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 font-mono truncate">heisnwaozor@gmail.com</p>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleSelectGoogleAccount('Mateo Silva', 'mateo.silva@gmail.com', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80')}
-                    className="w-full flex items-center space-x-3 p-2.5 rounded-xl dark:bg-white/[0.04] bg-white border dark:border-white/[0.06] border-slate-200 hover:border-blue-500 transition-all text-left shadow-sm"
-                  >
-                    <img
-                      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"
-                      alt="Mateo"
-                      className="w-8 h-8 rounded-full object-cover ring-1 ring-blue-500"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold dark:text-white text-slate-900">Mateo Silva</p>
-                      <p className="text-[11px] text-slate-500 font-mono truncate">mateo.silva@gmail.com</p>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleSelectGoogleAccount('Alex Rivera', 'alex.rivera@gmail.com', 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80')}
-                    className="w-full flex items-center space-x-3 p-2.5 rounded-xl dark:bg-white/[0.04] bg-white border dark:border-white/[0.06] border-slate-200 hover:border-blue-500 transition-all text-left shadow-sm"
-                  >
-                    <img
-                      src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80"
-                      alt="Alex"
-                      className="w-8 h-8 rounded-full object-cover ring-1 ring-blue-500"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold dark:text-white text-slate-900">Alex Rivera</p>
-                      <p className="text-[11px] text-slate-500 font-mono truncate">alex.rivera@gmail.com</p>
-                    </div>
-                  </button>
-                </div>
               </div>
-
-              {/* Or enter custom Google account */}
-              <form onSubmit={handleGoogleSubmit} className="space-y-3">
-                <div className="text-[11px] font-mono uppercase text-slate-400 text-center font-bold">
-                  Or enter your Google account
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold dark:text-slate-300 text-slate-700 mb-1">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    value={googleName}
-                    onChange={e => setGoogleName(e.target.value)}
-                    placeholder="e.g. David Morales"
-                    className="w-full px-3.5 py-2.5 rounded-xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-xs dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 font-medium"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold dark:text-slate-300 text-slate-700 mb-1">
-                    Google Email
-                  </label>
-                  <input
-                    type="email"
-                    value={googleEmail}
-                    onChange={e => setGoogleEmail(e.target.value)}
-                    placeholder="your.email@gmail.com"
-                    required
-                    className="w-full px-3.5 py-2.5 rounded-xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-xs dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 font-medium"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center space-x-2"
-                >
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Authorize Google with Pollar</span>
-                </button>
-              </form>
-            </div>
-          ) : activeProviderPrompt === 'github' ? (
-            /* Interactive GitHub Sign-In Prompt */
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => setActiveProviderPrompt('none')}
-                  className="flex items-center space-x-1 text-xs text-blue-500 hover:underline font-bold"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Choose another provider</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => openOAuthPopup('github')}
-                  className="text-xs text-slate-500 hover:text-blue-500 flex items-center gap-1 font-mono"
-                  title="Open in separate popup window"
-                >
-                  <span>Open Window</span>
-                  <ExternalLink className="w-3 h-3" />
-                </button>
-              </div>
-
-              <form onSubmit={handleGithubSubmit} className="space-y-3.5">
-                <div>
-                  <label className="block text-xs font-semibold dark:text-slate-300 text-slate-700 mb-1">
-                    GitHub Username or Handle
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={githubUsername}
-                      onChange={e => handleGithubUsernameChange(e.target.value)}
-                      placeholder="e.g. heisnwaozor, torvalds, octocat"
-                      required
-                      className="w-full pl-8 pr-3.5 py-2.5 rounded-xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-xs dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 font-mono"
-                    />
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-mono text-xs">@</span>
-                  </div>
-                </div>
-
-                {/* Live GitHub Profile Preview */}
-                {githubAvatarUrl && (
-                  <div className="p-3.5 rounded-2xl dark:bg-black/40 bg-slate-100 border dark:border-white/[0.08] border-slate-200 flex items-center space-x-3 animate-in fade-in">
-                    <img
-                      src={githubAvatarUrl}
-                      alt={githubUsername}
-                      onError={e => {
-                        (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/identicon/svg?seed=${githubUsername}`;
-                      }}
-                      className="w-11 h-11 rounded-full object-cover ring-2 ring-blue-500 shadow-md"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <p className="text-xs font-bold dark:text-white text-slate-900 truncate">
-                          {githubProfile?.name ? `${githubProfile.name} (@${githubUsername})` : `@${githubUsername}`}
-                        </p>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-500 font-mono font-bold">Connected</span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 font-mono mt-0.5 truncate">
-                        {githubProfile?.repos !== undefined ? `${githubProfile.repos} repos • ${githubProfile.followers ?? 0} followers` : 'Verified GitHub Account'}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                <p className="text-[11px] dark:text-slate-400 text-slate-500 leading-relaxed">
-                  Pollar will automatically provision your unique, gas-sponsored Stellar wallet linked to your GitHub profile.
-                </p>
-
-                <button
-                  type="submit"
-                  className="w-full py-3 rounded-2xl bg-[#1E2638] hover:bg-[#28334a] text-white font-bold text-xs border border-white/[0.15] shadow-lg transition-all flex items-center justify-center space-x-2"
-                >
-                  <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                  </svg>
-                  <span>Authorize with GitHub</span>
-                </button>
-              </form>
             </div>
           ) : activeTab === 'create' ? (
             /* Dedicated Create Account Form with SQLite Database Persistence */
@@ -707,7 +462,7 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                   type="text"
                   value={signupName}
                   onChange={e => setSignupName(e.target.value)}
-                  placeholder="e.g. Alex Rivera"
+                  placeholder="e.g. Satoshi Builder"
                   required
                   className="w-full px-4 py-2.5 rounded-2xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-xs dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-950 dark:focus:border-blue-400 font-medium"
                 />
@@ -722,7 +477,7 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                   type="email"
                   value={signupEmail}
                   onChange={e => setSignupEmail(e.target.value)}
-                  placeholder="e.g. alex.rivera@example.com"
+                  placeholder="e.g. satoshi@stellar.org"
                   required
                   className="w-full px-4 py-2.5 rounded-2xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-xs dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-950 dark:focus:border-blue-400 font-medium"
                 />
@@ -790,42 +545,96 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
             </form>
           ) : activeTab === 'social' ? (
             /* Social Login Main Tab */
-            <div className="space-y-4">
-              <p className="text-xs dark:text-slate-300 text-slate-600 leading-relaxed text-center">
-                Pollar creates a secure, gas-sponsored Stellar wallet linked directly to your social profile.
-              </p>
+            <div className="space-y-5">
+              <div className="text-center space-y-1">
+                <p className="text-xs dark:text-slate-300 text-slate-700 font-semibold">
+                  Sign in with your Google or GitHub account.
+                </p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Dart connects directly to your signed-in browser accounts and provisions a sponsored Stellar keypair.
+                </p>
+              </div>
 
-              <div className="space-y-3 pt-2">
+              {/* Official Google Identity Rendered Button (if GIS script rendered) */}
+              <div ref={googleButtonContainerRef} className="flex justify-center empty:hidden my-1"></div>
+
+              {/* Direct Continue with Google Button */}
+              <div className="space-y-3">
                 <button
                   type="button"
-                  onClick={() => handleStartSocial('google')}
-                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-4 rounded-full bg-white text-slate-950 font-black text-sm border-2 border-slate-950 shadow-md hover:scale-[1.02] active:scale-95 transition-all"
+                  onClick={handleStartGoogle}
+                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-4 rounded-full bg-white text-slate-950 font-black text-sm border-2 border-slate-950 shadow-md hover:scale-[1.02] active:scale-95 transition-all group"
                 >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                   </svg>
-                  <span className="ctrl-roll-label">Continue with Google</span>
+                  <span className="ctrl-roll-label">Continue with Google Account</span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => handleStartSocial('github')}
-                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-4 rounded-full bg-slate-950 text-white font-black text-sm border-2 border-slate-950 shadow-md hover:scale-[1.02] active:scale-95 transition-all"
+                  onClick={handleStartGithub}
+                  className="ctrl-roll-button w-full flex items-center justify-center space-x-3 py-4 rounded-full bg-slate-950 text-white font-black text-sm border-2 border-slate-950 shadow-md hover:scale-[1.02] active:scale-95 transition-all group"
                 >
-                  <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 fill-white flex-shrink-0" viewBox="0 0 24 24">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                   </svg>
-                  <span className="ctrl-roll-label">Continue with GitHub</span>
+                  <span className="ctrl-roll-label">Continue with GitHub Account</span>
                 </button>
               </div>
 
-              <div className="pt-2 text-center">
-                <span className="text-[11px] dark:text-slate-400 text-slate-500 font-mono">
-                  Both options open an interactive OAuth sign-in prompt and provision a Stellar wallet automatically.
-                </span>
+              {/* Google Client ID Configuration Toggle */}
+              <div className="pt-2 border-t dark:border-white/[0.06] border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setShowGoogleConfig(!showGoogleConfig)}
+                  className="w-full text-center text-[11px] font-mono text-blue-500 hover:underline flex items-center justify-center gap-1"
+                >
+                  <Key className="w-3 h-3" />
+                  <span>{showGoogleConfig ? 'Hide Google OAuth Settings' : 'Google Cloud OAuth Settings'}</span>
+                </button>
+
+                {showGoogleConfig && (
+                  <div className="mt-3 p-3.5 rounded-2xl dark:bg-white/[0.03] bg-slate-100 border dark:border-white/[0.08] border-slate-300 space-y-2 text-xs">
+                    <label className="block text-[11px] font-mono font-bold dark:text-slate-300 text-slate-700">
+                      Google OAuth Client ID
+                    </label>
+                    <input
+                      type="text"
+                      value={googleClientId}
+                      onChange={e => setGoogleClientId(e.target.value)}
+                      placeholder="e.g. 12345-abc.apps.googleusercontent.com"
+                      className="w-full px-3 py-2 rounded-xl dark:bg-black/60 bg-white border dark:border-white/[0.1] border-slate-300 text-[11px] font-mono"
+                    />
+                    <div className="flex items-center justify-between pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          localStorage.setItem('pollar_google_client_id', googleClientId.trim());
+                          setSavedGoogleIdMsg(true);
+                          setTimeout(() => setSavedGoogleIdMsg(false), 2000);
+                        }}
+                        className="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs"
+                      >
+                        Save Client ID
+                      </button>
+                      {savedGoogleIdMsg && (
+                        <span className="text-[11px] text-emerald-500 font-mono flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3" />
+                          Saved
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-2 leading-relaxed">
+                      Whitelist in Google Cloud Console:<br />
+                      • Origin: <code>{window.location.origin}</code><br />
+                      • Redirect URI: <code>{window.location.origin}/oauth.html</code>
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           ) : activeTab === 'presets' ? (
