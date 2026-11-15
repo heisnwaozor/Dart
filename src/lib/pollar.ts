@@ -1,6 +1,7 @@
 import { PollarUser, PublicVote, SignatureProof, Project } from '../types';
 import { INITIAL_PROJECTS, INITIAL_PUBLIC_VOTES } from '../data/mockData';
 import { PollarClient } from '@pollar/core';
+import { DatabaseService } from './databaseService';
 
 // Preset test personas for instant live testing & demonstration
 export const PRESET_USERS: PollarUser[] = [
@@ -66,10 +67,32 @@ export class PollarClientService {
   public static setActiveUser(user: PollarUser | null) {
     if (user) {
       localStorage.setItem(this.STORAGE_KEY_USER, JSON.stringify(user));
+      // Asynchronously record user in SQLite database
+      DatabaseService.registerUser(user).catch(err => {
+        console.warn('Database user registration notice:', err);
+      });
     } else {
       localStorage.setItem(this.STORAGE_KEY_USER, 'disconnected');
     }
     window.dispatchEvent(new Event('pollar_auth_changed'));
+  }
+
+  public static async syncWithDatabase(): Promise<void> {
+    try {
+      const [remoteProjects, remoteVotes] = await Promise.all([
+        DatabaseService.getProjects(),
+        DatabaseService.getVotes()
+      ]);
+      if (remoteProjects && remoteProjects.length > 0) {
+        this.saveProjects(remoteProjects);
+      }
+      if (remoteVotes && remoteVotes.length > 0) {
+        this.savePublicVotes(remoteVotes);
+      }
+      window.dispatchEvent(new Event('pollar_data_changed'));
+    } catch {
+      // Fallback to local storage if API is temporarily unreachable
+    }
   }
 
   public static getApiKey(): string {
@@ -120,6 +143,12 @@ export class PollarClientService {
     };
     projects.unshift(created);
     this.saveProjects(projects);
+
+    // Asynchronously record in SQLite database
+    DatabaseService.createProject(created).catch(err => {
+      console.warn('Database create project notice:', err);
+    });
+
     window.dispatchEvent(new Event('pollar_data_changed'));
     return created;
   }
@@ -268,6 +297,12 @@ export class PollarClientService {
     }
 
     this.saveProjects(projects);
+
+    // Asynchronously record vote and update project counts in SQLite database
+    DatabaseService.submitVote(voteRecord).catch(err => {
+      console.warn('Database vote recording notice:', err);
+    });
+
     window.dispatchEvent(new Event('pollar_data_changed'));
 
     return {
@@ -306,6 +341,9 @@ export class PollarClientService {
     this.saveProjects(INITIAL_PROJECTS);
     this.savePublicVotes(INITIAL_PUBLIC_VOTES);
     this.setActiveUser(PRESET_USERS[0]);
+    DatabaseService.resetDatabase().catch(err => {
+      console.warn('Database reset notice:', err);
+    });
     window.dispatchEvent(new Event('pollar_data_changed'));
     window.dispatchEvent(new Event('pollar_auth_changed'));
   }

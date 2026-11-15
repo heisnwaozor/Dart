@@ -1,4 +1,8 @@
-# Logs
+# Database
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
 logs
 *.log
 npm-debug.log*

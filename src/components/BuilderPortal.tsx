@@ -12,7 +12,8 @@ import {
   Layers,
   Terminal,
   Cpu,
-  Coins
+  Coins,
+  Lock
 } from 'lucide-react';
 import { PollarUser, Project } from '../types';
 import { PollarClientService } from '../lib/pollar';
@@ -63,6 +64,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
     }
 
     if (!currentUser) {
+      setErrorMsg('You must create an account or sign in first before submitting a project.');
       onOpenAuth();
       return;
     }
@@ -127,6 +129,77 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
             Register your decentralized application for the Pollar Pitch Projects. Submissions will be opened immediately to community voting and expert review.
           </p>
         </div>
+
+        {/* Account Gate Status Banner */}
+        {!currentUser ? (
+          <div className="ctrl-card mb-10 p-6 sm:p-8 bg-amber-500/10 border-2 border-amber-500/30 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+            <div className="flex items-center space-x-4">
+              <div className="w-14 h-14 rounded-full bg-amber-500/20 border-2 border-amber-500 text-amber-500 flex items-center justify-center flex-shrink-0">
+                <Lock className="w-7 h-7" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg font-black dark:text-white text-slate-950">
+                    Account Required to Submit a Project
+                  </h3>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold uppercase">
+                    Database Gated
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm dark:text-slate-300 text-slate-600 max-w-xl leading-relaxed">
+                  Every project must be cryptographically registered under a builder account in SQLite. Please create your builder account or sign in to continue.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onOpenAuth}
+              className="ctrl-roll-button flex items-center space-x-2.5 px-7 py-4 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/25 whitespace-nowrap hover:scale-105 active:scale-95 transition-all"
+            >
+              <div className="flex items-center -space-x-1 mr-1 flex-shrink-0">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#fbe74e] ring-1 ring-slate-950"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#ffcadc] ring-1 ring-slate-950"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#9dc4f5] ring-1 ring-slate-950"></span>
+              </div>
+              <span className="ctrl-roll-label">Create Builder Account / Sign In</span>
+            </button>
+          </div>
+        ) : (
+          <div className="ctrl-card mb-10 p-5 sm:p-6 bg-emerald-500/10 border-2 border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+            <div className="flex items-center space-x-3.5">
+              {currentUser.avatar ? (
+                <img
+                  src={currentUser.avatar}
+                  alt={currentUser.name}
+                  className="w-10 h-10 rounded-full object-cover ring-2 ring-[#05c92f]"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] flex items-center justify-center font-bold text-sm">
+                  {currentUser.name.slice(0, 2).toUpperCase()}
+                </div>
+              )}
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-black dark:text-white text-slate-950">
+                    {currentUser.name}
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono font-bold uppercase">
+                    Database Verified {currentUser.role || 'Builder'}
+                  </span>
+                </div>
+                <p className="text-xs font-mono text-slate-500 dark:text-slate-400 truncate max-w-md">
+                  Stellar Wallet: {currentUser.walletAddress}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-white/50 dark:bg-black/30 px-3.5 py-1.5 rounded-full border border-emerald-500/20">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              <span>Ready to publish to SQLite & Stellar</span>
+            </div>
+          </div>
+        )}
 
         {/* Submission Success State */}
         {isSubmitted ? (
@@ -402,7 +475,9 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
                       <span className="w-3.5 h-3.5 rounded-full bg-[#9dc4f5] ring-2 ring-slate-950"></span>
                     </div>
                     <Upload className="w-5 h-5" />
-                    <span className="ctrl-roll-label">Submit Project to Hackathon</span>
+                    <span className="ctrl-roll-label">
+                      {currentUser ? 'Submit Project to Hackathon' : 'Create Account & Submit Project'}
+                    </span>
                   </button>
                   <p className="text-[11px] text-center dark:text-slate-400 text-slate-500 mt-2 font-mono">
                     Project will be cryptographically registered and immediately eligible for public community votes.

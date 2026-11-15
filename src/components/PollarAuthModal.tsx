@@ -10,27 +10,43 @@ import {
   Wallet,
   ExternalLink,
   Sparkles,
-  Lock
+  Lock,
+  UserPlus,
+  Database,
+  RefreshCw,
+  AlertCircle
 } from 'lucide-react';
 import { PollarUser } from '../types';
 import { PRESET_USERS, PollarClientService } from '../lib/pollar';
+import { DatabaseService } from '../lib/databaseService';
 import { DartLogo } from './DartLogo';
 
 interface PollarAuthModalProps {
   currentUser: PollarUser | null;
   onClose: () => void;
   onLogin: (user: PollarUser) => void;
+  initialTab?: 'create' | 'social' | 'presets' | 'apikey';
+  defaultRole?: 'voter' | 'builder';
 }
 
 export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
   currentUser,
   onClose,
   onLogin,
+  initialTab = 'create',
+  defaultRole = 'voter',
 }) => {
-  const [activeTab, setActiveTab] = useState<'social' | 'presets' | 'apikey'>('social');
+  const [activeTab, setActiveTab] = useState<'create' | 'social' | 'presets' | 'apikey'>(initialTab);
   const [activeProviderPrompt, setActiveProviderPrompt] = useState<'none' | 'google' | 'github'>('none');
   const [apiKey, setApiKey] = useState(PollarClientService.getApiKey());
   const [savedKeySuccess, setSavedKeySuccess] = useState(false);
+
+  // Dedicated Account Creation State
+  const [signupRole, setSignupRole] = useState<'voter' | 'builder'>(defaultRole);
+  const [signupName, setSignupName] = useState('');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupWallet, setSignupWallet] = useState('');
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Google interactive form states
   const [googleEmail, setGoogleEmail] = useState('');
@@ -85,6 +101,60 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
       stellarAddr += chars[Math.floor(Math.random() * chars.length)];
     }
     return stellarAddr;
+  };
+
+  // Initialize signup wallet on mount
+  useEffect(() => {
+    if (!signupWallet) {
+      setSignupWallet(generateStellarAddress());
+    }
+  }, []);
+
+  const handleCreateAccountSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+
+    const name = signupName.trim();
+    const email = signupEmail.trim();
+
+    if (!name) {
+      setFormError('Please enter your full name or nickname.');
+      return;
+    }
+    if (!email) {
+      setFormError('Please enter your email address.');
+      return;
+    }
+
+    setIsLoading(true);
+    setLoadingMsg(`Registering ${signupRole} account in SQLite database...`);
+
+    const wallet = signupWallet.trim() || generateStellarAddress();
+    const avatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(email || name)}`;
+
+    const newUser: PollarUser = {
+      id: `usr_${Date.now()}`,
+      name,
+      email,
+      avatar,
+      walletAddress: wallet,
+      chain: 'stellar',
+      provider: 'direct',
+      role: signupRole
+    };
+
+    try {
+      await DatabaseService.registerUser(newUser);
+    } catch (err) {
+      console.warn('Database user registration notice:', err);
+    }
+
+    setTimeout(() => {
+      PollarClientService.setActiveUser(newUser);
+      setIsLoading(false);
+      onLogin(newUser);
+      onClose();
+    }, 600);
   };
 
   // Listen for OAuth messages from the popup window
@@ -314,30 +384,42 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
         {/* Tab Switchers (only visible if not in interactive OAuth prompt) */}
         {activeProviderPrompt === 'none' && (
           <div className="p-2 border-b dark:border-white/[0.06] border-slate-200">
-            <div className="flex p-1 rounded-full ctrl-pill-nav text-xs font-semibold">
+            <div className="grid grid-cols-4 p-1 rounded-full ctrl-pill-nav text-[11px] font-semibold gap-1">
               <button
+                type="button"
+                onClick={() => setActiveTab('create')}
+                className={`py-2 rounded-full font-bold transition-all text-center ${
+                  activeTab === 'create' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
+                }`}
+              >
+                Create
+              </button>
+              <button
+                type="button"
                 onClick={() => setActiveTab('social')}
-                className={`flex-1 py-2 rounded-full font-bold transition-all ${
+                className={`py-2 rounded-full font-bold transition-all text-center ${
                   activeTab === 'social' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
-                Social Login
+                Social
               </button>
               <button
+                type="button"
                 onClick={() => setActiveTab('presets')}
-                className={`flex-1 py-2 rounded-full font-bold transition-all ${
+                className={`py-2 rounded-full font-bold transition-all text-center ${
                   activeTab === 'presets' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
-                Demo Accounts
+                Presets
               </button>
               <button
+                type="button"
                 onClick={() => setActiveTab('apikey')}
-                className={`flex-1 py-2 rounded-full font-bold transition-all ${
+                className={`py-2 rounded-full font-bold transition-all text-center ${
                   activeTab === 'apikey' ? 'bg-[#05c92f] text-slate-950 shadow-sm' : 'dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
-                Pollar Key
+                API Key
               </button>
             </div>
           </div>
@@ -562,6 +644,150 @@ export const PollarAuthModal: React.FC<PollarAuthModalProps> = ({
                 </button>
               </form>
             </div>
+          ) : activeTab === 'create' ? (
+            /* Dedicated Create Account Form with SQLite Database Persistence */
+            <form onSubmit={handleCreateAccountSubmit} className="space-y-4">
+              <div className="text-center space-y-1.5">
+                <p className="text-xs dark:text-slate-300 text-slate-700 font-semibold">
+                  Register your account in the project database to vote or submit projects.
+                </p>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#05c92f]/15 text-[#05c92f] text-[10px] font-mono font-bold">
+                  <Database className="w-3 h-3" />
+                  <span>SQLite Database Persistence (dart.sqlite)</span>
+                </div>
+              </div>
+
+              {formError && (
+                <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
+
+              {/* Account Type / Role Toggle */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600">
+                  Account Type
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSignupRole('voter')}
+                    className={`py-2.5 px-3 rounded-2xl border-2 text-xs font-bold transition-all text-center flex flex-col items-center gap-1 ${
+                      signupRole === 'voter'
+                        ? 'bg-[#05c92f] border-slate-950 text-slate-950 font-black shadow-md'
+                        : 'bg-[#ecefec] dark:bg-white/[0.04] border-slate-300 dark:border-white/10 dark:text-slate-300 text-slate-700'
+                    }`}
+                  >
+                    <span>Voter Account</span>
+                    <span className="text-[10px] font-normal opacity-80">Cast SEP-53 ballots</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSignupRole('builder')}
+                    className={`py-2.5 px-3 rounded-2xl border-2 text-xs font-bold transition-all text-center flex flex-col items-center gap-1 ${
+                      signupRole === 'builder'
+                        ? 'bg-[#05c92f] border-slate-950 text-slate-950 font-black shadow-md'
+                        : 'bg-[#ecefec] dark:bg-white/[0.04] border-slate-300 dark:border-white/10 dark:text-slate-300 text-slate-700'
+                    }`}
+                  >
+                    <span>Builder Account</span>
+                    <span className="text-[10px] font-normal opacity-80">Submit hackathon projects</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Full Name */}
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600">
+                  Full Name or Handle *
+                </label>
+                <input
+                  type="text"
+                  value={signupName}
+                  onChange={e => setSignupName(e.target.value)}
+                  placeholder="e.g. Alex Rivera"
+                  required
+                  className="w-full px-4 py-2.5 rounded-2xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-xs dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-950 dark:focus:border-blue-400 font-medium"
+                />
+              </div>
+
+              {/* Email Address */}
+              <div className="space-y-1">
+                <label className="block text-xs font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600">
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  value={signupEmail}
+                  onChange={e => setSignupEmail(e.target.value)}
+                  placeholder="e.g. alex.rivera@example.com"
+                  required
+                  className="w-full px-4 py-2.5 rounded-2xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-xs dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-950 dark:focus:border-blue-400 font-medium"
+                />
+              </div>
+
+              {/* Auto-provisioned Stellar Wallet */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider dark:text-slate-400 text-slate-600">
+                    Stellar Wallet (Auto Provisioned)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setSignupWallet(generateStellarAddress())}
+                    className="text-[10px] text-blue-500 hover:underline flex items-center gap-1 font-mono"
+                    title="Generate a new random Stellar address"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                    <span>Regenerate</span>
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  value={signupWallet}
+                  onChange={e => setSignupWallet(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-2xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.1] border-slate-300 text-[11px] font-mono dark:text-emerald-400 text-emerald-700 focus:outline-none focus:border-slate-950 dark:focus:border-blue-400"
+                />
+              </div>
+
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  className="ctrl-roll-button w-full py-4 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 group"
+                >
+                  <div className="flex items-center -space-x-1 mr-1 flex-shrink-0">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#fbe74e] ring-1 ring-slate-950"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#ffcadc] ring-1 ring-slate-950"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#9dc4f5] ring-1 ring-slate-950"></span>
+                  </div>
+                  <UserPlus className="w-4 h-4" />
+                  <span className="ctrl-roll-label">Create Account & Register in Database</span>
+                </button>
+              </div>
+
+              <div className="text-center pt-1">
+                <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Already have an account? Switch to{' '}
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('social')}
+                    className="text-blue-500 hover:underline font-bold"
+                  >
+                    Social Login
+                  </button>
+                  {' '}or{' '}
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('presets')}
+                    className="text-blue-500 hover:underline font-bold"
+                  >
+                    Demo Presets
+                  </button>
+                </span>
+              </div>
+            </form>
           ) : activeTab === 'social' ? (
             /* Social Login Main Tab */
             <div className="space-y-4">

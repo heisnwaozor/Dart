@@ -30,11 +30,25 @@ const MainApp: React.FC = () => {
   const [votingProject, setVotingProject] = useState<Project | null>(null);
   const [inspectingProject, setInspectingProject] = useState<Project | null>(null);
   const [isSubmitOpen, setIsSubmitOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+  const [authConfig, setAuthConfig] = useState<{
+    isOpen: boolean;
+    initialTab?: 'create' | 'social' | 'presets' | 'apikey';
+    defaultRole?: 'voter' | 'builder';
+  }>({ isOpen: false, initialTab: 'create', defaultRole: 'voter' });
 
-  // Sync state on events
+  const handleOpenAuth = (
+    initialTab: 'create' | 'social' | 'presets' | 'apikey' = 'create',
+    defaultRole: 'voter' | 'builder' = 'voter'
+  ) => {
+    setAuthConfig({ isOpen: true, initialTab, defaultRole });
+  };
+
+  // Initial database sync and event listeners
   useEffect(() => {
+    // Initial sync with SQLite backend database
+    PollarClientService.syncWithDatabase();
+
     const handleDataChange = () => {
       setProjects(PollarClientService.getProjects());
       setPublicVotes(PollarClientService.getPublicVotes());
@@ -87,7 +101,7 @@ const MainApp: React.FC = () => {
         userVote={activeUserVote}
         projectsCount={projects.length}
         onOpenSubmit={() => setCurrentView('builder')}
-        onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenAuth={() => handleOpenAuth('create', 'voter')}
         onCheckMyVote={() => setIsReceiptOpen(true)}
       />
 
@@ -102,7 +116,7 @@ const MainApp: React.FC = () => {
             totalVotes={totalVotesCount}
             onEnterVoting={() => setCurrentView('voting')}
             onEnterBuilder={() => setCurrentView('builder')}
-            onOpenAuth={() => setIsAuthOpen(true)}
+            onOpenAuth={() => handleOpenAuth('create', 'voter')}
           />
         )}
 
@@ -115,7 +129,7 @@ const MainApp: React.FC = () => {
               setCurrentView('voting');
               setActiveTab('leaderboard');
             }}
-            onOpenAuth={() => setIsAuthOpen(true)}
+            onOpenAuth={() => handleOpenAuth('create', 'builder')}
           />
         )}
 
@@ -243,7 +257,7 @@ const MainApp: React.FC = () => {
           onClose={() => setVotingProject(null)}
           onOpenAuth={() => {
             setVotingProject(null);
-            setIsAuthOpen(true);
+            handleOpenAuth('create', 'voter');
           }}
           onSuccess={() => {
             setVotingProject(null);
@@ -290,17 +304,19 @@ const MainApp: React.FC = () => {
             setCurrentView('voting');
             setActiveTab('projects');
           }}
-          onOpenAuth={() => setIsAuthOpen(true)}
+          onOpenAuth={() => handleOpenAuth('create', 'builder')}
         />
       )}
 
-      {isAuthOpen && (
+      {authConfig.isOpen && (
         <PollarAuthModal
           currentUser={currentUser}
-          onClose={() => setIsAuthOpen(false)}
+          initialTab={authConfig.initialTab}
+          defaultRole={authConfig.defaultRole}
+          onClose={() => setAuthConfig(prev => ({ ...prev, isOpen: false }))}
           onLogin={user => {
             setCurrentUser(user);
-            setIsAuthOpen(false);
+            setAuthConfig(prev => ({ ...prev, isOpen: false }));
           }}
         />
       )}

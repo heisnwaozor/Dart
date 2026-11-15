@@ -66,7 +66,7 @@ export interface PublicVote {
   projectName: string;
   voterWallet: string;
   voterName: string;
-  voterProvider: 'google' | 'github' | 'email' | 'wallet';
+  voterProvider: 'google' | 'github' | 'email' | 'wallet' | 'direct';
   voterAvatar?: string;
   score: number; // 1 point per project
   signedMessage: string;
@@ -83,8 +83,8 @@ export interface PollarUser {
   avatar: string;
   walletAddress: string;
   chain: 'stellar' | 'solana';
-  provider: 'google' | 'github' | 'email' | 'wallet';
-  role: 'voter' | 'judge' | 'organizer';
+  provider: 'google' | 'github' | 'email' | 'wallet' | 'direct';
+  role: 'voter' | 'builder' | 'judge' | 'organizer';
   judgeProfile?: Judge;
 }
 
