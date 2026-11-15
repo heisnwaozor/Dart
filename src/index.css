@@ -5,7 +5,7 @@
 @layer base {
   :root {
     --bg-main: #F8FAFC;
-    --card-bg: rgba(255, 255, 255, 0.85);
+    --card-bg: rgba(255, 255, 255, 0.95);
     --border-color: rgba(226, 232, 240, 0.9);
     --text-primary: #0F172A;
     --text-secondary: #475569;
@@ -14,7 +14,7 @@
 
   .dark {
     --bg-main: #070A13;
-    --card-bg: rgba(14, 20, 36, 0.75);
+    --card-bg: rgba(14, 20, 36, 0.85);
     --border-color: rgba(255, 255, 255, 0.08);
     --text-primary: #FFFFFF;
     --text-secondary: #94A3B8;
@@ -24,7 +24,7 @@
   body {
     background-color: var(--bg-main);
     color: var(--text-primary);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
@@ -49,9 +49,109 @@
   background: rgba(37, 99, 235, 0.6);
 }
 
-/* Interactive Mindblowing Keyframe Classes */
+/* Ctrl.xyz Exact Keyframe Animations */
+@keyframes MoveUpInitial {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+}
 
-/* 1. Shimmer sweep on cards and buttons */
+@keyframes MoveUpEnd {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes ctrlRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ctrlShake {
+  10%, 60% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 70% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 80% {
+    transform: translate3d(-2px, 0, 0);
+  }
+  40%, 90% {
+    transform: translate3d(1px, 0, 0);
+  }
+}
+
+/* Ctrl Interactive Button and Roll Text Utility */
+.ctrl-roll-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  white-space: nowrap;
+}
+
+.ctrl-roll-button:hover .ctrl-roll-label {
+  animation: MoveUpInitial 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+             MoveUpEnd 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) 0.15s forwards;
+}
+
+.ctrl-roll-label {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Ctrl Pill Navbar */
+.ctrl-pill-nav {
+  background-color: #ecefec;
+  border-radius: 9999px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dark .ctrl-pill-nav {
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 25px -2px rgba(0, 0, 0, 0.4);
+}
+
+/* Ctrl Card Styling */
+.ctrl-card {
+  border-radius: 36px;
+  border: 2px solid rgba(15, 15, 15, 0.1);
+  background-color: #ffffff;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.dark .ctrl-card {
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background-color: #0E1527;
+}
+
+.ctrl-card:hover {
+  border-color: #0f0f0f;
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12);
+}
+
+.dark .ctrl-card:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+/* Shimmer sweep on cards and buttons */
 .shimmer-sweep {
   position: relative;
   overflow: hidden;
@@ -75,46 +175,7 @@
   pointer-events: none;
 }
 
-/* 2. Glassmorphism for Light & Dark */
-.glass-surface {
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-color);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.dark .glass-surface {
-  background: rgba(14, 20, 36, 0.75);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.glass-surface:hover {
-  border-color: rgba(59, 130, 246, 0.45);
-  box-shadow: 0 12px 36px -10px rgba(37, 99, 235, 0.2);
-}
-
-/* 3. Holographic border beam */
-.border-beam {
-  position: relative;
-}
-
-.border-beam::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: linear-gradient(90deg, #2563EB, #60A5FA, #FFFFFF, #2563EB);
-  background-size: 300% 300%;
-  animation: gradientX 5s ease infinite;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* 4. Rotating cryptographic rings */
+/* Rotating cryptographic rings */
 @keyframes spinCounter {
   from { transform: rotate(360deg); }
   to { transform: rotate(0deg); }
@@ -124,107 +185,39 @@
   animation: spinCounter 12s linear infinite;
 }
 
-/* 5. Electric Blue & White Glow Effects */
-.glow-blue {
-  box-shadow: 0 0 35px -5px rgba(37, 99, 235, 0.45);
-}
-
-.glow-blue-lg {
-  box-shadow: 0 0 60px -10px rgba(59, 130, 246, 0.55);
-}
-
-.glow-white {
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
-}
-
-/* 6. Dynamic Grid background */
+/* Mesh grid background */
 .mesh-grid {
   background-image: 
-    linear-gradient(to right, rgba(59, 130, 246, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
+    linear-gradient(to right, rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
   background-size: 3rem 3rem;
 }
 
 .dark .mesh-grid {
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
-/* 7. MotionSites AI Interactive Spotlight & Spatial Glass */
-.spotlight-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 32px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.4s ease, 
-              box-shadow 0.4s ease;
-}
-
-.spotlight-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    650px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(59, 130, 246, 0.12),
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.spotlight-card:hover::before {
-  opacity: 1;
-}
-
-.spotlight-card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(59, 130, 246, 0.55);
-  box-shadow: 0 30px 70px -15px rgba(37, 99, 235, 0.28);
-}
-
-.dark .spotlight-card:hover {
-  box-shadow: 0 30px 80px -12px rgba(37, 99, 235, 0.42), 0 0 25px rgba(56, 189, 248, 0.2);
-}
-
-/* Fluid negative space container with expansive MotionSites AI margins */
+/* Motion Container */
 .motion-container {
   max-width: 1420px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1.75rem;
-  padding-right: 1.75rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 @media (min-width: 640px) {
   .motion-container {
-    padding-left: 3rem;
-    padding-right: 3rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 }
 
 @media (min-width: 1024px) {
   .motion-container {
-    padding-left: 4.5rem;
-    padding-right: 4.5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
   }
-}
-
-/* MotionSites Glass Panels */
-.motion-glass {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-}
-
-.dark .motion-glass {
-  background: rgba(13, 19, 36, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.08);
 }

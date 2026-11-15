@@ -62,47 +62,46 @@ export const Hero: React.FC<HeroProps> = ({
 
       <div className="motion-container">
         
-        {/* Top Sketchy Hand & Dart Branding Badge */}
-        <div className="flex justify-center mb-8 sm:mb-12">
-          <div className="inline-flex items-center space-x-3.5 px-5 py-2.5 rounded-full dark:bg-white/[0.06] bg-blue-50/90 border dark:border-white/[0.12] border-blue-200/80 text-xs font-mono dark:text-blue-300 text-blue-700 shadow-md backdrop-blur-xl hover:scale-105 transition-all duration-300">
-            <DartLogo size={24} />
-            <span className="font-extrabold uppercase tracking-wider">Dart on Pollar</span>
-            <span className="text-slate-400">•</span>
-            <span className="font-semibold hidden sm:inline">Stellar SEP-53 Non-Repudiation</span>
+        {/* Top Ctrl Pill Badge */}
+        <div className="flex justify-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
+            <span>Decentralized community voting for all Pollar Pitch Projects</span>
           </div>
         </div>
 
         {/* Hero Title & Value Proposition */}
         <div className="text-center max-w-5xl mx-auto space-y-6 sm:space-y-8">
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-[-0.03em] leading-[1.08] dark:text-white text-slate-900">
-            Aim Higher with{' '}
-            <span className="bg-gradient-to-r from-blue-600 via-sky-400 to-blue-400 bg-clip-text text-transparent">
-              Dart Voting
-            </span>
+          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-[-0.04em] leading-[0.95] dark:text-white text-slate-950">
+            Aim <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300">❖</span> Vote.
           </h1>
 
           <p className="text-base sm:text-xl md:text-2xl dark:text-slate-300 text-slate-600 max-w-3xl mx-auto leading-relaxed font-normal">
-            Decentralized community governance for the <strong className="dark:text-white text-slate-900 font-bold">LATAM Builders Summit 2026</strong>. Built with the official <a href="https://docs.pollar.xyz" target="_blank" rel="noreferrer" className="text-blue-500 font-bold hover:underline">@pollar/react</a> and <a href="https://www.npmjs.com/package/@pollar/core" target="_blank" rel="noreferrer" className="text-blue-500 font-bold hover:underline">@pollar/core</a> SDKs.
+            Discover standout projects, test live demos, and cast your gasless cryptographic vote on Stellar SEP-53.
           </p>
         </div>
 
-        {/* Primary Interactive CTAs */}
-        <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 max-w-xl mx-auto">
+        {/* Primary Interactive CTAs (Ctrl.xyz Button Style) */}
+        <div className="mt-10 sm:mt-14 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 max-w-xl mx-auto">
           <button
             onClick={onExplore}
-            className="w-full sm:w-auto shimmer-sweep flex items-center justify-center space-x-3 px-9 py-5 rounded-2xl sm:rounded-3xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-base shadow-2xl shadow-blue-600/40 transition-all duration-300 hover:scale-105 active:scale-95 group"
+            className="ctrl-roll-button w-full sm:w-auto inline-flex items-center justify-center gap-3.5 px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-base sm:text-lg shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-slate-950 group"
           >
-            <Flame className="w-5 h-5 fill-white group-hover:animate-bounce" />
-            <span>Browse Projects & Vote</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+            <div className="flex items-center -space-x-1.5 flex-shrink-0">
+              <span className="w-3.5 h-3.5 rounded-full bg-[#fbe74e] ring-2 ring-slate-950"></span>
+              <span className="w-3.5 h-3.5 rounded-full bg-[#ffcadc] ring-2 ring-slate-950"></span>
+              <span className="w-3.5 h-3.5 rounded-full bg-[#9dc4f5] ring-2 ring-slate-950"></span>
+            </div>
+            <span className="ctrl-roll-label">Browse Projects & Vote</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
 
           <button
             onClick={onViewLeaderboard}
-            className="w-full sm:w-auto flex items-center justify-center space-x-2.5 px-8 py-5 rounded-2xl sm:rounded-3xl dark:bg-white/[0.06] bg-white hover:bg-slate-50 dark:hover:bg-white/[0.12] dark:text-white text-slate-800 border dark:border-white/[0.12] border-slate-200 text-base font-bold shadow-lg transition-all duration-300 hover:scale-[1.02]"
+            className="ctrl-roll-button w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-4 sm:py-5 rounded-full bg-white dark:bg-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.14] text-slate-950 dark:text-white font-bold text-base sm:text-lg border-2 border-slate-950 dark:border-white/20 shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
           >
-            <Trophy className="w-5 h-5 text-amber-400" />
-            <span>Live Standings</span>
+            <Trophy className="w-5 h-5 text-amber-500" />
+            <span className="ctrl-roll-label">Live Standings</span>
           </button>
         </div>
 
@@ -117,18 +116,18 @@ export const Hero: React.FC<HeroProps> = ({
           </div>
         </div>
 
-        {/* Interactive 3-Step Navigation Cards with MotionSites Spotlight & Generous Margins */}
+        {/* Interactive 3-Step Navigation Cards with Ctrl.xyz chunky styling */}
         <div className="mt-20 sm:mt-28 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
           
           <div 
             onMouseMove={handleMouseMove}
-            className="spotlight-card group p-8 sm:p-10 rounded-[36px] dark:bg-[#0D1424]/90 bg-white border dark:border-white/[0.08] border-slate-200/90 shadow-xl flex flex-col justify-between"
+            className="ctrl-card group p-8 sm:p-10 flex flex-col justify-between"
           >
             <div>
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-500 flex items-center justify-center font-black text-xl mb-6 border border-blue-500/30 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 rounded-2xl bg-[#9dc4f5]/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-black text-xl mb-6 border-2 border-slate-950 dark:border-white/20 group-hover:scale-110 transition-transform">
                 1
               </div>
-              <h3 className="text-xl font-bold dark:text-white text-slate-900 mb-2 flex items-center justify-between">
+              <h3 className="text-xl sm:text-2xl font-black dark:text-white text-slate-950 mb-3 flex items-center justify-between">
                 <span>Connect Pollar</span>
                 <Globe2 className="w-5 h-5 text-blue-500 opacity-60 group-hover:opacity-100 transition-opacity" />
               </h3>
@@ -136,7 +135,7 @@ export const Hero: React.FC<HeroProps> = ({
                 Sign in directly with your Google or GitHub account via Pollar. A secure, gas-sponsored Stellar wallet is provisioned automatically with no seed phrase required.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t dark:border-white/[0.06] border-slate-100 text-xs font-mono text-blue-500 font-bold flex items-center gap-1.5">
+            <div className="mt-8 pt-4 border-t dark:border-white/[0.08] border-slate-200/80 text-xs font-mono text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1.5">
               <span>Instant Social Auth</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -144,21 +143,21 @@ export const Hero: React.FC<HeroProps> = ({
 
           <div 
             onMouseMove={handleMouseMove}
-            className="spotlight-card group p-8 sm:p-10 rounded-[36px] dark:bg-[#0D1424]/90 bg-white border dark:border-white/[0.08] border-slate-200/90 shadow-xl flex flex-col justify-between"
+            className="ctrl-card group p-8 sm:p-10 flex flex-col justify-between"
           >
             <div>
-              <div className="w-14 h-14 rounded-2xl bg-sky-500/10 dark:bg-sky-500/20 text-sky-500 flex items-center justify-center font-black text-xl mb-6 border border-sky-500/30 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 rounded-2xl bg-[#fbe74e]/40 text-amber-600 dark:text-yellow-400 flex items-center justify-center font-black text-xl mb-6 border-2 border-slate-950 dark:border-white/20 group-hover:scale-110 transition-transform">
                 2
               </div>
-              <h3 className="text-xl font-bold dark:text-white text-slate-900 mb-2 flex items-center justify-between">
+              <h3 className="text-xl sm:text-2xl font-black dark:text-white text-slate-950 mb-3 flex items-center justify-between">
                 <span>Inspect Demos</span>
-                <Sparkles className="w-5 h-5 text-sky-500 opacity-60 group-hover:opacity-100 transition-opacity" />
+                <Sparkles className="w-5 h-5 text-amber-500 opacity-60 group-hover:opacity-100 transition-opacity" />
               </h3>
               <p className="text-sm dark:text-slate-400 text-slate-600 leading-relaxed">
                 Review verified testnet smart contracts, live video demos, and open-source GitHub code repositories with instant 1-click links.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t dark:border-white/[0.06] border-slate-100 text-xs font-mono text-sky-500 font-bold flex items-center gap-1.5">
+            <div className="mt-8 pt-4 border-t dark:border-white/[0.08] border-slate-200/80 text-xs font-mono text-amber-600 dark:text-yellow-400 font-bold flex items-center gap-1.5">
               <span>Transparent Pitch & Code</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -166,21 +165,21 @@ export const Hero: React.FC<HeroProps> = ({
 
           <div 
             onMouseMove={handleMouseMove}
-            className="spotlight-card group p-8 sm:p-10 rounded-[36px] dark:bg-[#0D1424]/90 bg-white border dark:border-white/[0.08] border-slate-200/90 shadow-xl flex flex-col justify-between"
+            className="ctrl-card group p-8 sm:p-10 flex flex-col justify-between"
           >
             <div>
-              <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-500 flex items-center justify-center font-black text-xl mb-6 border border-indigo-500/30 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 rounded-2xl bg-[#ffcadc]/40 text-pink-600 dark:text-pink-400 flex items-center justify-center font-black text-xl mb-6 border-2 border-slate-950 dark:border-white/20 group-hover:scale-110 transition-transform">
                 3
               </div>
-              <h3 className="text-xl font-bold dark:text-white text-slate-900 mb-2 flex items-center justify-between">
+              <h3 className="text-xl sm:text-2xl font-black dark:text-white text-slate-950 mb-3 flex items-center justify-between">
                 <span>Sign with SEP-53</span>
-                <Lock className="w-5 h-5 text-indigo-500 opacity-60 group-hover:opacity-100 transition-opacity" />
+                <Lock className="w-5 h-5 text-pink-500 opacity-60 group-hover:opacity-100 transition-opacity" />
               </h3>
               <p className="text-sm dark:text-slate-400 text-slate-600 leading-relaxed">
                 Cast your vote. Your wallet signs a canonical SEP-53 message payload recorded on Stellar with full public verification and zero gas fees.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t dark:border-white/[0.06] border-slate-100 text-xs font-mono text-indigo-500 font-bold flex items-center gap-1.5">
+            <div className="mt-8 pt-4 border-t dark:border-white/[0.08] border-slate-200/80 text-xs font-mono text-pink-600 dark:text-pink-400 font-bold flex items-center gap-1.5">
               <span>Cryptographic Proof</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -188,30 +187,36 @@ export const Hero: React.FC<HeroProps> = ({
 
         </div>
 
-        {/* Live Metrics Ribbon with Roomy Padding */}
-        <div className="mt-16 sm:mt-24 p-6 sm:p-8 rounded-[32px] dark:bg-white/[0.03] bg-slate-100/80 border dark:border-white/[0.08] border-slate-200/80 flex flex-wrap items-center justify-around gap-6 sm:gap-8 text-xs sm:text-sm font-mono shadow-sm">
+        {/* Live Metrics Ribbon with Ctrl Pill Bar Styling */}
+        <div className="mt-16 sm:mt-24 p-6 sm:p-8 rounded-full ctrl-pill-nav flex flex-wrap items-center justify-around gap-6 sm:gap-8 text-xs sm:text-sm font-mono shadow-md">
           <div className="flex items-center space-x-2.5">
             <Coins className="w-5 h-5 text-amber-500" />
-            <span className="dark:text-slate-400 text-slate-500">Prize Pool:</span>
-            <span className="dark:text-white text-slate-900 font-black">{hackathon.prizePool}</span>
+            <span className="dark:text-slate-400 text-slate-500 font-medium">Prize Pool:</span>
+            <span className="dark:text-white text-slate-950 font-black">{hackathon.prizePool}</span>
           </div>
+
+          <span className="hidden sm:inline text-slate-300 dark:text-white/20 select-none">|</span>
 
           <div className="flex items-center space-x-2.5">
             <Flame className="w-5 h-5 text-blue-500" />
-            <span className="dark:text-slate-400 text-slate-500">Active Submissions:</span>
-            <span className="dark:text-white text-slate-900 font-black">{totalProjects} Projects</span>
+            <span className="dark:text-slate-400 text-slate-500 font-medium">Submissions:</span>
+            <span className="dark:text-white text-slate-950 font-black">{totalProjects} Projects</span>
           </div>
 
+          <span className="hidden sm:inline text-slate-300 dark:text-white/20 select-none">|</span>
+
           <div className="flex items-center space-x-2.5">
-            <Fingerprint className="w-5 h-5 text-sky-400" />
-            <span className="dark:text-slate-400 text-slate-500">Verified SEP-53 Votes:</span>
-            <span className="text-blue-500 font-black">{totalVotes}</span>
+            <Fingerprint className="w-5 h-5 text-sky-500" />
+            <span className="dark:text-slate-400 text-slate-500 font-medium">SEP-53 Votes:</span>
+            <span className="text-blue-600 dark:text-sky-400 font-black">{totalVotes}</span>
           </div>
+
+          <span className="hidden sm:inline text-slate-300 dark:text-white/20 select-none">|</span>
 
           <div className="flex items-center space-x-2.5">
             <ShieldCheck className="w-5 h-5 text-emerald-500" />
-            <span className="dark:text-slate-400 text-slate-500">Sybil Defense:</span>
-            <span className="dark:text-white text-slate-900 font-black">1 Vote / Wallet</span>
+            <span className="dark:text-slate-400 text-slate-500 font-medium">Sybil Defense:</span>
+            <span className="dark:text-white text-slate-950 font-black">1 Vote / Wallet</span>
           </div>
         </div>
 

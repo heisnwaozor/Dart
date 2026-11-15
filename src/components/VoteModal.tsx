@@ -105,19 +105,19 @@ export const VoteModal: React.FC<VoteModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-xl rounded-3xl dark:bg-[#0C1326] bg-white border dark:border-white/[0.12] border-slate-200 shadow-2xl overflow-hidden transition-all"
+        className="ctrl-card relative w-full max-w-xl rounded-[36px] shadow-2xl overflow-hidden transition-all"
         onClick={e => e.stopPropagation()}
       >
         {/* Top Header */}
         <div className="flex items-center justify-between p-5 sm:p-6 border-b dark:border-white/[0.08] border-slate-200">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center">
-              <Fingerprint className="w-5 h-5 text-blue-500 animate-pulse" />
+            <div className="w-10 h-10 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] flex items-center justify-center">
+              <Fingerprint className="w-5 h-5 text-[#05c92f] animate-pulse" />
             </div>
             <div>
-              <h3 className="text-base font-bold dark:text-white text-slate-900 flex items-center gap-2">
+              <h3 className="text-base font-black dark:text-white text-slate-950 flex items-center gap-2">
                 <span>Cryptographic Vote Signing</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 font-mono font-bold">
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 font-mono font-bold">
                   Stellar SEP-53
                 </span>
               </h3>
@@ -127,7 +127,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white dark:hover:bg-white/[0.06] hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white dark:hover:bg-white/[0.06] hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -302,9 +302,9 @@ export const VoteModal: React.FC<VoteModalProps> = ({
                     onClose();
                     onViewReceipt();
                   }}
-                  className="w-full sm:flex-1 py-3.5 rounded-2xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/30 text-blue-600 dark:text-blue-400 font-extrabold text-xs transition-all shadow-sm"
+                  className="ctrl-roll-button w-full sm:flex-1 py-3.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] hover:bg-slate-200 border-2 border-slate-950 dark:border-white/20 text-slate-950 dark:text-white font-bold text-xs transition-all shadow-sm"
                 >
-                  Check My Vote Receipt
+                  <span className="ctrl-roll-label">Check My Vote Receipt</span>
                 </button>
               )}
               <button
@@ -312,25 +312,29 @@ export const VoteModal: React.FC<VoteModalProps> = ({
                   onClose();
                   if (onViewLeaderboard) onViewLeaderboard();
                 }}
-                className="w-full sm:flex-1 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-xl shadow-blue-600/30 hover:scale-[1.02] transition-all"
+                className="ctrl-roll-button w-full sm:flex-1 py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs border-2 border-slate-950 shadow-md transition-all"
               >
-                Done & View Leaderboard
+                <span className="ctrl-roll-label">Done & View Leaderboard</span>
               </button>
             </div>
           ) : step === 'review' && currentUser ? (
             <>
               <button
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-xl text-xs font-bold dark:text-slate-400 text-slate-600 hover:text-slate-800 dark:hover:text-white transition-colors"
+                className="ctrl-roll-button px-5 py-2.5 rounded-full text-xs font-bold dark:text-slate-400 text-slate-600 hover:text-slate-800 dark:hover:text-white transition-colors"
               >
-                Cancel
+                <span className="ctrl-roll-label">Cancel</span>
               </button>
               <button
                 onClick={handleSign}
-                className="shimmer-sweep flex items-center space-x-2 px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-sm shadow-xl shadow-blue-600/35 hover:scale-105 active:scale-95 transition-all"
+                className="ctrl-roll-button flex items-center space-x-2 px-7 py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-sm border-2 border-slate-950 shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all"
               >
-                <Fingerprint className="w-4 h-4 fill-white" />
-                <span>Sign Vote with Pollar</span>
+                <div className="flex items-center -space-x-1 mr-0.5 flex-shrink-0">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#fbe74e] ring-1 ring-slate-950"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ffcadc] ring-1 ring-slate-950"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#9dc4f5] ring-1 ring-slate-950"></span>
+                </div>
+                <span className="ctrl-roll-label">Sign Vote with Pollar</span>
               </button>
             </>
           ) : null}

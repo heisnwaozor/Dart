@@ -68,24 +68,24 @@ export const SubmitProjectModal: React.FC<SubmitProjectModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-xl rounded-3xl dark:bg-[#0C1326] bg-white border dark:border-white/[0.12] border-slate-200 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+        className="ctrl-card relative w-full max-w-xl rounded-[36px] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b dark:border-white/[0.08] border-slate-200">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-500">
-              <PlusCircle className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] flex items-center justify-center text-slate-950 dark:text-white">
+              <PlusCircle className="w-5 h-5 text-[#05c92f]" />
             </div>
             <div>
-              <h3 className="text-base font-bold dark:text-white text-slate-900">Submit Hackathon Project</h3>
-              <p className="text-xs dark:text-slate-400 text-slate-500">LATAM Builders Summit 2026</p>
+              <h3 className="text-base font-black dark:text-white text-slate-950">Submit Hackathon Project</h3>
+              <p className="text-xs dark:text-slate-400 text-slate-500 font-medium">Pollar Pitch Projects</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white"
+            className="p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -208,15 +208,15 @@ export const SubmitProjectModal: React.FC<SubmitProjectModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-bold dark:text-slate-400 text-slate-600 hover:text-slate-800 dark:hover:text-white"
+              className="ctrl-roll-button px-5 py-2.5 rounded-full text-xs font-bold dark:text-slate-400 text-slate-600 hover:text-slate-950 dark:hover:text-white transition-colors"
             >
-              Cancel
+              <span className="ctrl-roll-label">Cancel</span>
             </button>
             <button
               type="submit"
-              className="shimmer-sweep px-6 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/30 hover:scale-105 transition-all"
+              className="ctrl-roll-button px-7 py-3 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs border-2 border-slate-950 shadow-md transition-all"
             >
-              Publish Submission
+              <span className="ctrl-roll-label">Publish Submission</span>
             </button>
           </div>
         </form>

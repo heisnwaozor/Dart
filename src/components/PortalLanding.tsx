@@ -5,15 +5,11 @@ import {
   ArrowRight, 
   ShieldCheck, 
   CheckCircle, 
-  ExternalLink,
   Code2,
   Users,
-  Sparkles,
-  ChevronRight,
-  Compass,
   Zap,
-  Globe2,
-  Lock
+  Lock,
+  Compass
 } from 'lucide-react';
 import { Hackathon, Project } from '../types';
 
@@ -40,15 +36,15 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
       {/* 1. Hero Section inspired by Ctrl.xyz */}
       <section className="relative pt-20 sm:pt-28 lg:pt-36 pb-20 sm:pb-28 text-center overflow-hidden">
         
-        {/* Subtle radial ambient glows */}
+        {/* Subtle radial ambient glow */}
         <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] sm:w-[900px] h-[350px] sm:h-[450px] bg-blue-500/10 dark:bg-blue-600/15 rounded-full blur-[140px] pointer-events-none -z-10" />
 
         <div className="motion-container relative z-10 max-w-5xl mx-auto flex flex-col items-center">
           
-          {/* Subtitle above title (Ctrl.xyz style) */}
-          <div className="mb-6 sm:mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100/90 dark:bg-white/[0.06] border border-slate-200 dark:border-white/[0.1] text-xs sm:text-sm font-medium dark:text-slate-300 text-slate-600 backdrop-blur-md">
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-            <span>One wallet • One vote • 100% cryptographic</span>
+          {/* Subtitle above title: requested text */}
+          <div className="mb-6 sm:mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
+            <span>Decentralized community voting for all Pollar Pitch Projects</span>
           </div>
 
           {/* Monumental Headline (Ctrl.xyz giant typographic treatment) */}
@@ -58,34 +54,34 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
 
           {/* Clean summary line */}
           <p className="text-lg sm:text-2xl md:text-3xl dark:text-slate-300 text-slate-700 font-normal max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed">
-            Decentralized community voting for the <strong className="font-bold dark:text-white text-slate-950">{hackathon.name}</strong>.
+            One wallet. One vote. 100% cryptographic proof on Stellar.
           </p>
 
-          {/* Dual Action Center CTA Pills (Ctrl.xyz style) */}
+          {/* Dual Action Center CTA Pills (Ctrl.xyz exact button style with rolling text) */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full max-w-md sm:max-w-none">
             
-            {/* Primary Action: Vibrant Pill Button */}
+            {/* Primary Action: Signature Green Pill Button with 3-dot Badge */}
             <button
               onClick={onEnterVoting}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-3.5 px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[#00E5FF] hover:bg-[#38BDF8] text-slate-950 font-black text-base sm:text-lg shadow-xl shadow-cyan-500/20 hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-slate-950 dark:border-white/20 group"
+              className="ctrl-roll-button w-full sm:w-auto inline-flex items-center justify-center gap-3.5 px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-base sm:text-lg shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-slate-950 group"
             >
-              {/* Colored Indicator Dots on the pill */}
-              <div className="flex items-center -space-x-1.5">
-                <span className="w-3 h-3 rounded-full bg-blue-600 ring-2 ring-white"></span>
-                <span className="w-3 h-3 rounded-full bg-amber-400 ring-2 ring-white"></span>
-                <span className="w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-white"></span>
+              {/* Overlapping Multi-Color Status Circles (from Ctrl.xyz) */}
+              <div className="flex items-center -space-x-1.5 flex-shrink-0">
+                <span className="w-3.5 h-3.5 rounded-full bg-[#fbe74e] ring-2 ring-slate-950"></span>
+                <span className="w-3.5 h-3.5 rounded-full bg-[#ffcadc] ring-2 ring-slate-950"></span>
+                <span className="w-3.5 h-3.5 rounded-full bg-[#9dc4f5] ring-2 ring-slate-950"></span>
               </div>
-              <span>Enter Voting Arena</span>
+              <span className="ctrl-roll-label">Enter Voting Arena</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
 
-            {/* Secondary Action: Sleek Outline Pill for Builders */}
+            {/* Secondary Action: Sleek Dark / White Pill Button for Builders */}
             <button
               onClick={onEnterBuilder}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-4 sm:py-5 rounded-full bg-white dark:bg-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.14] text-slate-900 dark:text-white font-bold text-base sm:text-lg border-2 border-slate-300 dark:border-white/[0.15] shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
+              className="ctrl-roll-button w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-4 sm:py-5 rounded-full bg-white dark:bg-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.14] text-slate-950 dark:text-white font-bold text-base sm:text-lg border-2 border-slate-950 dark:border-white/20 shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
             >
               <Code2 className="w-5 h-5 text-blue-500" />
-              <span>Submit a Project</span>
+              <span className="ctrl-roll-label">Submit a Project</span>
             </button>
 
           </div>
@@ -119,10 +115,10 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
           
           <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 space-y-3">
             <h2 className="text-3xl sm:text-5xl font-black dark:text-white text-slate-950 tracking-tight">
-              Choose Your Doorway
+              Choose Your Pathway
             </h2>
             <p className="text-sm sm:text-base dark:text-slate-400 text-slate-600">
-              Whether you are a community member voting on the winning projects, or a hackathon builder submitting your Soroban contract, we have a dedicated space for you.
+              Community voters evaluate pitches and decide the prize winners; hackathon builders submit smart contracts and demos.
             </p>
           </div>
 
@@ -131,7 +127,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Doorway 1: Community Voters */}
             <div 
               onClick={onEnterVoting}
-              className="group relative rounded-[40px] sm:rounded-[44px] p-8 sm:p-12 dark:bg-[#0E1527] bg-white border-2 dark:border-white/[0.12] border-slate-300 shadow-xl hover:shadow-2xl hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+              className="ctrl-card p-8 sm:p-12 cursor-pointer flex flex-col justify-between group"
             >
               <div className="space-y-6">
                 
@@ -142,7 +138,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
                     For Voters & Community
                   </span>
                   <span className="text-xs font-mono font-bold text-slate-400">
-                    6 Active Projects
+                    {projects.length} Active Projects
                   </span>
                 </div>
 
@@ -173,10 +169,10 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
 
               </div>
 
-              {/* Action Button at bottom */}
+              {/* Action Button at bottom with rolling text */}
               <div className="pt-8">
-                <div className="w-full py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm sm:text-base flex items-center justify-between shadow-lg shadow-blue-600/25 group-hover:scale-[1.02] transition-all">
-                  <span>Enter Voting Arena</span>
+                <div className="ctrl-roll-button w-full py-4 px-6 rounded-2xl bg-slate-950 hover:bg-slate-900 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-slate-950 font-bold text-sm sm:text-base flex items-center justify-between shadow-lg group-hover:scale-[1.02] transition-all">
+                  <span className="ctrl-roll-label">Enter Voting Arena</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
@@ -186,7 +182,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Doorway 2: Hackathon Builders */}
             <div 
               onClick={onEnterBuilder}
-              className="group relative rounded-[40px] sm:rounded-[44px] p-8 sm:p-12 dark:bg-[#0E1527] bg-white border-2 dark:border-white/[0.12] border-slate-300 shadow-xl hover:shadow-2xl hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+              className="ctrl-card p-8 sm:p-12 cursor-pointer flex flex-col justify-between group"
             >
               <div className="space-y-6">
                 
@@ -228,10 +224,10 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
 
               </div>
 
-              {/* Action Button at bottom */}
+              {/* Action Button at bottom with rolling text */}
               <div className="pt-8">
-                <div className="w-full py-4 px-6 rounded-2xl bg-slate-900 dark:bg-white/[0.1] hover:bg-slate-800 dark:hover:bg-white/[0.18] text-white font-bold text-sm sm:text-base flex items-center justify-between border border-slate-700 dark:border-white/20 shadow-lg group-hover:scale-[1.02] transition-all">
-                  <span>Submit Hackathon Project</span>
+                <div className="ctrl-roll-button w-full py-4 px-6 rounded-2xl bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-bold text-sm sm:text-base flex items-center justify-between border-2 border-slate-950 shadow-lg group-hover:scale-[1.02] transition-all">
+                  <span className="ctrl-roll-label">Submit Hackathon Project</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
@@ -244,7 +240,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
       </section>
 
 
-      {/* 3. Three Pillars of Trust (Minimalist Bento Feature Breakdown) */}
+      {/* 3. Three Pillars of Trust (Ctrl.xyz minimal Bento Cards) */}
       <section className="py-16 sm:py-24 border-t dark:border-white/[0.08] border-slate-200">
         <div className="motion-container max-w-5xl mx-auto">
           
@@ -259,11 +255,11 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             
-            <div className="rounded-3xl p-7 dark:bg-[#0E1527] bg-white border dark:border-white/[0.08] border-slate-200 shadow-sm space-y-3">
+            <div className="ctrl-card p-7 space-y-3">
               <div className="w-11 h-11 rounded-2xl bg-blue-500/15 text-blue-500 flex items-center justify-center">
                 <Lock className="w-5 h-5" />
               </div>
-              <h4 className="text-lg font-bold dark:text-white text-slate-900">
+              <h4 className="text-lg font-bold dark:text-white text-slate-950">
                 1 Wallet, 1 Vote
               </h4>
               <p className="text-xs sm:text-sm dark:text-slate-400 text-slate-600 leading-relaxed">
@@ -271,11 +267,11 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
               </p>
             </div>
 
-            <div className="rounded-3xl p-7 dark:bg-[#0E1527] bg-white border dark:border-white/[0.08] border-slate-200 shadow-sm space-y-3">
+            <div className="ctrl-card p-7 space-y-3">
               <div className="w-11 h-11 rounded-2xl bg-sky-500/15 text-sky-500 flex items-center justify-center">
                 <Zap className="w-5 h-5" />
               </div>
-              <h4 className="text-lg font-bold dark:text-white text-slate-900">
+              <h4 className="text-lg font-bold dark:text-white text-slate-950">
                 Zero Gas Fees
               </h4>
               <p className="text-xs sm:text-sm dark:text-slate-400 text-slate-600 leading-relaxed">
@@ -283,11 +279,11 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
               </p>
             </div>
 
-            <div className="rounded-3xl p-7 dark:bg-[#0E1527] bg-white border dark:border-white/[0.08] border-slate-200 shadow-sm space-y-3">
+            <div className="ctrl-card p-7 space-y-3">
               <div className="w-11 h-11 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h4 className="text-lg font-bold dark:text-white text-slate-900">
+              <h4 className="text-lg font-bold dark:text-white text-slate-950">
                 Merkle Proof Audit
               </h4>
               <p className="text-xs sm:text-sm dark:text-slate-400 text-slate-600 leading-relaxed">

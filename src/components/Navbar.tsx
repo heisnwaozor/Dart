@@ -7,15 +7,12 @@ import {
   LogOut, 
   Copy,
   Check,
-  Wallet,
   Sun,
   Moon,
-  Zap,
   CheckCircle,
   ArrowLeft,
   Code2,
-  Users,
-  Compass
+  Users
 } from 'lucide-react';
 import { PollarUser, PublicVote } from '../types';
 import { PollarClientService } from '../lib/pollar';
@@ -85,67 +82,58 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b dark:border-white/[0.08] border-slate-200/80 dark:bg-[#070A13]/90 bg-white/90 backdrop-blur-2xl transition-colors duration-300">
+    <header className="sticky top-0 z-50 w-full border-b dark:border-white/[0.08] border-slate-200/80 dark:bg-[#070A13]/90 bg-[#F9FAF9]/90 backdrop-blur-2xl transition-colors duration-300">
       
-      {/* Top blue accent hairline */}
-      <div className="h-0.5 w-full bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-500" />
-
       <div className="motion-container">
         <div className="flex items-center justify-between h-20 sm:h-22">
           
-          {/* Brand Identity: Standalone Bold Blue Hand Holding Dart Logo */}
+          {/* Brand Identity: Fine-tuned clean logo without SDK badge (Ctrl.xyz style) */}
           <div 
             onClick={() => setCurrentView('portal')}
-            className="flex items-center space-x-3 cursor-pointer select-none group"
+            className="flex items-center space-x-3.5 cursor-pointer select-none group"
           >
-            <div className="relative flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <DartLogo size={40} animate />
+            <div className="relative flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+              <DartLogo size={42} animate />
             </div>
 
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="font-black text-xl sm:text-2xl dark:text-white text-slate-950 tracking-tight">
-                  Dart
-                </span>
-                <span className="hidden sm:inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full dark:bg-blue-500/15 bg-blue-50 text-blue-600 dark:text-blue-400 font-mono font-bold border dark:border-blue-500/30 border-blue-200">
-                  <Zap className="w-3 h-3 fill-current" />
-                  Pollar SDK
-                </span>
-              </div>
-              <p className="text-[10px] sm:text-[11px] dark:text-slate-400 text-slate-500 font-medium tracking-tight">
-                Stellar Governance
-              </p>
+            <div className="flex flex-col">
+              <span className="font-black text-2xl sm:text-3xl dark:text-white text-slate-950 tracking-tight leading-none group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                Dart
+              </span>
+              <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold mt-1">
+                Stellar Voting
+              </span>
             </div>
           </div>
 
-          {/* Center Floating Pill Bar inspired by Ctrl.xyz */}
-          <nav className="hidden md:flex items-center px-4 py-2 rounded-full dark:bg-white/[0.06] bg-slate-100/90 border dark:border-white/[0.1] border-slate-200 shadow-sm text-xs font-semibold backdrop-blur-md">
+          {/* Center Floating Pill Bar with thin dividers (Ctrl.xyz exact style) */}
+          <nav className="hidden md:flex items-center px-5 py-2.5 rounded-full ctrl-pill-nav text-xs font-semibold">
             
             {currentView === 'portal' ? (
-              <div className="flex items-center space-x-3 text-slate-600 dark:text-slate-300">
+              <div className="flex items-center space-x-3 text-slate-700 dark:text-slate-200">
                 <button
                   onClick={() => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="hover:text-blue-600 dark:hover:text-white transition-colors"
+                  className="ctrl-roll-button hover:text-blue-600 dark:hover:text-white transition-colors"
                 >
-                  Overview
+                  <span className="ctrl-roll-label">Overview</span>
                 </button>
                 <span className="text-slate-300 dark:text-white/20 select-none">|</span>
                 <button
                   onClick={() => setCurrentView('voting')}
-                  className="hover:text-blue-600 dark:hover:text-white transition-colors flex items-center gap-1.5"
+                  className="ctrl-roll-button hover:text-blue-600 dark:hover:text-white transition-colors flex items-center gap-1.5"
                 >
                   <Users className="w-3.5 h-3.5 text-blue-500" />
-                  <span>Voting Arena</span>
+                  <span className="ctrl-roll-label">Voting Arena</span>
                 </button>
                 <span className="text-slate-300 dark:text-white/20 select-none">|</span>
                 <button
                   onClick={() => setCurrentView('builder')}
-                  className="hover:text-blue-600 dark:hover:text-white transition-colors flex items-center gap-1.5"
+                  className="ctrl-roll-button hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5"
                 >
                   <Code2 className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Submit Project</span>
+                  <span className="ctrl-roll-label">Submit Project</span>
                 </button>
                 <span className="text-slate-300 dark:text-white/20 select-none">|</span>
                 <button
@@ -153,65 +141,65 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setCurrentView('voting');
                     setActiveTab('audit');
                   }}
-                  className="hover:text-blue-600 dark:hover:text-white transition-colors"
+                  className="ctrl-roll-button hover:text-blue-600 dark:hover:text-white transition-colors"
                 >
-                  Audit Trail
+                  <span className="ctrl-roll-label">Audit Trail</span>
                 </button>
               </div>
             ) : currentView === 'voting' ? (
               <div className="flex items-center space-x-2.5">
                 <button
                   onClick={() => setCurrentView('portal')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/[0.1] text-slate-600 dark:text-slate-300 transition-colors"
+                  className="ctrl-roll-button inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/[0.1] text-slate-700 dark:text-slate-200 transition-colors"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Hub</span>
+                  <span className="ctrl-roll-label">Hub</span>
                 </button>
                 <span className="text-slate-300 dark:text-white/20 select-none">|</span>
                 <button
                   onClick={() => setActiveTab('projects')}
-                  className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                  className={`ctrl-roll-button px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
                     activeTab === 'projects'
                       ? 'bg-blue-600 text-white shadow-sm'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-500'
+                      : 'text-slate-700 dark:text-slate-200 hover:text-blue-500'
                   }`}
                 >
                   <Flame className="w-3.5 h-3.5" />
-                  <span>Projects ({projectsCount})</span>
+                  <span className="ctrl-roll-label">Projects ({projectsCount})</span>
                 </button>
                 <span className="text-slate-300 dark:text-white/20 select-none">|</span>
                 <button
                   onClick={() => setActiveTab('leaderboard')}
-                  className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                  className={`ctrl-roll-button px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
                     activeTab === 'leaderboard'
                       ? 'bg-blue-600 text-white shadow-sm'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-500'
+                      : 'text-slate-700 dark:text-slate-200 hover:text-blue-500'
                   }`}
                 >
                   <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Leaderboard</span>
+                  <span className="ctrl-roll-label">Leaderboard</span>
                 </button>
                 <span className="text-slate-300 dark:text-white/20 select-none">|</span>
                 <button
                   onClick={() => setActiveTab('audit')}
-                  className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                  className={`ctrl-roll-button px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
                     activeTab === 'audit'
                       ? 'bg-blue-600 text-white shadow-sm'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-500'
+                      : 'text-slate-700 dark:text-slate-200 hover:text-blue-500'
                   }`}
                 >
                   <SearchCode className="w-3.5 h-3.5 text-sky-400" />
-                  <span>Audit</span>
+                  <span className="ctrl-roll-label">Audit</span>
                 </button>
               </div>
             ) : (
-              <div className="flex items-center space-x-3 text-slate-600 dark:text-slate-300">
+              <div className="flex items-center space-x-3 text-slate-700 dark:text-slate-200">
                 <button
                   onClick={() => setCurrentView('portal')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/[0.1] text-slate-600 dark:text-slate-300 transition-colors"
+                  className="ctrl-roll-button inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/[0.1] text-slate-700 dark:text-slate-200 transition-colors"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Back to Hub</span>
+                  <span className="ctrl-roll-label">Back to Hub</span>
                 </button>
                 <span className="text-slate-300 dark:text-white/20 select-none">|</span>
                 <span className="font-bold text-emerald-500 flex items-center gap-1.5">
@@ -221,9 +209,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="text-slate-300 dark:text-white/20 select-none">|</span>
                 <button
                   onClick={() => setCurrentView('voting')}
-                  className="hover:text-blue-600 dark:hover:text-white transition-colors"
+                  className="ctrl-roll-button hover:text-blue-600 dark:hover:text-white transition-colors"
                 >
-                  Switch to Voting
+                  <span className="ctrl-roll-label">Switch to Voting</span>
                 </button>
               </div>
             )}
@@ -338,10 +326,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             ) : (
               <button
-                onClick={onOpenAuth}
-                className="px-5 sm:px-6 py-2.5 rounded-full dark:bg-white bg-slate-950 hover:dark:bg-slate-100 hover:bg-slate-900 dark:text-slate-950 text-white font-bold text-xs sm:text-sm shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
+                onClick={currentView === 'portal' ? () => setCurrentView('voting') : onOpenAuth}
+                className="ctrl-roll-button px-6 sm:px-7 py-2.5 rounded-full dark:bg-white bg-slate-950 hover:dark:bg-slate-100 hover:bg-slate-900 dark:text-slate-950 text-white font-bold text-xs sm:text-sm shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
               >
-                Sign In
+                <span className="ctrl-roll-label">
+                  {currentView === 'portal' ? 'Enter App' : 'Sign In'}
+                </span>
               </button>
             )}
 

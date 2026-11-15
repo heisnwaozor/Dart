@@ -170,60 +170,65 @@ const MainApp: React.FC = () => {
 
       </main>
 
-      {/* Footer */}
-      <footer className="border-t dark:border-white/[0.08] border-slate-200 dark:bg-[#0A0E1A] bg-white py-14 sm:py-16 mt-24 text-xs sm:text-sm dark:text-slate-400 text-slate-500 transition-colors">
+      {/* Ctrl Footer */}
+      <footer className="border-t dark:border-white/[0.08] border-slate-200/80 dark:bg-[#070A13] bg-[#F9FAF9] py-14 sm:py-16 mt-24 text-xs sm:text-sm dark:text-slate-400 text-slate-500 transition-colors">
         <div className="motion-container flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center space-x-3.5">
             <div className="flex items-center justify-center">
               <DartLogo size={36} />
             </div>
             <div>
-              <p className="font-extrabold dark:text-white text-slate-900 text-sm">
-                Dart: Decentralized Hackathon Voting
+              <p className="font-black dark:text-white text-slate-950 text-sm">
+                Dart: Stellar Voting
               </p>
               <p className="text-[11px] dark:text-slate-400 text-slate-500">
-                Built with @pollar/react & @pollar/core • Stellar SEP-53 signed votes • 1 wallet per voter
+                Decentralized community voting for all Pollar Pitch Projects • Stellar SEP-53 signed votes
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6 font-medium">
+          <div className="flex flex-wrap items-center gap-3 font-semibold px-4 py-2 rounded-full ctrl-pill-nav text-xs">
             <button
               onClick={() => setCurrentView('portal')}
-              className="hover:text-blue-500 transition-colors"
+              className="ctrl-roll-button hover:text-blue-600 dark:hover:text-white transition-colors px-2 py-1"
             >
-              Portal Hub
+              <span className="ctrl-roll-label">Portal Hub</span>
             </button>
+            <span className="text-slate-300 dark:text-white/20 select-none">|</span>
             <button
               onClick={() => {
                 setCurrentView('voting');
                 setActiveTab('projects');
               }}
-              className="hover:text-blue-500 transition-colors"
+              className="ctrl-roll-button hover:text-blue-600 dark:hover:text-white transition-colors px-2 py-1"
             >
-              Voting Arena
+              <span className="ctrl-roll-label">Voting Arena</span>
             </button>
+            <span className="text-slate-300 dark:text-white/20 select-none">|</span>
             <button
               onClick={() => setCurrentView('builder')}
-              className="hover:text-blue-500 transition-colors"
+              className="ctrl-roll-button hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors px-2 py-1"
             >
-              Submit Project
+              <span className="ctrl-roll-label">Submit Project</span>
             </button>
+            <span className="text-slate-300 dark:text-white/20 select-none">|</span>
             <a
               href="https://pollar.xyz"
               target="_blank"
               rel="noreferrer"
-              className="hover:text-blue-500 transition-colors flex items-center gap-1 font-mono"
+              className="ctrl-roll-button hover:text-blue-600 dark:hover:text-white transition-colors flex items-center gap-1 font-mono px-2 py-1"
             >
-              pollar.xyz <ExternalLink className="w-3.5 h-3.5" />
+              <span className="ctrl-roll-label">pollar.xyz</span>
+              <ExternalLink className="w-3 h-3" />
             </a>
+            <span className="text-slate-300 dark:text-white/20 select-none">|</span>
             <button
               onClick={handleResetData}
-              className="flex items-center space-x-1.5 dark:text-slate-400 text-slate-500 hover:text-amber-500 transition-colors"
+              className="ctrl-roll-button flex items-center space-x-1.5 dark:text-slate-400 text-slate-500 hover:text-amber-500 transition-colors px-2 py-1"
               title="Reset Hackathon Demo Data"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset Demo</span>
+              <RotateCcw className="w-3 h-3" />
+              <span className="ctrl-roll-label">Reset Demo</span>
             </button>
           </div>
         </div>

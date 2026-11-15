@@ -99,32 +99,32 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
         <div className="mb-8 flex items-center justify-between">
           <button
             onClick={onBackToPortal}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.12] text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 transition-colors"
+            className="ctrl-roll-button inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#ecefec] dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.12] text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-white/10 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to Portal Hub</span>
+            <span className="ctrl-roll-label">Back to Portal Hub</span>
           </button>
 
           <button
             onClick={onViewInVotingArena}
-            className="text-xs sm:text-sm font-mono font-bold text-blue-500 hover:underline flex items-center gap-1.5"
+            className="ctrl-roll-button text-xs sm:text-sm font-mono font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1.5"
           >
-            <span>View Current Voting Standings</span>
+            <span className="ctrl-roll-label">View Current Voting Standings</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </button>
         </div>
 
         {/* Portal Header */}
         <div className="mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-xs uppercase tracking-wider">
-            <Code2 className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
             <span>Builder Submission Gateway</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black dark:text-white text-slate-950 tracking-tight">
-            Submit Your Soroban Project
+          <h1 className="text-4xl sm:text-6xl font-black dark:text-white text-slate-950 tracking-[-0.03em] leading-[0.98]">
+            Submit <span className="inline-block text-emerald-600 dark:text-emerald-400 transform hover:rotate-12 transition-transform duration-300">❖</span> Project.
           </h1>
           <p className="text-sm sm:text-base dark:text-slate-400 text-slate-600 max-w-2xl">
-            Register your decentralized application for the LATAM Builders Summit 2026. Submissions will be opened immediately to community voting and expert review.
+            Register your decentralized application for the Pollar Pitch Projects. Submissions will be opened immediately to community voting and expert review.
           </p>
         </div>
 
@@ -176,7 +176,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
             <div className="lg:col-span-4 space-y-6">
               
               {/* Prize Tracks Card */}
-              <div className="rounded-3xl p-6 sm:p-7 dark:bg-[#0E1527] bg-white border dark:border-white/[0.08] border-slate-200 shadow-sm space-y-4">
+              <div className="ctrl-card p-6 sm:p-7 shadow-sm space-y-4">
                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-amber-500 uppercase tracking-wider">
                   <Trophy className="w-4 h-4" />
                   <span>$75,000 USD Prize Tracks</span>
@@ -190,17 +190,17 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
                       <div
                         key={t.name}
                         onClick={() => setSelectedTrack(t.name)}
-                        className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                        className={`p-3.5 rounded-full border-2 transition-all cursor-pointer flex items-center justify-between ${
                           isSelected
-                            ? 'bg-blue-500/15 border-blue-500 dark:text-white text-slate-900 font-bold'
-                            : 'dark:bg-white/[0.02] bg-slate-50 dark:border-white/[0.06] border-slate-200 dark:text-slate-300 text-slate-700 hover:border-slate-300'
+                            ? 'bg-[#05c92f] border-slate-950 text-slate-950 font-black shadow-md'
+                            : 'bg-[#ecefec] dark:bg-white/[0.04] dark:border-white/[0.08] border-slate-200 dark:text-slate-300 text-slate-700 hover:border-slate-400'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <Icon className={`w-4 h-4 ${isSelected ? 'text-blue-500' : 'text-slate-400'}`} />
+                          <Icon className={`w-4 h-4 ${isSelected ? 'text-slate-950' : 'text-slate-500'}`} />
                           <span className="text-xs sm:text-sm">{t.name}</span>
                         </div>
-                        <span className="text-xs font-mono font-bold text-amber-500">{t.prize}</span>
+                        <span className="text-xs font-mono font-bold">{t.prize}</span>
                       </div>
                     );
                   })}
@@ -208,8 +208,8 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
               </div>
 
               {/* Submission Checklist */}
-              <div className="rounded-3xl p-6 sm:p-7 dark:bg-[#0E1527] bg-white border dark:border-white/[0.08] border-slate-200 shadow-sm space-y-4">
-                <h4 className="text-sm font-bold dark:text-white text-slate-900 uppercase tracking-wider font-mono">
+              <div className="ctrl-card p-6 sm:p-7 shadow-sm space-y-4">
+                <h4 className="text-sm font-black dark:text-white text-slate-950 uppercase tracking-wider font-mono">
                   Builder Checklist
                 </h4>
                 <ul className="space-y-3 text-xs dark:text-slate-400 text-slate-600">
@@ -236,7 +236,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
 
             {/* Right 8 Cols: The Submission Form */}
             <div className="lg:col-span-8">
-              <form onSubmit={handleSubmit} className="rounded-3xl p-7 sm:p-10 dark:bg-[#0E1527] bg-white border dark:border-white/[0.08] border-slate-200 shadow-xl space-y-6">
+              <form onSubmit={handleSubmit} className="ctrl-card p-7 sm:p-10 shadow-xl space-y-6">
                 
                 {errorMsg && (
                   <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs sm:text-sm flex items-center gap-2">
@@ -394,10 +394,15 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
                 <div className="pt-4">
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm sm:text-base shadow-xl shadow-emerald-600/25 transition-all flex items-center justify-center gap-2"
+                    className="ctrl-roll-button w-full py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-base sm:text-lg border-2 border-slate-950 shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-3.5 group"
                   >
+                    <div className="flex items-center -space-x-1.5 flex-shrink-0">
+                      <span className="w-3.5 h-3.5 rounded-full bg-[#fbe74e] ring-2 ring-slate-950"></span>
+                      <span className="w-3.5 h-3.5 rounded-full bg-[#ffcadc] ring-2 ring-slate-950"></span>
+                      <span className="w-3.5 h-3.5 rounded-full bg-[#9dc4f5] ring-2 ring-slate-950"></span>
+                    </div>
                     <Upload className="w-5 h-5" />
-                    <span>Submit Project to Hackathon</span>
+                    <span className="ctrl-roll-label">Submit Project to Hackathon</span>
                   </button>
                   <p className="text-[11px] text-center dark:text-slate-400 text-slate-500 mt-2 font-mono">
                     Project will be cryptographically registered and immediately eligible for public community votes.

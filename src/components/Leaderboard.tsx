@@ -49,32 +49,34 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
     <section className="py-10 sm:py-14 lg:py-16 border-b dark:border-white/[0.08] border-slate-200">
       <div className="motion-container">
         
-        {/* Title Header: Clean and balanced for all viewports */}
-        <div className="mb-8 sm:mb-10 text-center max-w-2xl mx-auto space-y-2.5">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-mono font-bold uppercase tracking-wider shadow-sm">
-            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+        {/* Title Header: Clean and balanced Ctrl aesthetic */}
+        <div className="mb-12 sm:mb-16 text-center max-w-3xl mx-auto space-y-4 sm:space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
             <span>Real-time Standings</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black dark:text-white text-slate-900 tracking-tight leading-tight">
-            Community Choice Leaderboard
+
+          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black dark:text-white text-slate-950 tracking-[-0.03em] leading-[0.98]">
+            Rankings <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300">❖</span> Standings.
           </h2>
-          <p className="text-xs sm:text-sm md:text-base dark:text-slate-400 text-slate-600 leading-relaxed max-w-xl mx-auto">
-            Rankings update live with every cryptographically signed vote on Stellar. Zero gas fees, instant non-repudiation.
+
+          <p className="text-sm sm:text-base md:text-lg dark:text-slate-400 text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            Decentralized community voting for all Pollar Pitch Projects. Rankings update live with every cryptographically signed vote on Stellar. Zero gas fees, instant non-repudiation.
           </p>
         </div>
 
         {/* User Active Vote Banner in Leaderboard */}
         {userVote && (
-          <div className="mb-8 sm:mb-10 p-4 sm:p-5 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-4xl mx-auto shadow-sm">
-            <div className="flex items-center space-x-3.5">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-500 flex items-center justify-center flex-shrink-0">
-                <CheckCircle2 className="w-5 h-5 text-blue-500" />
+          <div className="mb-10 sm:mb-12 p-6 sm:p-7 rounded-[32px] ctrl-card flex flex-col sm:flex-row items-center justify-between gap-6 max-w-4xl mx-auto shadow-md">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] text-slate-950 dark:text-white flex items-center justify-center flex-shrink-0">
+                <CheckCircle2 className="w-6 h-6 text-[#05c92f]" />
               </div>
-              <div className="space-y-0.5">
-                <p className="text-sm font-bold dark:text-white text-slate-900">
+              <div className="space-y-1">
+                <p className="text-base font-black dark:text-white text-slate-950">
                   Your Vote is Live: Supporting <span className="text-blue-600 dark:text-blue-400 underline">{userVote.projectName}</span>
                 </p>
-                <p className="text-xs dark:text-slate-400 text-slate-500">
+                <p className="text-xs dark:text-slate-400 text-slate-600">
                   Current Rank: #{sortedProjects.findIndex(p => p.id === userVote.projectId) + 1} with {sortedProjects.find(p => p.id === userVote.projectId)?.publicVotesCount ?? 0} verified votes.
                 </p>
               </div>
@@ -82,15 +84,15 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
             {onCheckMyVote && (
               <button
                 onClick={onCheckMyVote}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all whitespace-nowrap"
+                className="ctrl-roll-button w-full sm:w-auto px-6 py-3 rounded-full bg-[#ecefec] dark:bg-white/[0.08] hover:bg-slate-200 dark:hover:bg-white/[0.14] text-slate-950 dark:text-white font-bold text-xs sm:text-sm border-2 border-slate-950 dark:border-white/20 shadow-md transition-all whitespace-nowrap"
               >
-                Check My Vote Receipt
+                <span className="ctrl-roll-label">Check My Vote Receipt</span>
               </button>
             )}
           </div>
         )}
 
-        {/* Podium for Top 3: Fitted gracefully on the card face */}
+        {/* Podium for Top 3: Fitted gracefully on the card face with Ctrl.xyz aesthetic */}
         {sortedProjects.length >= 3 && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch mb-12 sm:mb-16">
             
@@ -101,13 +103,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
               return (
                 <div 
                   onMouseMove={handleMouseMove}
-                  className={`spotlight-card order-2 lg:order-1 rounded-3xl p-6 sm:p-7 dark:bg-[#0E1527] bg-white border flex flex-col items-center text-center justify-between transition-all shadow-lg hover:shadow-xl ${
-                    isUserVoteTop2 ? 'border-blue-500 ring-2 ring-blue-500/30' : 'dark:border-slate-700/60 border-slate-300'
+                  className={`ctrl-card order-2 lg:order-1 p-6 sm:p-7 flex flex-col items-center text-center justify-between ${
+                    isUserVoteTop2 ? '!border-blue-500 ring-2 ring-blue-500/30' : ''
                   }`}
                 >
                   {/* Card Header: 2nd Place Tag and 2nd Rank Badge */}
                   <div className="flex items-center justify-between w-full mb-5">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-400/15 border border-slate-400/30 text-slate-700 dark:text-slate-300 font-mono font-bold text-xs uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ecefec] dark:bg-white/[0.08] border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-300 font-mono font-bold text-xs uppercase tracking-wider">
                       <Medal className="w-3.5 h-3.5 text-slate-400" />
                       <span>2nd Place</span>
                     </div>
@@ -119,7 +121,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                           YOUR VOTE
                         </span>
                       )}
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-slate-200 via-slate-300 to-white text-slate-900 font-black flex items-center justify-center text-xs shadow-md border border-slate-300">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-slate-200 via-slate-300 to-white text-slate-900 font-black flex items-center justify-center text-xs shadow-md border-2 border-slate-950">
                         2nd
                       </div>
                     </div>
@@ -137,18 +139,18 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                         }}
                       />
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold dark:text-white text-slate-900 mb-0.5 truncate max-w-full">
+                    <h3 className="text-base sm:text-lg font-black dark:text-white text-slate-950 mb-0.5 truncate max-w-full">
                       {top2.name}
                     </h3>
-                    <p className="text-xs dark:text-slate-400 text-slate-500 font-mono truncate max-w-full">
+                    <p className="text-xs dark:text-slate-400 text-slate-600 font-mono truncate max-w-full">
                       {top2.teamName}
                     </p>
                   </div>
                   
                   {/* Verified Votes Pill */}
-                  <div className="w-full py-2.5 px-3.5 rounded-xl dark:bg-white/[0.04] bg-slate-100 text-xs font-mono font-bold dark:text-slate-200 text-slate-700 mb-5">
-                    <span className="flex items-center justify-center gap-1.5 text-blue-500">
-                      <Flame className="w-3.5 h-3.5 fill-blue-500" />
+                  <div className="w-full py-2.5 px-3.5 rounded-full bg-[#ecefec] dark:bg-white/[0.04] text-xs font-mono font-bold dark:text-slate-200 text-slate-700 mb-5 border border-slate-300 dark:border-white/10">
+                    <span className="flex items-center justify-center gap-1.5 text-blue-600 dark:text-blue-400">
+                      <Flame className="w-3.5 h-3.5 fill-blue-500 text-blue-500" />
                       {top2.publicVotesCount} Verified Votes ({votePercent}%)
                     </span>
                   </div>
@@ -157,40 +159,40 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                   <div className="grid grid-cols-2 gap-2.5 w-full mt-auto">
                     <button
                       onClick={() => onSelectProject(top2)}
-                      className="w-full py-2.5 px-2 rounded-xl dark:bg-white/[0.08] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.14] text-xs font-bold dark:text-slate-200 text-slate-700 transition-colors truncate"
+                      className="ctrl-roll-button w-full py-2.5 px-2 rounded-full bg-[#ecefec] dark:bg-white/[0.08] hover:bg-slate-200 dark:hover:bg-white/[0.14] text-xs font-bold dark:text-slate-200 text-slate-700 border border-slate-300 dark:border-white/10 transition-colors truncate"
                     >
-                      View Details
+                      <span className="ctrl-roll-label">Details</span>
                     </button>
                     <button
                       onClick={() => isUserVoteTop2 && onCheckMyVote ? onCheckMyVote() : onInitiateVote(top2)}
-                      className={`w-full py-2.5 px-2 rounded-xl text-xs font-bold transition-all shadow-md truncate ${
+                      className={`ctrl-roll-button w-full py-2.5 px-2 rounded-full text-xs font-bold transition-all shadow-md truncate ${
                         isUserVoteTop2
-                          ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
-                          : 'bg-blue-600 text-white hover:bg-blue-500 shadow-blue-600/20'
+                          ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400 border-2 border-blue-500 hover:bg-blue-500/30'
+                          : 'bg-[#ecefec] dark:bg-white/[0.1] text-slate-950 dark:text-white border-2 border-slate-950 dark:border-white/20'
                       }`}
                     >
-                      {isUserVoteTop2 ? 'Your Pick' : 'Vote'}
+                      <span className="ctrl-roll-label">{isUserVoteTop2 ? 'Your Pick' : 'Vote'}</span>
                     </button>
                   </div>
                 </div>
               );
             })()}
 
-            {/* 1st Place Card (Elevated Leader) */}
+            {/* 1st Place Card (Elevated Leader with Ctrl Lemon/Gold Accent) */}
             {top1 && (() => {
               const isUserVoteTop1 = userVote?.projectId === top1.id;
               const votePercent = Math.round(((top1.publicVotesCount || 0) / totalVotesAcrossAll) * 100);
               return (
                 <div 
                   onMouseMove={handleMouseMove}
-                  className={`spotlight-card order-1 lg:order-2 rounded-3xl p-6 sm:p-7 dark:bg-gradient-to-b dark:from-[#131D38] dark:to-[#0E1527] bg-white border-2 shadow-xl flex flex-col items-center text-center justify-between transition-all ${
-                    isUserVoteTop1 ? 'border-blue-400 ring-2 ring-blue-500/40' : 'border-blue-500 ring-1 ring-blue-500/30'
+                  className={`ctrl-card order-1 lg:order-2 p-6 sm:p-7 flex flex-col items-center text-center justify-between !border-blue-500 ring-2 ring-blue-500/40 shadow-2xl ${
+                    isUserVoteTop1 ? 'ring-4 ring-blue-500/50' : ''
                   }`}
                 >
                   {/* Card Header: 1st Place Tag and 1st Rank Badge */}
                   <div className="flex items-center justify-between w-full mb-5">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-mono font-bold text-xs uppercase tracking-wider">
-                      <Crown className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fbe74e]/40 border border-amber-400 text-amber-700 dark:text-yellow-300 font-mono font-bold text-xs uppercase tracking-wider">
+                      <Crown className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                       <span>1st Place • Leader</span>
                     </div>
 
@@ -201,7 +203,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                           YOUR VOTE
                         </span>
                       )}
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-200 text-slate-950 font-black flex items-center justify-center text-xs shadow-md border border-white">
+                      <div className="w-9 h-9 rounded-full bg-[#fbe74e] text-slate-950 font-black flex items-center justify-center text-xs shadow-md border-2 border-slate-950">
                         1st
                       </div>
                     </div>
@@ -219,7 +221,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                         }}
                       />
                     </div>
-                    <h3 className="text-lg sm:text-xl font-black dark:text-white text-slate-900 mb-0.5 truncate max-w-full">
+                    <h3 className="text-lg sm:text-xl font-black dark:text-white text-slate-950 mb-0.5 truncate max-w-full">
                       {top1.name}
                     </h3>
                     <p className="text-xs dark:text-slate-300 text-slate-600 font-mono truncate max-w-full">
@@ -228,7 +230,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                   </div>
                   
                   {/* Verified Votes Pill */}
-                  <div className="w-full py-2.5 px-3.5 rounded-xl bg-blue-500/15 border border-blue-500/30 text-xs sm:text-sm font-mono font-black text-blue-600 dark:text-blue-400 mb-5 shadow-inner">
+                  <div className="w-full py-2.5 px-3.5 rounded-full bg-blue-500/15 border border-blue-500/30 text-xs sm:text-sm font-mono font-black text-blue-600 dark:text-blue-400 mb-5 shadow-inner">
                     <span className="flex items-center justify-center gap-1.5">
                       <Flame className="w-4 h-4 fill-current text-blue-500" />
                       {top1.publicVotesCount} Verified Votes ({votePercent}%)
@@ -239,19 +241,19 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                   <div className="grid grid-cols-2 gap-2.5 w-full mt-auto">
                     <button
                       onClick={() => onSelectProject(top1)}
-                      className="w-full py-2.5 px-2 rounded-xl dark:bg-white/[0.1] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.16] text-xs font-bold dark:text-white text-slate-800 transition-colors truncate"
+                      className="ctrl-roll-button w-full py-2.5 px-2 rounded-full bg-[#ecefec] dark:bg-white/[0.08] hover:bg-slate-200 dark:hover:bg-white/[0.14] text-xs font-bold dark:text-white text-slate-800 border border-slate-300 dark:border-white/10 transition-colors truncate"
                     >
-                      View Details
+                      <span className="ctrl-roll-label">Details</span>
                     </button>
                     <button
                       onClick={() => isUserVoteTop1 && onCheckMyVote ? onCheckMyVote() : onInitiateVote(top1)}
-                      className={`w-full py-2.5 px-2 rounded-xl text-xs font-bold transition-all shadow-md truncate ${
+                      className={`ctrl-roll-button w-full py-2.5 px-2 rounded-full text-xs font-black transition-all shadow-md truncate border-2 border-slate-950 ${
                         isUserVoteTop1
-                          ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
-                          : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30'
+                          ? 'bg-blue-500/20 text-blue-600 border-blue-500 hover:bg-blue-500/30'
+                          : 'bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 shadow-emerald-500/20'
                       }`}
                     >
-                      {isUserVoteTop1 ? 'Your Pick' : 'Vote for #1'}
+                      <span className="ctrl-roll-label">{isUserVoteTop1 ? 'Your Pick' : 'Vote for #1'}</span>
                     </button>
                   </div>
                 </div>
@@ -265,14 +267,14 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
               return (
                 <div 
                   onMouseMove={handleMouseMove}
-                  className={`spotlight-card order-3 lg:order-3 rounded-3xl p-6 sm:p-7 dark:bg-[#0E1527] bg-white border flex flex-col items-center text-center justify-between transition-all shadow-lg hover:shadow-xl ${
-                    isUserVoteTop3 ? 'border-blue-500 ring-2 ring-blue-500/30' : 'dark:border-amber-900/40 border-amber-200'
+                  className={`ctrl-card order-3 lg:order-3 p-6 sm:p-7 flex flex-col items-center text-center justify-between ${
+                    isUserVoteTop3 ? '!border-blue-500 ring-2 ring-blue-500/30' : ''
                   }`}
                 >
                   {/* Card Header: 3rd Place Tag and 3rd Rank Badge */}
                   <div className="flex items-center justify-between w-full mb-5">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-700/15 border border-amber-700/30 text-amber-700 dark:text-amber-400 font-mono font-bold text-xs uppercase tracking-wider">
-                      <Award className="w-3.5 h-3.5 text-amber-600" />
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ffcadc]/40 border border-pink-300 text-pink-700 dark:text-pink-300 font-mono font-bold text-xs uppercase tracking-wider">
+                      <Award className="w-3.5 h-3.5 text-pink-500" />
                       <span>3rd Place</span>
                     </div>
 
@@ -283,7 +285,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                           YOUR VOTE
                         </span>
                       )}
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-700 via-amber-600 to-amber-500 text-white font-black flex items-center justify-center text-xs shadow-md border border-amber-500">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-700 via-amber-600 to-amber-500 text-white font-black flex items-center justify-center text-xs shadow-md border-2 border-slate-950">
                         3rd
                       </div>
                     </div>
@@ -301,18 +303,18 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                         }}
                       />
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold dark:text-white text-slate-900 mb-0.5 truncate max-w-full">
+                    <h3 className="text-base sm:text-lg font-black dark:text-white text-slate-950 mb-0.5 truncate max-w-full">
                       {top3.name}
                     </h3>
-                    <p className="text-xs dark:text-slate-400 text-slate-500 font-mono truncate max-w-full">
+                    <p className="text-xs dark:text-slate-400 text-slate-600 font-mono truncate max-w-full">
                       {top3.teamName}
                     </p>
                   </div>
                   
                   {/* Verified Votes Pill */}
-                  <div className="w-full py-2.5 px-3.5 rounded-xl dark:bg-white/[0.04] bg-slate-100 text-xs font-mono font-bold dark:text-slate-200 text-slate-700 mb-5">
-                    <span className="flex items-center justify-center gap-1.5 text-amber-500">
-                      <Flame className="w-3.5 h-3.5 fill-amber-500" />
+                  <div className="w-full py-2.5 px-3.5 rounded-full bg-[#ecefec] dark:bg-white/[0.04] text-xs font-mono font-bold dark:text-slate-200 text-slate-700 mb-5 border border-slate-300 dark:border-white/10">
+                    <span className="flex items-center justify-center gap-1.5 text-amber-600 dark:text-amber-400">
+                      <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                       {top3.publicVotesCount} Verified Votes ({votePercent}%)
                     </span>
                   </div>
@@ -321,19 +323,19 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                   <div className="grid grid-cols-2 gap-2.5 w-full mt-auto">
                     <button
                       onClick={() => onSelectProject(top3)}
-                      className="w-full py-2.5 px-2 rounded-xl dark:bg-white/[0.08] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.14] text-xs font-bold dark:text-slate-200 text-slate-700 transition-colors truncate"
+                      className="ctrl-roll-button w-full py-2.5 px-2 rounded-full bg-[#ecefec] dark:bg-white/[0.08] hover:bg-slate-200 dark:hover:bg-white/[0.14] text-xs font-bold dark:text-slate-200 text-slate-700 border border-slate-300 dark:border-white/10 transition-colors truncate"
                     >
-                      View Details
+                      <span className="ctrl-roll-label">Details</span>
                     </button>
                     <button
                       onClick={() => isUserVoteTop3 && onCheckMyVote ? onCheckMyVote() : onInitiateVote(top3)}
-                      className={`w-full py-2.5 px-2 rounded-xl text-xs font-bold transition-all shadow-md truncate ${
+                      className={`ctrl-roll-button w-full py-2.5 px-2 rounded-full text-xs font-bold transition-all shadow-md truncate ${
                         isUserVoteTop3
-                          ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
-                          : 'bg-amber-600 text-white hover:bg-amber-500 shadow-amber-600/20'
+                          ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400 border-2 border-blue-500 hover:bg-blue-500/30'
+                          : 'bg-[#ecefec] dark:bg-white/[0.1] text-slate-950 dark:text-white border-2 border-slate-950 dark:border-white/20'
                       }`}
                     >
-                      {isUserVoteTop3 ? 'Your Pick' : 'Vote'}
+                      <span className="ctrl-roll-label">{isUserVoteTop3 ? 'Your Pick' : 'Vote'}</span>
                     </button>
                   </div>
                 </div>
@@ -343,13 +345,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
           </div>
         )}
 
-        {/* Full Leaderboard Table */}
-        <div className="rounded-3xl dark:bg-[#0E1527] bg-white border dark:border-white/[0.08] border-slate-200 overflow-hidden shadow-xl">
-          <div className="p-5 sm:p-6 border-b dark:border-white/[0.08] border-slate-200 flex items-center justify-between">
-            <h4 className="text-xs sm:text-sm font-bold dark:text-white text-slate-900 uppercase tracking-wider font-mono">
+        {/* Full Leaderboard Table Wrapped in Ctrl Card */}
+        <div className="ctrl-card overflow-hidden shadow-xl">
+          <div className="p-5 sm:p-6 border-b dark:border-white/[0.08] border-slate-200 flex items-center justify-between bg-[#ecefec]/40 dark:bg-white/[0.02]">
+            <h4 className="text-xs sm:text-sm font-black dark:text-white text-slate-950 uppercase tracking-wider font-mono">
               All Projects & Vote Distribution
             </h4>
-            <span className="text-xs text-blue-500 font-mono font-bold">
+            <span className="text-xs px-3 py-1 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 font-mono font-bold">
               {sortedProjects.length} Projects Total
             </span>
           </div>
@@ -372,15 +374,15 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                     {/* Rank Indicator */}
                     <div className="w-10 flex items-center justify-center">
                       {index === 0 ? (
-                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg bg-amber-500/15 text-amber-500 font-mono font-black text-xs">
+                        <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-[#fbe74e] text-slate-950 border border-slate-950 font-mono font-black text-xs">
                           1st
                         </span>
                       ) : index === 1 ? (
-                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg bg-slate-400/15 text-slate-400 font-mono font-black text-xs">
+                        <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-slate-300 text-slate-900 border border-slate-950 font-mono font-black text-xs">
                           2nd
                         </span>
                       ) : index === 2 ? (
-                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg bg-amber-700/15 text-amber-600 font-mono font-black text-xs">
+                        <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-amber-600 text-white border border-slate-950 font-mono font-black text-xs">
                           3rd
                         </span>
                       ) : (
@@ -406,7 +408,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                       <div className="flex items-center gap-2">
                         <h5 
                           onClick={() => onSelectProject(project)}
-                          className="text-sm sm:text-base font-bold dark:text-white text-slate-900 hover:text-blue-500 cursor-pointer flex items-center gap-1.5"
+                          className="text-sm sm:text-base font-black dark:text-white text-slate-950 hover:text-blue-600 cursor-pointer flex items-center gap-1.5"
                         >
                           {project.name}
                           <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
@@ -418,7 +420,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                           </span>
                         )}
                       </div>
-                      <p className="text-xs dark:text-slate-400 text-slate-500 font-mono mt-0.5">
+                      <p className="text-xs dark:text-slate-400 text-slate-600 font-mono mt-0.5">
                         {project.teamName} • {project.tags.slice(0, 2).join(', ')}
                       </p>
                     </div>
@@ -428,13 +430,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                   <div className="flex items-center space-x-4 sm:w-80">
                     <div className="flex-1">
                       <div className="flex justify-between text-xs font-mono mb-1">
-                        <span className="dark:text-slate-400 text-slate-500">{project.publicVotesCount} votes</span>
-                        <span className="text-blue-500 font-bold">{votePercent}%</span>
+                        <span className="dark:text-slate-400 text-slate-600">{project.publicVotesCount} votes</span>
+                        <span className="text-blue-600 dark:text-blue-400 font-black">{votePercent}%</span>
                       </div>
 
-                      <div className="w-full h-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 overflow-hidden">
+                      <div className="w-full h-2.5 rounded-full dark:bg-white/[0.06] bg-slate-200 overflow-hidden">
                         <div
-                          className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-blue-600 via-sky-400 to-indigo-500"
+                          className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-blue-600 via-sky-400 to-emerald-400"
                           style={{ width: `${Math.max(votePercent, 5)}%` }}
                         />
                       </div>
@@ -442,13 +444,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
 
                     <button
                       onClick={() => isVoted && onCheckMyVote ? onCheckMyVote() : onInitiateVote(project)}
-                      className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all shadow-md active:scale-95 whitespace-nowrap ${
+                      className={`ctrl-roll-button px-5 py-2 rounded-full text-xs font-mono font-bold transition-all shadow-md active:scale-95 whitespace-nowrap ${
                         isVoted
-                          ? 'bg-blue-500/20 text-blue-500 border border-blue-500/40 hover:bg-blue-500/30'
-                          : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'
+                          ? 'bg-blue-500/20 text-blue-600 border border-blue-500/40 hover:bg-blue-500/30'
+                          : 'bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black border-2 border-slate-950'
                       }`}
                     >
-                      {isVoted ? 'Your Pick' : 'Vote'}
+                      <span className="ctrl-roll-label">{isVoted ? 'Your Pick' : 'Vote'}</span>
                     </button>
                   </div>
                 </div>
