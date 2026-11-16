@@ -12,7 +12,11 @@ import {
   CheckCircle,
   ArrowLeft,
   Code2,
-  Users
+  Users,
+  Menu,
+  X,
+  UserPlus,
+  LogIn
 } from 'lucide-react';
 import { PollarUser, PublicVote } from '../types';
 import { PollarClientService } from '../lib/pollar';
@@ -46,6 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onCheckMyVote,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
@@ -218,17 +223,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           </nav>
 
-          {/* Right Action CTAs & User Controls */}
-          <div className="flex items-center space-x-2.5 sm:space-x-3">
+          {/* Right Action CTAs & Controls */}
+          <div className="flex items-center space-x-2 sm:space-x-2.5">
             
-            {/* Check My Vote Quick Pill */}
+            {/* Check My Vote Quick Pill (Desktop & Tablet) */}
             {userVote && onCheckMyVote && (
               <button
                 onClick={onCheckMyVote}
-                className="hidden sm:flex items-center space-x-1.5 px-3.5 py-2 rounded-full bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-bold transition-all shadow-sm group hover:scale-105"
+                className="hidden lg:flex items-center space-x-1.5 px-3.5 py-2 rounded-full bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-bold transition-all shadow-sm group hover:scale-105"
                 title="Check Your Verified SEP-53 Vote Receipt"
               >
-                <CheckCircle className="w-3.5 h-3.5 text-blue-500 group-hover:scale-110 transition-transform" />
+                <CheckCircle className="w-3.5 h-3.5 text-blue-500 group-hover:scale-110 transition-transform flex-shrink-0" />
                 <span className="max-w-[120px] md:max-w-[160px] truncate">My Vote: {userVote.projectName}</span>
               </button>
             )}
@@ -237,7 +242,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
-              className="p-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] border dark:border-white/[0.1] border-slate-200 text-slate-700 dark:text-slate-200 transition-all duration-300 hover:rotate-45"
+              className="p-2 sm:p-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] border dark:border-white/[0.1] border-slate-200 text-slate-700 dark:text-slate-200 transition-all duration-300 hover:rotate-45"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-300" />
@@ -246,148 +251,310 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </button>
 
-            {/* User Profile or Connect Button (Ctrl.xyz pill button) */}
-            {currentUser ? (
-              <div className="relative">
-                <button
-                  onClick={() => setShowMenu(!showMenu)}
-                  className="flex items-center space-x-2.5 p-1.5 pl-3 pr-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.1] border dark:border-white/[0.12] border-slate-200 transition-all shadow-sm"
-                >
-                  <img
-                    src={currentUser.avatar}
-                    alt={currentUser.name}
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-blue-500/50"
-                  />
-                  <div className="text-left hidden sm:block">
-                    <p className="text-xs font-bold dark:text-white text-slate-900 leading-tight">
-                      {currentUser.name}
-                    </p>
-                    <p className="text-[10px] text-blue-500 font-mono font-semibold">
-                      {currentUser.walletAddress.substring(0, 4)}...{currentUser.walletAddress.slice(-4)}
-                    </p>
-                  </div>
-                  <ChevronDown className="w-4 h-4 text-slate-400" />
-                </button>
+            {/* Mobile / Tablet Dropdown Menu Trigger (Side-by-side with theme toggle) */}
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle Navigation Menu"
+              className="md:hidden p-2 sm:p-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] border dark:border-white/[0.1] border-slate-200 text-slate-700 dark:text-slate-200 transition-all"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-4 h-4 text-rose-500" />
+              ) : (
+                <Menu className="w-4 h-4" />
+              )}
+            </button>
 
-                {/* Dropdown Menu */}
-                {showMenu && (
-                  <>
-                    <div 
-                      className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px]" 
-                      onClick={() => setShowMenu(false)} 
+            {/* Desktop Only: User Profile or Sign In / Create Account Buttons */}
+            <div className="hidden md:flex items-center space-x-2.5 sm:space-x-3">
+              {currentUser ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowMenu(!showMenu)}
+                    className="flex items-center space-x-2.5 p-1.5 pl-3 pr-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.1] border dark:border-white/[0.12] border-slate-200 transition-all shadow-sm"
+                  >
+                    <img
+                      src={currentUser.avatar}
+                      alt={currentUser.name}
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-blue-500/50"
                     />
-                    <div className="absolute right-0 mt-2 w-72 rounded-3xl dark:bg-[#0E1527] bg-white border dark:border-white/[0.12] border-slate-200 shadow-2xl p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                      <div className="px-1 py-2 border-b dark:border-white/[0.08] border-slate-100 mb-3">
-                        <p className="text-sm font-bold dark:text-white text-slate-900">{currentUser.name}</p>
-                        <p className="text-xs text-blue-500 font-medium">{currentUser.email || 'Pollar Connected'}</p>
-                        
-                        <div className="mt-2.5 p-2.5 rounded-2xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.06] border-slate-200 flex items-center justify-between">
-                          <span className="font-mono text-xs dark:text-slate-300 text-slate-600 truncate max-w-[170px]">
-                            {currentUser.walletAddress}
-                          </span>
+                    <div className="text-left hidden lg:block">
+                      <p className="text-xs font-bold dark:text-white text-slate-900 leading-tight">
+                        {currentUser.name}
+                      </p>
+                      <p className="text-[10px] text-blue-500 font-mono font-semibold">
+                        {currentUser.walletAddress.substring(0, 4)}...{currentUser.walletAddress.slice(-4)}
+                      </p>
+                    </div>
+                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                  </button>
+
+                  {/* Desktop Profile Dropdown */}
+                  {showMenu && (
+                    <>
+                      <div 
+                        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px]" 
+                        onClick={() => setShowMenu(false)} 
+                      />
+                      <div className="absolute right-0 mt-2 w-72 rounded-3xl dark:bg-[#0E1527] bg-white border dark:border-white/[0.12] border-slate-200 shadow-2xl p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                        <div className="px-1 py-2 border-b dark:border-white/[0.08] border-slate-100 mb-3">
+                          <p className="text-sm font-bold dark:text-white text-slate-900">{currentUser.name}</p>
+                          <p className="text-xs text-blue-500 font-medium">{currentUser.email || 'Pollar Connected'}</p>
+                          
+                          <div className="mt-2.5 p-2.5 rounded-2xl dark:bg-black/50 bg-slate-50 border dark:border-white/[0.06] border-slate-200 flex items-center justify-between">
+                            <span className="font-mono text-xs dark:text-slate-300 text-slate-600 truncate max-w-[170px]">
+                              {currentUser.walletAddress}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={handleCopyWallet}
+                              className="text-blue-500 hover:text-blue-600 p-1 rounded"
+                              title="Copy Wallet Address"
+                            >
+                              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                            </button>
+                          </div>
+                        </div>
+
+                        {userVote && onCheckMyVote && (
                           <button
                             type="button"
-                            onClick={handleCopyWallet}
-                            className="text-blue-500 hover:text-blue-600 p-1 rounded"
-                            title="Copy Wallet Address"
+                            onClick={() => {
+                              setShowMenu(false);
+                              onCheckMyVote();
+                            }}
+                            className="w-full text-left px-3 py-2.5 rounded-2xl text-xs font-bold text-blue-500 dark:hover:bg-blue-950/40 hover:bg-blue-50 flex items-center justify-between mb-1"
                           >
-                            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                            <span className="flex items-center gap-2">
+                              <CheckCircle className="w-4 h-4" />
+                              View Signed Receipt
+                            </span>
                           </button>
-                        </div>
-                      </div>
+                        )}
 
-                      {userVote && onCheckMyVote && (
                         <button
                           type="button"
-                          onClick={() => {
-                            setShowMenu(false);
-                            onCheckMyVote();
-                          }}
-                          className="w-full text-left px-3 py-2.5 rounded-2xl text-xs font-bold text-blue-500 dark:hover:bg-blue-950/40 hover:bg-blue-50 flex items-center justify-between mb-1"
+                          onClick={handleLogout}
+                          className="w-full text-left px-3 py-2.5 rounded-2xl text-xs font-bold text-rose-500 dark:hover:bg-rose-950/30 hover:bg-rose-50 flex items-center space-x-2 transition-colors cursor-pointer"
                         >
-                          <span className="flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4" />
-                            View Signed Receipt
-                          </span>
+                          <LogOut className="w-4 h-4" />
+                          <span>Sign Out</span>
                         </button>
-                      )}
-
-                      <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="w-full text-left px-3 py-2.5 rounded-2xl text-xs font-bold text-rose-500 dark:hover:bg-rose-950/30 hover:bg-rose-50 flex items-center space-x-2 transition-colors cursor-pointer"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2 sm:space-x-2.5">
-                <button
-                  type="button"
-                  onClick={() => onOpenAuth('signin')}
-                  className="px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white transition-colors"
-                >
-                  Sign In
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onOpenAuth('signup')}
-                  className="ctrl-roll-button px-5 sm:px-6 py-2.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
-                >
-                  <span className="ctrl-roll-label">Create Account</span>
-                </button>
-              </div>
-            )}
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2 sm:space-x-2.5">
+                  <button
+                    type="button"
+                    onClick={() => onOpenAuth('signin')}
+                    className="px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold dark:text-slate-300 text-slate-700 hover:text-slate-950 dark:hover:text-white transition-colors"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onOpenAuth('signup')}
+                    className="ctrl-roll-button px-5 sm:px-6 py-2.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
+                  >
+                    <span className="ctrl-roll-label">Create Account</span>
+                  </button>
+                </div>
+              )}
+            </div>
 
           </div>
 
         </div>
 
-        {/* Mobile Navigation Bar */}
-        <div className="md:hidden flex items-center justify-around py-2.5 border-t dark:border-white/[0.08] border-slate-200/80 text-xs font-bold">
-          <button
-            onClick={() => setCurrentView('portal')}
-            className={`py-1.5 px-3 rounded-full transition-all ${
-              currentView === 'portal' ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950' : 'text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            Portal
-          </button>
-          <button
-            onClick={() => {
-              setCurrentView('voting');
-              setActiveTab('projects');
-            }}
-            className={`py-1.5 px-3 rounded-full transition-all ${
-              currentView === 'voting' && activeTab === 'projects' ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            Vote
-          </button>
-          <button
-            onClick={() => {
-              setCurrentView('voting');
-              setActiveTab('leaderboard');
-            }}
-            className={`py-1.5 px-3 rounded-full transition-all ${
-              currentView === 'voting' && activeTab === 'leaderboard' ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            Ranks
-          </button>
-          <button
-            onClick={() => setCurrentView('builder')}
-            className={`py-1.5 px-3 rounded-full transition-all ${
-              currentView === 'builder' ? 'bg-emerald-600 text-white' : 'text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            Submit
-          </button>
-        </div>
+        {/* Mobile / Tablet Dropdown Menu Panel */}
+        {isMobileMenuOpen && (
+          <>
+            <div 
+              className="fixed inset-0 top-20 z-40 bg-black/50 backdrop-blur-sm md:hidden animate-in fade-in duration-200"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            <div className="relative z-50 md:hidden border-t dark:border-white/[0.08] border-slate-200/80 dark:bg-[#090d18]/98 bg-white/98 backdrop-blur-2xl px-4 py-5 shadow-2xl animate-in slide-in-from-top-2 fade-in duration-200 rounded-b-3xl">
+              
+              {/* Navigation Items: Portal, Vote, Ranks, Submit */}
+              <div className="space-y-1 mb-4">
+                <p className="px-3 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-1">
+                  Menu
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentView('portal');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                    currentView === 'portal'
+                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-black shadow-sm'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/[0.06]'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <DartLogo size={18} />
+                    <span>Portal</span>
+                  </div>
+                  {currentView === 'portal' && <span className="w-2 h-2 rounded-full bg-[#05c92f]"></span>}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentView('voting');
+                    setActiveTab('projects');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                    currentView === 'voting' && activeTab === 'projects'
+                      ? 'bg-blue-600 text-white font-black shadow-sm'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/[0.06]'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Flame className="w-4 h-4 text-blue-500" />
+                    <span>Vote</span>
+                  </div>
+                  <span className="text-[10px] font-mono opacity-80">({projectsCount} Projects)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentView('voting');
+                    setActiveTab('leaderboard');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                    currentView === 'voting' && activeTab === 'leaderboard'
+                      ? 'bg-blue-600 text-white font-black shadow-sm'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/[0.06]'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Trophy className="w-4 h-4 text-amber-500" />
+                    <span>Ranks</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-amber-400 font-bold">Standings</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentView('builder');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                    currentView === 'builder'
+                      ? 'bg-emerald-600 text-white font-black shadow-sm'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/[0.06]'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Code2 className="w-4 h-4 text-emerald-500" />
+                    <span>Submit</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-emerald-400 font-bold">Project</span>
+                </button>
+              </div>
+
+              {/* Account Section: Sign In & Create Account or Active Profile */}
+              <div className="pt-3 border-t dark:border-white/[0.08] border-slate-200/80">
+                {currentUser ? (
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-2xl dark:bg-white/[0.04] bg-slate-50 border dark:border-white/[0.06] border-slate-200">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <img
+                          src={currentUser.avatar}
+                          alt={currentUser.name}
+                          className="w-10 h-10 rounded-full object-cover ring-2 ring-blue-500/50"
+                        />
+                        <div>
+                          <p className="text-sm font-bold dark:text-white text-slate-900 leading-tight">
+                            {currentUser.name}
+                          </p>
+                          <p className="text-[11px] text-blue-500 font-medium">
+                            {currentUser.email || 'Pollar Connected'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="p-2 rounded-xl dark:bg-black/50 bg-white border dark:border-white/[0.06] border-slate-200 flex items-center justify-between text-xs font-mono">
+                        <span className="dark:text-slate-300 text-slate-600 truncate max-w-[200px]">
+                          {currentUser.walletAddress}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleCopyWallet}
+                          className="text-blue-500 hover:text-blue-600 p-1 rounded"
+                          title="Copy Wallet Address"
+                        >
+                          {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {userVote && onCheckMyVote && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          onCheckMyVote();
+                        }}
+                        className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold text-blue-500 dark:bg-blue-950/30 bg-blue-50 border border-blue-500/20"
+                      >
+                        <span className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4" />
+                          View Signed Vote Receipt
+                        </span>
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="w-full py-2.5 rounded-2xl text-xs font-bold text-rose-500 hover:bg-rose-500/10 flex items-center justify-center space-x-2 transition-colors border border-rose-500/20"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        onOpenAuth('signup');
+                      }}
+                      className="ctrl-roll-button w-full py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md flex items-center justify-center gap-2"
+                    >
+                      <UserPlus className="w-4 h-4" />
+                      <span className="ctrl-roll-label">Create Account</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        onOpenAuth('signin');
+                      }}
+                      className="w-full py-3 rounded-full text-xs font-bold dark:text-slate-200 text-slate-700 dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.1] border dark:border-white/[0.1] border-slate-200 text-center transition-colors flex items-center justify-center gap-2"
+                    >
+                      <LogIn className="w-4 h-4" />
+                      <span>Sign In</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </>
+        )}
 
       </div>
     </header>

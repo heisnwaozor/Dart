@@ -64,8 +64,8 @@ export const Hero: React.FC<HeroProps> = ({
         
         {/* Top Ctrl Pill Badge */}
         <div className="flex justify-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl sm:rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm text-center">
+            <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse flex-shrink-0"></span>
             <span>Decentralized community voting for all Pollar Pitch Projects</span>
           </div>
         </div>
@@ -187,36 +187,38 @@ export const Hero: React.FC<HeroProps> = ({
 
         </div>
 
-        {/* Live Metrics Ribbon with Ctrl Pill Bar Styling */}
-        <div className="mt-16 sm:mt-24 p-6 sm:p-8 rounded-full ctrl-pill-nav flex flex-wrap items-center justify-around gap-6 sm:gap-8 text-xs sm:text-sm font-mono shadow-md">
-          <div className="flex items-center space-x-2.5">
-            <Coins className="w-5 h-5 text-amber-500" />
-            <span className="dark:text-slate-400 text-slate-500 font-medium">Prize Pool:</span>
-            <span className="dark:text-white text-slate-950 font-black">{hackathon.prizePool}</span>
-          </div>
+        {/* Live Metrics Card: Clean modern card on mobile/tablet, sleek ribbon on desktop */}
+        <div className="mt-12 sm:mt-20 p-5 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl lg:rounded-full ctrl-pill-nav shadow-md">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-center lg:justify-around gap-4 sm:gap-6 lg:gap-8 text-xs sm:text-sm font-mono">
+            <div className="flex items-center space-x-2.5">
+              <Coins className="w-5 h-5 text-amber-500 flex-shrink-0" />
+              <span className="dark:text-slate-400 text-slate-500 font-medium">Prize Pool:</span>
+              <span className="dark:text-white text-slate-950 font-black">{hackathon.prizePool}</span>
+            </div>
 
-          <span className="hidden sm:inline text-slate-300 dark:text-white/20 select-none">|</span>
+            <span className="hidden lg:inline text-slate-300 dark:text-white/20 select-none">|</span>
 
-          <div className="flex items-center space-x-2.5">
-            <Flame className="w-5 h-5 text-blue-500" />
-            <span className="dark:text-slate-400 text-slate-500 font-medium">Submissions:</span>
-            <span className="dark:text-white text-slate-950 font-black">{totalProjects} Projects</span>
-          </div>
+            <div className="flex items-center space-x-2.5">
+              <Flame className="w-5 h-5 text-blue-500 flex-shrink-0" />
+              <span className="dark:text-slate-400 text-slate-500 font-medium">Submissions:</span>
+              <span className="dark:text-white text-slate-950 font-black">{totalProjects} Projects</span>
+            </div>
 
-          <span className="hidden sm:inline text-slate-300 dark:text-white/20 select-none">|</span>
+            <span className="hidden lg:inline text-slate-300 dark:text-white/20 select-none">|</span>
 
-          <div className="flex items-center space-x-2.5">
-            <Fingerprint className="w-5 h-5 text-sky-500" />
-            <span className="dark:text-slate-400 text-slate-500 font-medium">SEP-53 Votes:</span>
-            <span className="text-blue-600 dark:text-sky-400 font-black">{totalVotes}</span>
-          </div>
+            <div className="flex items-center space-x-2.5">
+              <Fingerprint className="w-5 h-5 text-sky-500 flex-shrink-0" />
+              <span className="dark:text-slate-400 text-slate-500 font-medium">SEP-53 Votes:</span>
+              <span className="text-blue-600 dark:text-sky-400 font-black">{totalVotes}</span>
+            </div>
 
-          <span className="hidden sm:inline text-slate-300 dark:text-white/20 select-none">|</span>
+            <span className="hidden lg:inline text-slate-300 dark:text-white/20 select-none">|</span>
 
-          <div className="flex items-center space-x-2.5">
-            <ShieldCheck className="w-5 h-5 text-emerald-500" />
-            <span className="dark:text-slate-400 text-slate-500 font-medium">Sybil Defense:</span>
-            <span className="dark:text-white text-slate-950 font-black">1 Vote / Wallet</span>
+            <div className="flex items-center space-x-2.5">
+              <ShieldCheck className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+              <span className="dark:text-slate-400 text-slate-500 font-medium">Sybil Defense:</span>
+              <span className="dark:text-white text-slate-950 font-black">1 Vote / Wallet</span>
+            </div>
           </div>
         </div>
 
