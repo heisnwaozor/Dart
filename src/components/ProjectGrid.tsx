@@ -100,24 +100,24 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
         </div>
 
         {/* Control Panel: Search & Filter Pills */}
-        <div className="ctrl-card p-6 sm:p-8 rounded-[36px] mb-12 sm:mb-16 space-y-6 shadow-xl transition-all duration-300">
+        <div className="ctrl-card p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-[36px] mb-8 sm:mb-16 space-y-5 sm:space-y-6 shadow-xl transition-all duration-300">
           
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-5">
             
             {/* Search box with clear button */}
             <div className="relative flex-1">
-              <Search className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500" />
+              <Search className="absolute left-3.5 sm:left-5 top-1/2 -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-blue-500" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search projects by name, Soroban smart contracts, AI agents..."
-                className="w-full pl-12 sm:pl-14 pr-12 py-3.5 sm:py-4 rounded-full dark:bg-black/50 bg-[#ecefec]/60 border-2 dark:border-white/[0.1] border-slate-300 text-sm sm:text-base dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-950 dark:focus:border-blue-400 transition-all font-medium"
+                placeholder="Search projects by name, tags..."
+                className="w-full pl-10 sm:pl-14 pr-10 sm:pr-12 py-3 sm:py-4 rounded-full dark:bg-black/50 bg-[#ecefec]/60 border-2 dark:border-white/[0.1] border-slate-300 text-xs sm:text-base dark:text-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-950 dark:focus:border-blue-400 transition-all font-medium"
               />
               {searchQuery && (
                 <button 
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white p-1.5"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white p-1"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -125,12 +125,12 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
             </div>
 
             {/* Sort order */}
-            <div className="flex items-center space-x-3 self-end md:self-auto">
+            <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full md:w-auto">
               <span className="text-xs dark:text-slate-400 text-slate-500 font-mono font-semibold">Sort:</span>
               <select
                 value={sortBy}
                 onChange={e => setSortBy(e.target.value as any)}
-                className="dark:bg-[#141C33] bg-[#ecefec] border-2 dark:border-white/[0.12] border-slate-300 rounded-full px-5 py-3 text-xs sm:text-sm font-bold dark:text-white text-slate-800 focus:outline-none focus:border-slate-950 dark:focus:border-blue-400 cursor-pointer shadow-sm"
+                className="flex-1 sm:flex-initial dark:bg-[#141C33] bg-[#ecefec] border-2 dark:border-white/[0.12] border-slate-300 rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-bold dark:text-white text-slate-800 focus:outline-none focus:border-slate-950 dark:focus:border-blue-400 cursor-pointer shadow-sm"
               >
                 <option value="votes">Most Community Votes</option>
                 <option value="newest">Recently Submitted</option>

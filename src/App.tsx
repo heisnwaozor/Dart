@@ -201,7 +201,7 @@ const MainApp: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 font-semibold px-4 py-2 rounded-full ctrl-pill-nav text-xs">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 sm:gap-3 font-semibold p-3 sm:px-4 sm:py-2 rounded-2xl sm:rounded-full border dark:border-white/10 border-slate-200/80 ctrl-pill-nav text-xs shadow-sm">
             <button
               onClick={() => setCurrentView('portal')}
               className="ctrl-roll-button hover:text-blue-600 dark:hover:text-white transition-colors px-2 py-1"

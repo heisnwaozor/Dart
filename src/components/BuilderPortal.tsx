@@ -98,10 +98,10 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
       <div className="motion-container max-w-6xl mx-auto">
         
         {/* Navigation Breadcrumb */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <button
             onClick={onBackToPortal}
-            className="ctrl-roll-button inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#ecefec] dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.12] text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-white/10 transition-colors"
+            className="ctrl-roll-button inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#ecefec] dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.12] text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-white/10 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="ctrl-roll-label">Back to Portal Hub</span>
@@ -132,13 +132,13 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
 
         {/* Account Gate Status Banner */}
         {!currentUser ? (
-          <div className="ctrl-card mb-10 p-6 sm:p-8 bg-amber-500/10 border-2 border-amber-500/30 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
-            <div className="flex items-center space-x-4">
-              <div className="w-14 h-14 rounded-full bg-amber-500/20 border-2 border-amber-500 text-amber-500 flex items-center justify-center flex-shrink-0">
-                <Lock className="w-7 h-7" />
+          <div className="ctrl-card mb-10 p-5 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-[36px] bg-amber-500/10 border-2 border-amber-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 sm:gap-6 shadow-lg">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl sm:rounded-full bg-amber-500/20 border-2 border-amber-500 text-amber-500 flex items-center justify-center flex-shrink-0">
+                <Lock className="w-6 h-6 sm:w-7 sm:h-7" />
               </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2">
                   <h3 className="text-base sm:text-lg font-black dark:text-white text-slate-950">
                     Account Required to Submit a Project
                   </h3>
@@ -155,7 +155,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
             <button
               type="button"
               onClick={onOpenAuth}
-              className="ctrl-roll-button flex items-center space-x-2.5 px-7 py-4 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/25 whitespace-nowrap hover:scale-105 active:scale-95 transition-all"
+              className="ctrl-roll-button w-full md:w-auto flex items-center justify-center space-x-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md shadow-emerald-500/25 hover:scale-[1.02] active:scale-95 transition-all flex-shrink-0"
             >
               <div className="flex items-center -space-x-1 mr-1 flex-shrink-0">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#fbe74e] ring-1 ring-slate-950"></span>
@@ -166,7 +166,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
             </button>
           </div>
         ) : (
-          <div className="ctrl-card mb-10 p-5 sm:p-6 bg-emerald-500/10 border-2 border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+          <div className="ctrl-card mb-10 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-emerald-500/10 border-2 border-emerald-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
             <div className="flex items-center space-x-3.5">
               {currentUser.avatar ? (
                 <img
@@ -180,7 +180,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
                 </div>
               )}
               <div className="space-y-0.5">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm font-black dark:text-white text-slate-950">
                     {currentUser.name}
                   </span>
@@ -188,7 +188,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
                     Database Verified {currentUser.role || 'Builder'}
                   </span>
                 </div>
-                <p className="text-xs font-mono text-slate-500 dark:text-slate-400 truncate max-w-md">
+                <p className="text-xs font-mono text-slate-500 dark:text-slate-400 truncate max-w-[220px] sm:max-w-md">
                   Stellar Wallet: {currentUser.walletAddress}
                 </p>
               </div>

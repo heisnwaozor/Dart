@@ -188,7 +188,7 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
 
         {/* Live Metrics Card: Clean modern card on mobile/tablet, sleek ribbon on desktop */}
-        <div className="mt-12 sm:mt-20 p-5 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl lg:rounded-full ctrl-pill-nav shadow-md">
+        <div className="mt-12 sm:mt-20 p-5 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl lg:rounded-full border dark:border-white/10 border-slate-200/80 ctrl-pill-nav shadow-md">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-center lg:justify-around gap-4 sm:gap-6 lg:gap-8 text-xs sm:text-sm font-mono">
             <div className="flex items-center space-x-2.5">
               <Coins className="w-5 h-5 text-amber-500 flex-shrink-0" />
