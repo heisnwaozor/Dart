@@ -127,17 +127,17 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Doorway 1: Community Voters */}
             <div 
               onClick={onEnterVoting}
-              className="ctrl-card p-8 sm:p-12 cursor-pointer flex flex-col justify-between group"
+              className="ctrl-card p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl md:rounded-[36px] cursor-pointer flex flex-col justify-between group shadow-xl"
             >
-              <div className="space-y-6">
+              <div className="space-y-5 sm:space-y-6">
                 
                 {/* Header Tag */}
-                <div className="flex items-center justify-between">
-                  <span className="px-3.5 py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-400 font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5" />
-                    For Voters & Community
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
+                  <span className="self-start px-3.5 py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-400 font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                    <Users className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>For Voters & Community</span>
                   </span>
-                  <span className="text-xs font-mono font-bold text-slate-400">
+                  <span className="text-xs font-mono font-bold text-slate-400 whitespace-nowrap">
                     {projects.length} Active Projects
                   </span>
                 </div>
@@ -182,17 +182,17 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Doorway 2: Hackathon Builders */}
             <div 
               onClick={onEnterBuilder}
-              className="ctrl-card p-8 sm:p-12 cursor-pointer flex flex-col justify-between group"
+              className="ctrl-card p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl md:rounded-[36px] cursor-pointer flex flex-col justify-between group shadow-xl"
             >
-              <div className="space-y-6">
+              <div className="space-y-5 sm:space-y-6">
                 
                 {/* Header Tag */}
-                <div className="flex items-center justify-between">
-                  <span className="px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                    <Code2 className="w-3.5 h-3.5" />
-                    For Hackathon Builders
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
+                  <span className="self-start px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                    <Code2 className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>For Hackathon Builders</span>
                   </span>
-                  <span className="text-xs font-mono font-bold text-emerald-500">
+                  <span className="text-xs font-mono font-bold text-emerald-500 whitespace-nowrap">
                     $75k Prize Pool
                   </span>
                 </div>

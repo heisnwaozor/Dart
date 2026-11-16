@@ -309,7 +309,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
 
             {/* Right 8 Cols: The Submission Form */}
             <div className="lg:col-span-8">
-              <form onSubmit={handleSubmit} className="ctrl-card p-7 sm:p-10 shadow-xl space-y-6">
+              <form onSubmit={handleSubmit} className="ctrl-card p-4 sm:p-7 md:p-10 rounded-2xl sm:rounded-3xl md:rounded-[36px] shadow-xl space-y-5 sm:space-y-6">
                 
                 {errorMsg && (
                   <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs sm:text-sm flex items-center gap-2">
@@ -467,14 +467,14 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
                 <div className="pt-4">
                   <button
                     type="submit"
-                    className="ctrl-roll-button w-full py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-base sm:text-lg border-2 border-slate-950 shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-3.5 group"
+                    className="ctrl-roll-button w-full px-4 sm:px-8 py-3.5 sm:py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-base border-2 border-slate-950 shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 sm:gap-3.5 group"
                   >
-                    <div className="flex items-center -space-x-1.5 flex-shrink-0">
+                    <div className="hidden sm:flex items-center -space-x-1.5 flex-shrink-0">
                       <span className="w-3.5 h-3.5 rounded-full bg-[#fbe74e] ring-2 ring-slate-950"></span>
                       <span className="w-3.5 h-3.5 rounded-full bg-[#ffcadc] ring-2 ring-slate-950"></span>
                       <span className="w-3.5 h-3.5 rounded-full bg-[#9dc4f5] ring-2 ring-slate-950"></span>
                     </div>
-                    <Upload className="w-5 h-5" />
+                    <Upload className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                     <span className="ctrl-roll-label">
                       {currentUser ? 'Submit Project to Hackathon' : 'Create Account & Submit Project'}
                     </span>
