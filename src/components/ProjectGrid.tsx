@@ -159,13 +159,13 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
 
         {/* User voting state notification banner if voted */}
         {userVote && (
-          <div className="mb-12 p-6 sm:p-7 rounded-[32px] ctrl-card flex flex-col sm:flex-row items-center justify-between gap-6 text-xs sm:text-sm shadow-md">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] text-slate-950 dark:text-white flex items-center justify-center flex-shrink-0">
-                <CheckCircle className="w-6 h-6 text-[#05c92f]" />
+          <div className="mb-8 sm:mb-12 p-4 sm:p-7 rounded-2xl sm:rounded-[32px] ctrl-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 text-xs sm:text-sm shadow-md">
+            <div className="flex items-center space-x-3.5 sm:space-x-4">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] text-slate-950 dark:text-white flex items-center justify-center flex-shrink-0">
+                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-[#05c92f]" />
               </div>
               <div className="space-y-1">
-                <p className="text-base font-black dark:text-white text-slate-950">
+                <p className="text-sm sm:text-base font-black dark:text-white text-slate-950">
                   Your cryptographic vote is recorded for <span className="text-blue-600 dark:text-blue-400 underline">{userVote.projectName}</span>.
                 </p>
                 <p className="text-xs dark:text-slate-400 text-slate-600">
@@ -232,16 +232,16 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                     <div className="absolute inset-0 bg-gradient-to-t dark:from-[#0E1527] from-black/80 via-black/20 to-transparent" />
 
                     {/* Top Badges */}
-                    <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                      <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white font-bold flex items-center gap-1.5 shadow-md">
-                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
-                        {project.teamName}
+                    <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
+                      <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white font-bold flex items-center gap-1.5 shadow-md truncate min-w-0">
+                        <span className="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0"></span>
+                        <span className="truncate">{project.teamName}</span>
                       </span>
 
                       {isUserVotedForThis && (
-                        <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-blue-600 text-white font-black flex items-center gap-1 shadow-lg shadow-blue-600/50 animate-pulse">
-                          <CheckCircle className="w-4 h-4" />
-                          YOUR VOTE
+                        <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-blue-600 text-white font-black flex items-center gap-1 shadow-lg shadow-blue-600/50 animate-pulse whitespace-nowrap flex-shrink-0">
+                          <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                          <span>YOUR VOTE</span>
                         </span>
                       )}
                     </div>

@@ -67,13 +67,13 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
 
         {/* User Active Vote Banner in Leaderboard */}
         {userVote && (
-          <div className="mb-10 sm:mb-12 p-6 sm:p-7 rounded-[32px] ctrl-card flex flex-col sm:flex-row items-center justify-between gap-6 max-w-4xl mx-auto shadow-md">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] text-slate-950 dark:text-white flex items-center justify-center flex-shrink-0">
-                <CheckCircle2 className="w-6 h-6 text-[#05c92f]" />
+          <div className="mb-10 sm:mb-12 p-4 sm:p-7 rounded-2xl sm:rounded-[32px] ctrl-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 max-w-4xl mx-auto shadow-md">
+            <div className="flex items-center space-x-3.5 sm:space-x-4">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] text-slate-950 dark:text-white flex items-center justify-center flex-shrink-0">
+                <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-[#05c92f]" />
               </div>
               <div className="space-y-1">
-                <p className="text-base font-black dark:text-white text-slate-950">
+                <p className="text-sm sm:text-base font-black dark:text-white text-slate-950">
                   Your Vote is Live: Supporting <span className="text-blue-600 dark:text-blue-400 underline">{userVote.projectName}</span>
                 </p>
                 <p className="text-xs dark:text-slate-400 text-slate-600">
@@ -116,12 +116,12 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
 
                     <div className="flex items-center gap-2">
                       {isUserVoteTop2 && (
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-bold flex items-center gap-1 shadow-sm">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-bold flex items-center gap-1 shadow-sm whitespace-nowrap flex-shrink-0">
                           <CheckCircle className="w-3 h-3" />
                           YOUR VOTE
                         </span>
                       )}
-                      <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-slate-200 via-slate-300 to-white text-slate-900 font-black flex items-center justify-center text-xs shadow-md border-2 border-slate-950">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-slate-200 via-slate-300 to-white text-slate-900 font-black flex items-center justify-center text-xs shadow-md border-2 border-slate-950 flex-shrink-0">
                         2nd
                       </div>
                     </div>
@@ -198,12 +198,12 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
 
                     <div className="flex items-center gap-2">
                       {isUserVoteTop1 && (
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-bold flex items-center gap-1 shadow-sm">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-bold flex items-center gap-1 shadow-sm whitespace-nowrap flex-shrink-0">
                           <CheckCircle className="w-3 h-3" />
                           YOUR VOTE
                         </span>
                       )}
-                      <div className="w-9 h-9 rounded-full bg-[#fbe74e] text-slate-950 font-black flex items-center justify-center text-xs shadow-md border-2 border-slate-950">
+                      <div className="w-9 h-9 rounded-full bg-[#fbe74e] text-slate-950 font-black flex items-center justify-center text-xs shadow-md border-2 border-slate-950 flex-shrink-0">
                         1st
                       </div>
                     </div>
@@ -280,12 +280,12 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
 
                     <div className="flex items-center gap-2">
                       {isUserVoteTop3 && (
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-bold flex items-center gap-1 shadow-sm">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-bold flex items-center gap-1 shadow-sm whitespace-nowrap flex-shrink-0">
                           <CheckCircle className="w-3 h-3" />
                           YOUR VOTE
                         </span>
                       )}
-                      <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-700 via-amber-600 to-amber-500 text-white font-black flex items-center justify-center text-xs shadow-md border-2 border-slate-950">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-700 via-amber-600 to-amber-500 text-white font-black flex items-center justify-center text-xs shadow-md border-2 border-slate-950 flex-shrink-0">
                         3rd
                       </div>
                     </div>
@@ -347,11 +347,11 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
 
         {/* Full Leaderboard Table Wrapped in Ctrl Card */}
         <div className="ctrl-card overflow-hidden shadow-xl">
-          <div className="p-5 sm:p-6 border-b dark:border-white/[0.08] border-slate-200 flex items-center justify-between bg-[#ecefec]/40 dark:bg-white/[0.02]">
+          <div className="p-4 sm:p-6 border-b dark:border-white/[0.08] border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 bg-[#ecefec]/40 dark:bg-white/[0.02]">
             <h4 className="text-xs sm:text-sm font-black dark:text-white text-slate-950 uppercase tracking-wider font-mono">
               All Projects & Vote Distribution
             </h4>
-            <span className="text-xs px-3 py-1 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 font-mono font-bold">
+            <span className="self-start sm:self-auto text-[11px] sm:text-xs px-3 py-1 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 font-mono font-bold whitespace-nowrap flex-shrink-0">
               {sortedProjects.length} Projects Total
             </span>
           </div>
@@ -405,7 +405,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                     />
 
                     <div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                         <h5 
                           onClick={() => onSelectProject(project)}
                           className="text-sm sm:text-base font-black dark:text-white text-slate-950 hover:text-blue-600 cursor-pointer flex items-center gap-1.5"
@@ -414,7 +414,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
                           <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
                         </h5>
                         {isVoted && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-black flex items-center gap-1 shadow-sm">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white font-black flex items-center gap-1 shadow-sm whitespace-nowrap flex-shrink-0">
                             <CheckCircle className="w-3 h-3" />
                             YOUR VOTE
                           </span>

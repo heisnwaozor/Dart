@@ -109,25 +109,29 @@ export const VoteModal: React.FC<VoteModalProps> = ({
         onClick={e => e.stopPropagation()}
       >
         {/* Top Header */}
-        <div className="flex items-center justify-between p-4 sm:p-5 border-b dark:border-white/[0.08] border-slate-200 flex-shrink-0">
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] flex items-center justify-center flex-shrink-0">
+        <div className="flex items-start sm:items-center justify-between p-4 sm:p-5 border-b dark:border-white/[0.08] border-slate-200 flex-shrink-0 gap-3">
+          <div className="flex items-start sm:items-center space-x-3 min-w-0 flex-1">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#05c92f]/20 border-2 border-[#05c92f] flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0">
               <Fingerprint className="w-5 h-5 text-[#05c92f] animate-pulse" />
             </div>
-            <div>
-              <h3 className="text-sm sm:text-base font-black dark:text-white text-slate-950 flex items-center gap-2">
-                <span>Cryptographic Vote Signing</span>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 font-mono font-bold">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h3 className="text-sm sm:text-base font-black dark:text-white text-slate-950 leading-tight">
+                  Cryptographic Vote Signing
+                </h3>
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-slate-700 dark:text-slate-300 font-mono font-bold whitespace-nowrap flex-shrink-0">
                   Stellar SEP-53
                 </span>
-              </h3>
-              <p className="text-[11px] sm:text-xs dark:text-slate-400 text-slate-500">Zero gas fees • Non-repudiation on Stellar</p>
+              </div>
+              <p className="text-[11px] sm:text-xs dark:text-slate-400 text-slate-500 mt-0.5 leading-normal">
+                Zero gas fees • Non-repudiation on Stellar
+              </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white dark:hover:bg-white/[0.06] hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white dark:hover:bg-white/[0.06] hover:bg-slate-100 transition-colors flex-shrink-0 -mr-1"
           >
             <X className="w-5 h-5" />
           </button>
@@ -308,7 +312,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
         </div>
 
         {/* Footer Actions: Always anchored at bottom and clearly visible */}
-        <div className="p-4 sm:p-5 border-t dark:border-white/[0.08] border-slate-200 dark:bg-black/60 bg-slate-50 flex items-center justify-end space-x-3 flex-shrink-0 sticky bottom-0 z-10">
+        <div className="p-3.5 sm:p-5 border-t dark:border-white/[0.08] border-slate-200 dark:bg-black/60 bg-slate-50 flex items-center justify-end gap-2.5 sm:gap-3 flex-shrink-0 sticky bottom-0 z-10">
           {step === 'confirmed' ? (
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full">
               {onViewReceipt && (
@@ -336,13 +340,13 @@ export const VoteModal: React.FC<VoteModalProps> = ({
             <>
               <button
                 onClick={onClose}
-                className="ctrl-roll-button px-5 py-2.5 rounded-full text-xs font-bold dark:text-slate-400 text-slate-600 hover:text-slate-800 dark:hover:text-white transition-colors"
+                className="ctrl-roll-button px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold dark:text-slate-400 text-slate-600 hover:text-slate-800 dark:hover:text-white transition-colors"
               >
                 <span className="ctrl-roll-label">Cancel</span>
               </button>
               <button
                 onClick={handleSign}
-                className="ctrl-roll-button flex items-center space-x-2 px-6 sm:px-7 py-3 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all"
+                className="ctrl-roll-button flex items-center space-x-2 px-5 sm:px-7 py-2.5 sm:py-3 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all"
               >
                 <div className="flex items-center -space-x-1 mr-0.5 flex-shrink-0">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#fbe74e] ring-1 ring-slate-950"></span>

@@ -61,22 +61,22 @@ export const VoteReceiptModal: React.FC<VoteReceiptModalProps> = ({
         onClick={e => e.stopPropagation()}
       >
         {/* Top Header */}
-        <div className="flex items-center justify-between p-5 sm:p-6 border-b dark:border-white/[0.08] border-slate-200 bg-[#ecefec]/40 dark:bg-white/[0.02]">
-          <div className="flex items-center space-x-3.5">
-            <div className="flex items-center justify-center">
-              <DartLogo size={38} animate />
+        <div className="flex items-start sm:items-center justify-between p-4 sm:p-6 border-b dark:border-white/[0.08] border-slate-200 bg-[#ecefec]/40 dark:bg-white/[0.02] gap-3">
+          <div className="flex items-start sm:items-center space-x-3 sm:space-x-3.5 min-w-0 flex-1">
+            <div className="flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0">
+              <DartLogo size={36} animate />
             </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <h3 className="text-base sm:text-lg font-black dark:text-white text-slate-950 tracking-tight">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h3 className="text-sm sm:text-lg font-black dark:text-white text-slate-950 tracking-tight leading-tight">
                   Your Verified Vote Receipt
                 </h3>
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#05c92f] text-slate-950 font-mono font-black flex items-center gap-1 border border-slate-950">
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#05c92f] text-slate-950 font-mono font-black flex items-center gap-1 border border-slate-950 whitespace-nowrap flex-shrink-0">
                   <CheckCircle2 className="w-3 h-3 text-slate-950" />
                   CONFIRMED
                 </span>
               </div>
-              <p className="text-xs dark:text-slate-400 text-slate-500 font-medium">
+              <p className="text-[11px] sm:text-xs dark:text-slate-400 text-slate-500 font-medium mt-0.5">
                 Stellar SEP-53 Cryptographic Proof on Pollar
               </p>
             </div>
@@ -84,7 +84,7 @@ export const VoteReceiptModal: React.FC<VoteReceiptModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white dark:hover:bg-white/[0.06] hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white dark:hover:bg-white/[0.06] hover:bg-slate-100 transition-colors flex-shrink-0 -mr-1"
           >
             <X className="w-5 h-5" />
           </button>
