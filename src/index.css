@@ -280,7 +280,8 @@ html {
   will-change: transform;
 }
 
-.scale-on-scroll:hover {
+.scale-on-scroll:hover,
+.scale-on-scroll:active {
   transform: scale(1.02);
 }
 
@@ -289,7 +290,8 @@ html {
   will-change: transform;
 }
 
-.rotate-on-scroll:hover {
+.rotate-on-scroll:hover,
+.rotate-on-scroll:active {
   transform: rotate(1.2deg) scale(1.015);
 }
 

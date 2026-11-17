@@ -16,32 +16,53 @@ export const CursorFollower: React.FC = () => {
   const ringRef = useRef<HTMLDivElement | null>(null);
   const dotRef = useRef<HTMLDivElement | null>(null);
   
-  const [enabled, setEnabled] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [tooltip, setTooltip] = useState<string | null>(null);
+  const [isTouchActive, setIsTouchActive] = useState(false);
 
   const targetPos = useRef({ x: -200, y: -200 });
   const currentPos = useRef({ x: -200, y: -200 });
   const particles = useRef<TrailParticle[]>([]);
   const lastEmitTime = useRef(0);
   const isVisible = useRef(false);
+  const touchFadeTimer = useRef<number | null>(null);
 
   // Palette matching Dart electric blue, cyan and vibrant brand green
   const trailColors = [
-    'rgba(59, 130, 246, 0.85)',
-    'rgba(14, 165, 233, 0.85)',
-    'rgba(96, 165, 250, 0.75)',
-    'rgba(5, 201, 47, 0.75)'
+    'rgba(59, 130, 246, 0.9)',
+    'rgba(14, 165, 233, 0.9)',
+    'rgba(96, 165, 250, 0.8)',
+    'rgba(5, 201, 47, 0.8)'
   ];
 
+  // Helper to spawn geometric diamond trail particles
+  const spawnTrailParticles = (x: number, y: number, quantity = 1) => {
+    const now = performance.now();
+    if (now - lastEmitTime.current < 16) return;
+    lastEmitTime.current = now;
+
+    for (let c = 0; c < quantity; c = c + 1) {
+      const randomColor = trailColors[Math.floor(Math.random() * trailColors.length)];
+      const particle: TrailParticle = {
+        x: x + (Math.random() - 0.5) * 6,
+        y: y + (Math.random() - 0.5) * 6,
+        size: Math.random() * 5 + 4,
+        alpha: 0.95,
+        decay: Math.random() * 0.022 + 0.018,
+        rotation: Math.PI / 4, // 45 deg signature diamond orientation
+        rotationSpeed: (Math.random() - 0.5) * 0.08,
+        color: randomColor
+      };
+      particles.current.push(particle);
+    }
+
+    if (particles.current.length > 50) {
+      particles.current.shift();
+    }
+  };
+
   useEffect(() => {
-    // Only activate for fine pointers (desktops with mouse/trackpad), not touchscreens
-    const media = window.matchMedia('(pointer: fine)');
-    if (!media.matches) return;
-
-    setEnabled(true);
-
     const handleResize = () => {
       if (canvasRef.current) {
         canvasRef.current.width = window.innerWidth;
@@ -52,35 +73,15 @@ export const CursorFollower: React.FC = () => {
     handleResize();
     window.addEventListener('resize', handleResize);
 
+    // Desktop Mouse Tracking
     const handleMouseMove = (e: MouseEvent) => {
       targetPos.current.x = e.clientX;
       targetPos.current.y = e.clientY;
       isVisible.current = true;
+      setIsTouchActive(false);
 
-      // Spawn diamond trail particles when moving
-      const now = performance.now();
-      if (now - lastEmitTime.current > 24) {
-        lastEmitTime.current = now;
-        
-        const randomColor = trailColors[Math.floor(Math.random() * trailColors.length)];
-        const particle: TrailParticle = {
-          x: e.clientX,
-          y: e.clientY,
-          size: Math.random() * 5 + 4,
-          alpha: 0.9,
-          decay: Math.random() * 0.025 + 0.02,
-          rotation: Math.PI / 4, // 45 deg diamond orientation
-          rotationSpeed: (Math.random() - 0.5) * 0.08,
-          color: randomColor
-        };
-        
-        particles.current.push(particle);
-        if (particles.current.length > 35) {
-          particles.current.shift();
-        }
-      }
+      spawnTrailParticles(e.clientX, e.clientY, 1);
 
-      // Check if hovering over clickable or tooltip element
       const target = e.target as HTMLElement | null;
       if (target) {
         const interactiveEl = target.closest('button, a, input, select, [role="button"], .ctrl-card, [data-tooltip]');
@@ -103,16 +104,75 @@ export const CursorFollower: React.FC = () => {
       setTooltip(null);
     };
 
+    // Mobile & Tablet Touch Tracking
+    const handleTouchStart = (e: TouchEvent) => {
+      if (touchFadeTimer.current) {
+        window.clearTimeout(touchFadeTimer.current);
+      }
+      setIsTouchActive(true);
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      targetPos.current.x = touch.clientX;
+      targetPos.current.y = touch.clientY;
+      currentPos.current.x = touch.clientX;
+      currentPos.current.y = touch.clientY;
+      isVisible.current = true;
+      setIsClicking(true);
+
+      spawnTrailParticles(touch.clientX, touch.clientY, 2);
+
+      const element = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (element) {
+        const interactiveEl = element.closest('button, a, input, select, [role="button"], .ctrl-card, [data-tooltip]');
+        setIsHovering(Boolean(interactiveEl));
+
+        const tooltipEl = element.closest('[data-tooltip]');
+        if (tooltipEl) {
+          const text = tooltipEl.getAttribute('data-tooltip');
+          setTooltip(text || null);
+        } else {
+          setTooltip(null);
+        }
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      targetPos.current.x = touch.clientX;
+      targetPos.current.y = touch.clientY;
+      isVisible.current = true;
+
+      spawnTrailParticles(touch.clientX, touch.clientY, 1);
+    };
+
+    const handleTouchEnd = () => {
+      setIsClicking(false);
+      touchFadeTimer.current = window.setTimeout(() => {
+        isVisible.current = false;
+        setTooltip(null);
+        setIsTouchActive(false);
+      }, 550);
+    };
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('mouseleave', handleMouseLeave);
 
+    // Active touch listeners for mobile & tablet screens
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+
     let animationFrameId: number;
 
     const render = () => {
-      // 1. Smooth Spring Easing for Cursor Ring Follower
-      const ease = 0.18;
+      // 1. Smooth Spring Easing for Follower Ring
+      const ease = isTouchActive ? 0.35 : 0.18;
       currentPos.current.x += (targetPos.current.x - currentPos.current.x) * ease;
       currentPos.current.y += (targetPos.current.y - currentPos.current.y) * ease;
 
@@ -135,7 +195,7 @@ export const CursorFollower: React.FC = () => {
         }
       }
 
-      // 2. Render Cursor Diamond Particle Trail
+      // 2. Render Diamond Particle Trail (60fps on mobile, tablet & desktop)
       const canvas = canvasRef.current;
       if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -187,39 +247,41 @@ export const CursorFollower: React.FC = () => {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchEnd);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
-
-  if (!enabled) return null;
+  }, [isTouchActive]);
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
-      {/* Canvas for 60fps dynamic geometric diamond trail */}
+      {/* Canvas for 60fps dynamic geometric diamond trail on all viewports */}
       <canvas
         ref={canvasRef}
         className="pointer-events-none absolute inset-0 w-full h-full"
       />
 
-      {/* Physics Cursor Outer Ring */}
+      {/* Physics Follower Outer Ring (Adapts dynamically to cursor and touch points) */}
       <div
         ref={ringRef}
         className={`pointer-events-none absolute top-0 left-0 w-8 h-8 rounded-full border-2 transition-opacity duration-150 ease-physics will-change-transform flex items-center justify-center ${
           isHovering
-            ? 'border-[#05c92f] bg-[#05c92f]/10 shadow-[0_0_15px_rgba(5,201,47,0.4)]'
+            ? 'border-[#05c92f] bg-[#05c92f]/15 shadow-[0_0_15px_rgba(5,201,47,0.4)]'
             : 'border-blue-500/70 bg-blue-500/5 shadow-[0_0_12px_rgba(59,130,246,0.3)]'
         }`}
       >
-        {/* Dynamic Contextual Tooltip Following the Cursor */}
+        {/* Dynamic Contextual Tooltip: Above finger on mobile, beside cursor on desktop */}
         {tooltip && (
-          <div className="absolute left-9 top-1/2 -translate-y-1/2 px-3 py-1 rounded-full bg-slate-950/95 dark:bg-white text-white dark:text-slate-950 text-[11px] font-mono font-black shadow-2xl border border-white/20 dark:border-slate-800 whitespace-nowrap animate-pop-in flex items-center gap-1.5">
+          <div className="absolute -top-11 left-1/2 -translate-x-1/2 sm:left-9 sm:top-1/2 sm:-translate-y-1/2 sm:translate-x-0 px-3 py-1 rounded-full bg-slate-950/95 dark:bg-white text-white dark:text-slate-950 text-[11px] font-mono font-black shadow-2xl border border-white/20 dark:border-slate-800 whitespace-nowrap animate-pop-in flex items-center gap-1.5 pointer-events-none">
             <span className="w-1.5 h-1.5 rounded-full bg-[#05c92f] animate-pulse"></span>
             <span>{tooltip}</span>
           </div>
         )}
       </div>
 
-      {/* Inner Center Dot Directly Locked to Pointer Coordinates */}
+      {/* Inner Center Dot Directly on Cursor / Touch Coordinates */}
       <div
         ref={dotRef}
         className="pointer-events-none absolute top-0 left-0 w-2 h-2 rounded-full bg-blue-600 dark:bg-sky-400 shadow-[0_0_8px_#38bdf8] will-change-transform"

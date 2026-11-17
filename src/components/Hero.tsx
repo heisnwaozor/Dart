@@ -33,14 +33,42 @@ export const Hero: React.FC<HeroProps> = ({
   const [timeLeft, setTimeLeft] = useState({ days: 5, hours: 14, minutes: 38, seconds: 42 });
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
 
+  // Motion & Parallax tracking for Mobile, Tablet & Desktop screens
   useEffect(() => {
     const handleWindowMouseMove = (e: MouseEvent) => {
       const offsetX = (e.clientX / window.innerWidth - 0.5) * 45;
       const offsetY = (e.clientY / window.innerHeight - 0.5) * 35;
       setMouseOffset({ x: offsetX, y: offsetY });
     };
+
+    const handleWindowTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const offsetX = (touch.clientX / window.innerWidth - 0.5) * 45;
+      const offsetY = (touch.clientY / window.innerHeight - 0.5) * 35;
+      setMouseOffset({ x: offsetX, y: offsetY });
+    };
+
+    // Gyroscope tilt parallax on smartphones and tablets
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma !== null && e.beta !== null) {
+        const clampGamma = Math.max(-30, Math.min(30, e.gamma));
+        const clampBeta = Math.max(-30, Math.min(30, e.beta - 45));
+        const offsetX = (clampGamma / 30) * 35;
+        const offsetY = (clampBeta / 30) * 25;
+        setMouseOffset({ x: offsetX, y: offsetY });
+      }
+    };
+
     window.addEventListener('mousemove', handleWindowMouseMove, { passive: true });
-    return () => window.removeEventListener('mousemove', handleWindowMouseMove);
+    window.addEventListener('touchmove', handleWindowTouchMove, { passive: true });
+    window.addEventListener('deviceorientation', handleOrientation);
+
+    return () => {
+      window.removeEventListener('mousemove', handleWindowMouseMove);
+      window.removeEventListener('touchmove', handleWindowTouchMove);
+      window.removeEventListener('deviceorientation', handleOrientation);
+    };
   }, []);
 
   useEffect(() => {

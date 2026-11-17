@@ -30,14 +30,57 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
   onEnterBuilder,
   onOpenAuth,
 }) => {
+  const [mouseOffset, setMouseOffset] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const offsetX = (e.clientX / window.innerWidth - 0.5) * 40;
+      const offsetY = (e.clientY / window.innerHeight - 0.5) * 30;
+      setMouseOffset({ x: offsetX, y: offsetY });
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const offsetX = (touch.clientX / window.innerWidth - 0.5) * 40;
+      const offsetY = (touch.clientY / window.innerHeight - 0.5) * 30;
+      setMouseOffset({ x: offsetX, y: offsetY });
+    };
+
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma !== null && e.beta !== null) {
+        const clampGamma = Math.max(-30, Math.min(30, e.gamma));
+        const clampBeta = Math.max(-30, Math.min(30, e.beta - 45));
+        const offsetX = (clampGamma / 30) * 30;
+        const offsetY = (clampBeta / 30) * 20;
+        setMouseOffset({ x: offsetX, y: offsetY });
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('deviceorientation', handleOrientation);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('deviceorientation', handleOrientation);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       
       {/* 1. Hero Section inspired by Ctrl.xyz */}
       <section className="relative pt-20 sm:pt-28 lg:pt-36 pb-20 sm:pb-28 text-center overflow-hidden">
         
-        {/* Subtle radial ambient glow with float animation */}
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] sm:w-[900px] h-[350px] sm:h-[450px] bg-blue-500/10 dark:bg-blue-600/15 rounded-full blur-[140px] pointer-events-none -z-10 animate-float" />
+        {/* Subtle radial ambient glow with motion parallax tracking on all screens */}
+        <div 
+          className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] sm:w-[900px] h-[350px] sm:h-[450px] bg-blue-500/10 dark:bg-blue-600/15 rounded-full blur-[140px] pointer-events-none -z-10 animate-float transition-transform duration-700 ease-physics"
+          style={{
+            transform: `translate3d(calc(-50% + ${mouseOffset.x}px), ${mouseOffset.y}px, 0)`
+          }}
+        />
 
         <div className="motion-container relative z-10 max-w-5xl mx-auto flex flex-col items-center">
           
