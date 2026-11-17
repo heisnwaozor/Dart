@@ -31,6 +31,7 @@ const MainApp: React.FC = () => {
   const [inspectingProject, setInspectingProject] = useState<Project | null>(null);
   const [isSubmitOpen, setIsSubmitOpen] = useState(false);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [authConfig, setAuthConfig] = useState<{
     isOpen: boolean;
     initialTab?: 'signup' | 'signin' | 'presets';
@@ -68,6 +69,18 @@ const MainApp: React.FC = () => {
     };
   }, []);
 
+  // Continuous Scroll Scrub indicator
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress((window.scrollY / totalScroll) * 100);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const activeUserVote = currentUser 
     ? publicVotes.find(v => (v.voterWallet || '').trim().toLowerCase() === (currentUser.walletAddress || '').trim().toLowerCase())
     : undefined;
@@ -91,6 +104,12 @@ const MainApp: React.FC = () => {
   return (
     <div className="min-h-screen dark:bg-[#070A13] bg-[#F8FAFC] dark:text-[#F3F4F6] text-slate-900 flex flex-col selection:bg-blue-600 selection:text-white transition-colors duration-300">
       
+      {/* Scroll Scrub Progress Bar */}
+      <div 
+        className="fixed top-0 left-0 h-[2.5px] bg-gradient-to-r from-blue-600 via-sky-400 to-emerald-400 z-50 transition-all duration-75 pointer-events-none"
+        style={{ width: `${scrollProgress}%` }}
+      />
+
       {/* Top Title Bar / Floating Pill Navbar inspired by Ctrl.xyz */}
       <Navbar
         currentView={currentView}

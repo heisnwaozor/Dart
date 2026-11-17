@@ -36,37 +36,43 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
       {/* 1. Hero Section inspired by Ctrl.xyz */}
       <section className="relative pt-20 sm:pt-28 lg:pt-36 pb-20 sm:pb-28 text-center overflow-hidden">
         
-        {/* Subtle radial ambient glow */}
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] sm:w-[900px] h-[350px] sm:h-[450px] bg-blue-500/10 dark:bg-blue-600/15 rounded-full blur-[140px] pointer-events-none -z-10" />
+        {/* Subtle radial ambient glow with float animation */}
+        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] sm:w-[900px] h-[350px] sm:h-[450px] bg-blue-500/10 dark:bg-blue-600/15 rounded-full blur-[140px] pointer-events-none -z-10 animate-float" />
 
         <div className="motion-container relative z-10 max-w-5xl mx-auto flex flex-col items-center">
           
-          {/* Subtitle above title: requested text */}
-          <div className="mb-6 sm:mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
+          {/* Subtitle above title: Entrance fade up */}
+          <div className="mb-6 sm:mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm animate-fade-up">
             <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
             <span>Decentralized community voting for all Pollar Pitch Projects</span>
           </div>
 
-          {/* Monumental Headline (Ctrl.xyz giant typographic treatment) */}
+          {/* Monumental Headline: Mask reveal from behind invisible box */}
           <h1 className="text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.04em] leading-[0.92] dark:text-white text-slate-950 mb-8 sm:mb-10 select-none">
-            Take <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300">❖</span> Dart.
+            <span className="mask-reveal-box">
+              <span className="mask-reveal-text">Take</span>
+            </span>{" "}
+            <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300 animate-pop-in">❖</span>{" "}
+            <span className="mask-reveal-box">
+              <span className="mask-reveal-text" style={{ animationDelay: '140ms' }}>Dart.</span>
+            </span>
           </h1>
 
-          {/* Clean summary line */}
-          <p className="text-lg sm:text-2xl md:text-3xl dark:text-slate-300 text-slate-700 font-normal max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed">
+          {/* Clean summary line: Smooth entrance */}
+          <p className="text-lg sm:text-2xl md:text-3xl dark:text-slate-300 text-slate-700 font-normal max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed animate-fade-up stagger-1">
             One wallet. One vote. 100% cryptographic proof on Stellar.
           </p>
 
-          {/* Dual Action Center CTA Pills (Ctrl.xyz exact button style with rolling text) */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full max-w-md sm:max-w-none">
+          {/* Dual Action Center CTA Pills: Spring & Magnetic physics */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full max-w-md sm:max-w-none animate-spring stagger-2">
             
             {/* Primary Action: Signature Green Pill Button with 3-dot Badge */}
             <button
               onClick={onEnterVoting}
-              className="ctrl-roll-button w-full sm:w-auto inline-flex items-center justify-center gap-3.5 px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-base sm:text-lg shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-slate-950 group"
+              className="ctrl-roll-button magnetic-pull w-full sm:w-auto inline-flex items-center justify-center gap-3.5 px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-base sm:text-lg shadow-xl shadow-emerald-500/25 active:scale-95 transition-all duration-300 border-2 border-slate-950 group"
             >
               {/* Overlapping Multi-Color Status Circles (from Ctrl.xyz) */}
-              <div className="flex items-center -space-x-1.5 flex-shrink-0">
+              <div className="flex items-center -space-x-1.5 flex-shrink-0 animate-bounce-soft">
                 <span className="w-3.5 h-3.5 rounded-full bg-[#fbe74e] ring-2 ring-slate-950"></span>
                 <span className="w-3.5 h-3.5 rounded-full bg-[#ffcadc] ring-2 ring-slate-950"></span>
                 <span className="w-3.5 h-3.5 rounded-full bg-[#9dc4f5] ring-2 ring-slate-950"></span>
@@ -78,7 +84,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Secondary Action: Sleek Dark / White Pill Button for Builders */}
             <button
               onClick={onEnterBuilder}
-              className="ctrl-roll-button w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-4 sm:py-5 rounded-full bg-white dark:bg-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.14] text-slate-950 dark:text-white font-bold text-base sm:text-lg border-2 border-slate-950 dark:border-white/20 shadow-md hover:scale-105 active:scale-95 transition-all duration-300"
+              className="ctrl-roll-button magnetic-pull w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-4 sm:py-5 rounded-full bg-white dark:bg-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.14] text-slate-950 dark:text-white font-bold text-base sm:text-lg border-2 border-slate-950 dark:border-white/20 shadow-md active:scale-95 transition-all duration-300"
             >
               <Code2 className="w-5 h-5 text-blue-500" />
               <span className="ctrl-roll-label">Submit a Project</span>
@@ -87,7 +93,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
           </div>
 
           {/* Micro stats banner below CTAs */}
-          <div className="mt-12 sm:mt-16 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm font-mono dark:text-slate-400 text-slate-500">
+          <div className="mt-12 sm:mt-16 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm font-mono dark:text-slate-400 text-slate-500 animate-pop-in stagger-3">
             <span className="flex items-center gap-2">
               <Trophy className="w-4 h-4 text-amber-500" />
               {hackathon.prizePool} Prize Pool
@@ -127,7 +133,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Doorway 1: Community Voters */}
             <div 
               onClick={onEnterVoting}
-              className="ctrl-card p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl md:rounded-[36px] cursor-pointer flex flex-col justify-between group shadow-xl"
+              className="ctrl-card scale-on-scroll animate-slide-in-left p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl md:rounded-[36px] cursor-pointer flex flex-col justify-between group shadow-xl"
             >
               <div className="space-y-5 sm:space-y-6">
                 
@@ -182,7 +188,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Doorway 2: Hackathon Builders */}
             <div 
               onClick={onEnterBuilder}
-              className="ctrl-card p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl md:rounded-[36px] cursor-pointer flex flex-col justify-between group shadow-xl"
+              className="ctrl-card scale-on-scroll animate-fade-up stagger-1 p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl md:rounded-[36px] cursor-pointer flex flex-col justify-between group shadow-xl"
             >
               <div className="space-y-5 sm:space-y-6">
                 
@@ -255,7 +261,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             
-            <div className="ctrl-card p-7 space-y-3">
+            <div className="ctrl-card scale-on-scroll animate-zoom-in-up stagger-1 p-7 space-y-3">
               <div className="w-11 h-11 rounded-2xl bg-blue-500/15 text-blue-500 flex items-center justify-center">
                 <Lock className="w-5 h-5" />
               </div>
@@ -267,7 +273,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
               </p>
             </div>
 
-            <div className="ctrl-card p-7 space-y-3">
+            <div className="ctrl-card scale-on-scroll animate-zoom-in-up stagger-2 p-7 space-y-3">
               <div className="w-11 h-11 rounded-2xl bg-sky-500/15 text-sky-500 flex items-center justify-center">
                 <Zap className="w-5 h-5" />
               </div>
@@ -279,7 +285,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
               </p>
             </div>
 
-            <div className="ctrl-card p-7 space-y-3">
+            <div className="ctrl-card scale-on-scroll animate-zoom-in-up stagger-3 p-7 space-y-3">
               <div className="w-11 h-11 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
                 <ShieldCheck className="w-5 h-5" />
               </div>

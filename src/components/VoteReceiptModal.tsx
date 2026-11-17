@@ -55,9 +55,9 @@ export const VoteReceiptModal: React.FC<VoteReceiptModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-up duration-200">
       <div 
-        className="ctrl-card relative w-full max-w-2xl rounded-[36px] shadow-2xl overflow-hidden max-h-[92vh] flex flex-col"
+        className="ctrl-card relative w-full max-w-2xl rounded-[36px] shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-overshoot"
         onClick={e => e.stopPropagation()}
       >
         {/* Top Header */}

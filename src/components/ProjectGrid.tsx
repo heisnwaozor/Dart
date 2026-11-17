@@ -83,24 +83,30 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
     <section id="projects-section" className="py-20 sm:py-28 lg:py-36 border-b dark:border-white/[0.08] border-slate-200">
       <div className="motion-container">
         
-        {/* Ctrl Section Header */}
+        {/* Ctrl Section Header: Mask reveal and physics easing */}
         <div className="mb-14 sm:mb-20 text-center max-w-3xl mx-auto space-y-4 sm:space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm animate-fade-up">
             <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
             <span>Hackathon Showcase & Voting</span>
           </div>
 
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black dark:text-white text-slate-950 tracking-[-0.03em] leading-[0.98]">
-            Explore <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300">❖</span> Vote.
+            <span className="mask-reveal-box">
+              <span className="mask-reveal-text">Explore</span>
+            </span>{" "}
+            <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300 animate-pop-in">❖</span>{" "}
+            <span className="mask-reveal-box">
+              <span className="mask-reveal-text" style={{ animationDelay: '120ms' }}>Vote.</span>
+            </span>
           </h2>
 
-          <p className="text-sm sm:text-base md:text-lg dark:text-slate-400 text-slate-600 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg dark:text-slate-400 text-slate-600 leading-relaxed max-w-2xl mx-auto animate-fade-up stagger-1">
             Decentralized community voting for all Pollar Pitch Projects. Review verified live demos, testnet Soroban smart contracts, and cast your gasless SEP-53 vote on Stellar.
           </p>
         </div>
 
         {/* Control Panel: Search & Filter Pills */}
-        <div className="ctrl-card p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-[36px] mb-8 sm:mb-16 space-y-5 sm:space-y-6 shadow-xl transition-all duration-300">
+        <div className="ctrl-card animate-fade-up stagger-1 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-[36px] mb-8 sm:mb-16 space-y-5 sm:space-y-6 shadow-xl transition-all duration-300">
           
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-5">
             
@@ -140,11 +146,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
 
           {/* Filter Pills neatly wrapped inside the frame with full text visibility */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-1">
-            {allTags.map(tag => (
+            {allTags.map((tag, idx) => (
               <button
                 key={tag}
                 onClick={() => setSelectedTag(tag)}
-                className={`ctrl-roll-button flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 ${
+                className={`ctrl-roll-button flex-shrink-0 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 animate-pop-in stagger-${Math.min((idx % 6) + 1, 6)} ${
                   selectedTag === tag
                     ? 'bg-[#05c92f] text-slate-950 border-2 border-slate-950 shadow-md shadow-emerald-500/25 scale-105 font-black'
                     : 'bg-[#ecefec] dark:bg-white/[0.06] dark:text-slate-200 text-slate-700 hover:text-slate-950 dark:hover:text-white border dark:border-white/[0.08] border-slate-300'
@@ -202,7 +208,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
-            {filteredProjects.map((project) => {
+            {filteredProjects.map((project, idx) => {
               const isUserVotedForThis = userVote?.projectId === project.id;
               const hasUserVotedElsewhere = userVote && userVote.projectId !== project.id;
 
@@ -210,7 +216,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 <div
                   key={project.id}
                   onMouseMove={handleMouseMove}
-                  className={`ctrl-card group relative overflow-hidden flex flex-col justify-between ${
+                  className={`ctrl-card scale-on-scroll animate-zoom-in-up stagger-${Math.min((idx % 6) + 1, 6)} group relative overflow-hidden flex flex-col justify-between ${
                     isUserVotedForThis
                       ? '!border-blue-600 ring-2 ring-blue-500/40 shadow-2xl'
                       : ''
@@ -304,12 +310,12 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
 
                         <button
                           onClick={() => onInitiateVote(project)}
-                          className={`ctrl-roll-button flex items-center space-x-2 px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 ${
+                          className={`ctrl-roll-button magnetic-pull flex items-center space-x-2 px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 ${
                             isUserVotedForThis
                               ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border-2 border-blue-500 hover:bg-blue-500/25'
                               : hasUserVotedElsewhere
                               ? 'bg-[#ecefec] dark:bg-white/[0.1] hover:bg-slate-200 dark:hover:bg-white/[0.16] text-slate-950 dark:text-white border-2 border-slate-950 dark:border-white/20'
-                              : 'bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black border-2 border-slate-950 shadow-md shadow-emerald-500/25 hover:scale-105 active:scale-95'
+                              : 'bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black border-2 border-slate-950 shadow-md shadow-emerald-500/25 active:scale-95'
                           }`}
                         >
                           {!isUserVotedForThis && !hasUserVotedElsewhere && (

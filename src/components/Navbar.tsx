@@ -87,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b dark:border-white/[0.08] border-slate-200/80 dark:bg-[#070A13]/90 bg-[#F9FAF9]/90 backdrop-blur-2xl transition-colors duration-300">
+    <header className="sticky top-0 z-50 w-full border-b dark:border-white/[0.08] border-slate-200/80 dark:bg-[#070A13]/90 bg-[#F9FAF9]/90 backdrop-blur-2xl transition-colors duration-300 sticky-pin">
       
       <div className="motion-container">
         <div className="flex items-center justify-between h-20 sm:h-22">
@@ -372,10 +372,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         {isMobileMenuOpen && (
           <>
             <div 
-              className="fixed inset-0 top-20 z-40 bg-black/50 backdrop-blur-sm md:hidden animate-in fade-in duration-200"
+              className="fixed inset-0 top-20 z-40 bg-black/50 backdrop-blur-sm md:hidden animate-fade-up duration-200"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <div className="relative z-50 md:hidden border-t dark:border-white/[0.08] border-slate-200/80 dark:bg-[#090d18]/98 bg-white/98 backdrop-blur-2xl px-4 py-5 shadow-2xl animate-in slide-in-from-top-2 fade-in duration-200 rounded-b-3xl">
+            <div className="relative z-50 md:hidden border-t dark:border-white/[0.08] border-slate-200/80 dark:bg-[#090d18]/98 bg-white/98 backdrop-blur-2xl px-4 py-5 shadow-2xl animate-unfold rounded-b-3xl">
               
               {/* Navigation Items: Portal, Vote, Ranks, Submit */}
               <div className="space-y-1 mb-4">
@@ -389,7 +389,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setCurrentView('portal');
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all animate-slide-in-left stagger-1 ${
                     currentView === 'portal'
                       ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-black shadow-sm'
                       : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/[0.06]'
@@ -399,7 +399,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <DartLogo size={18} />
                     <span>Portal</span>
                   </div>
-                  {currentView === 'portal' && <span className="w-2 h-2 rounded-full bg-[#05c92f]"></span>}
+                  {currentView === 'portal' && <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>}
                 </button>
 
                 <button
@@ -409,14 +409,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setActiveTab('projects');
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all animate-slide-in-left stagger-2 ${
                     currentView === 'voting' && activeTab === 'projects'
                       ? 'bg-blue-600 text-white font-black shadow-sm'
                       : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/[0.06]'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <Flame className="w-4 h-4 text-blue-500" />
+                    <Flame className="w-4 h-4 text-blue-500 animate-bounce-soft" />
                     <span>Vote</span>
                   </div>
                   <span className="text-[10px] font-mono opacity-80">({projectsCount} Projects)</span>
@@ -429,7 +429,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setActiveTab('leaderboard');
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all animate-slide-in-left stagger-3 ${
                     currentView === 'voting' && activeTab === 'leaderboard'
                       ? 'bg-blue-600 text-white font-black shadow-sm'
                       : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/[0.06]'
@@ -448,7 +448,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setCurrentView('builder');
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all animate-slide-in-left stagger-4 ${
                     currentView === 'builder'
                       ? 'bg-emerald-600 text-white font-black shadow-sm'
                       : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/[0.06]'
@@ -524,14 +524,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </button>
                   </div>
                 ) : (
-                  <div className="space-y-2 pt-1">
+                  <div className="space-y-2 pt-1 animate-fade-up stagger-5">
                     <button
                       type="button"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         onOpenAuth('signup');
                       }}
-                      className="ctrl-roll-button w-full py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md flex items-center justify-center gap-2"
+                      className="ctrl-roll-button magnetic-pull w-full py-3.5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-sm border-2 border-slate-950 shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all"
                     >
                       <UserPlus className="w-4 h-4" />
                       <span className="ctrl-roll-label">Create Account</span>
@@ -543,7 +543,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         setIsMobileMenuOpen(false);
                         onOpenAuth('signin');
                       }}
-                      className="w-full py-3 rounded-full text-xs font-bold dark:text-slate-200 text-slate-700 dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.1] border dark:border-white/[0.1] border-slate-200 text-center transition-colors flex items-center justify-center gap-2"
+                      className="w-full py-3 rounded-full text-xs font-bold dark:text-slate-200 text-slate-700 dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.1] border dark:border-white/[0.1] border-slate-200 text-center transition-colors flex items-center justify-center gap-2 magnetic-pull"
                     >
                       <LogIn className="w-4 h-4" />
                       <span>Sign In</span>

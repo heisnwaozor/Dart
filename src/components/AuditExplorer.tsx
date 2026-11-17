@@ -135,26 +135,32 @@ export const AuditExplorer: React.FC<AuditExplorerProps> = ({
     <section className="py-20 sm:py-28 lg:py-36 border-b dark:border-white/[0.08] border-slate-200">
       <div className="motion-container">
         
-        {/* Ctrl Section Header */}
+        {/* Ctrl Section Header: Mask reveal and physics easing */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 sm:mb-16 pb-8 border-b dark:border-white/[0.08] border-slate-200">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm animate-fade-up">
               <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
               <span>Public Ledger & Database Records</span>
             </div>
             <h2 className="text-4xl sm:text-6xl font-black dark:text-white text-slate-950 tracking-[-0.03em] leading-[0.98]">
-              Audit <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300">❖</span> Proofs.
+              <span className="mask-reveal-box">
+                <span className="mask-reveal-text">Audit</span>
+              </span>{" "}
+              <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300 animate-pop-in">❖</span>{" "}
+              <span className="mask-reveal-box">
+                <span className="mask-reveal-text" style={{ animationDelay: '120ms' }}>Proofs.</span>
+              </span>
             </h2>
-            <p className="text-sm sm:text-base dark:text-slate-400 text-slate-600 max-w-2xl">
+            <p className="text-sm sm:text-base dark:text-slate-400 text-slate-600 max-w-2xl animate-fade-up stagger-1">
               Decentralized community voting for all Pollar Pitch Projects. Every account is registered in SQLite, and every ballot is cryptographically signed using Stellar SEP-53.
             </p>
           </div>
 
           {/* Action CTAs */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 animate-spring stagger-2">
             <button
               onClick={activeLedger === 'votes' ? exportJson : exportUsersJson}
-              className="ctrl-roll-button flex items-center space-x-2.5 px-7 py-4 rounded-full bg-[#ecefec] dark:bg-white/[0.08] hover:bg-slate-200 dark:hover:bg-white/[0.14] text-slate-950 dark:text-white border-2 border-slate-950 dark:border-white/20 text-xs sm:text-sm font-bold transition-all shadow-md"
+              className="ctrl-roll-button magnetic-pull flex items-center space-x-2.5 px-7 py-4 rounded-full bg-[#ecefec] dark:bg-white/[0.08] hover:bg-slate-200 dark:hover:bg-white/[0.14] text-slate-950 dark:text-white border-2 border-slate-950 dark:border-white/20 text-xs sm:text-sm font-bold transition-all shadow-md active:scale-95"
             >
               <Download className="w-4 h-4 text-blue-500" />
               <span className="ctrl-roll-label">

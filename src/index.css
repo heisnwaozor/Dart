@@ -220,3 +220,88 @@
     padding-right: 4rem;
   }
 }
+
+/* Physics & Feel: Smooth Momentum Scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Easing curves & momentum */
+.ease-physics {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ease-spring {
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Magnetic Button Physics */
+.magnetic-pull {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.magnetic-pull:hover {
+  transform: translateY(-3px) scale(1.025);
+}
+
+.magnetic-pull:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+/* Mask Reveal: Text emerging from behind invisible box */
+.mask-reveal-box {
+  overflow: hidden;
+  display: inline-flex;
+  align-items: baseline;
+  vertical-align: bottom;
+}
+
+.mask-reveal-text {
+  display: inline-block;
+  will-change: transform, opacity;
+  animation: maskReveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Stagger List Delays */
+.stagger-1 { animation-delay: 60ms; animation-fill-mode: backwards; }
+.stagger-2 { animation-delay: 120ms; animation-fill-mode: backwards; }
+.stagger-3 { animation-delay: 180ms; animation-fill-mode: backwards; }
+.stagger-4 { animation-delay: 240ms; animation-fill-mode: backwards; }
+.stagger-5 { animation-delay: 300ms; animation-fill-mode: backwards; }
+.stagger-6 { animation-delay: 360ms; animation-fill-mode: backwards; }
+.stagger-7 { animation-delay: 420ms; animation-fill-mode: backwards; }
+.stagger-8 { animation-delay: 480ms; animation-fill-mode: backwards; }
+
+/* Continuous Scroll Linked: Parallax, Scale on Scroll, Rotate on Scroll */
+.scale-on-scroll {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.scale-on-scroll:hover {
+  transform: scale(1.02);
+}
+
+.rotate-on-scroll {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.rotate-on-scroll:hover {
+  transform: rotate(1.2deg) scale(1.015);
+}
+
+.sticky-pin {
+  position: sticky;
+  top: 1rem;
+  z-index: 40;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.parallax-slow {
+  will-change: transform;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}

@@ -49,18 +49,24 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
     <section className="py-10 sm:py-14 lg:py-16 border-b dark:border-white/[0.08] border-slate-200">
       <div className="motion-container">
         
-        {/* Title Header: Clean and balanced Ctrl aesthetic */}
+        {/* Title Header: Clean and balanced Ctrl aesthetic with Mask Reveal */}
         <div className="mb-12 sm:mb-16 text-center max-w-3xl mx-auto space-y-4 sm:space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm animate-fade-up">
             <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
             <span>Real-time Standings</span>
           </div>
 
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black dark:text-white text-slate-950 tracking-[-0.03em] leading-[0.98]">
-            Rankings <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300">❖</span> Standings.
+            <span className="mask-reveal-box">
+              <span className="mask-reveal-text">Rankings</span>
+            </span>{" "}
+            <span className="inline-block text-blue-600 dark:text-blue-500 transform hover:rotate-12 transition-transform duration-300 animate-pop-in">❖</span>{" "}
+            <span className="mask-reveal-box">
+              <span className="mask-reveal-text" style={{ animationDelay: '120ms' }}>Standings.</span>
+            </span>
           </h2>
 
-          <p className="text-sm sm:text-base md:text-lg dark:text-slate-400 text-slate-600 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg dark:text-slate-400 text-slate-600 leading-relaxed max-w-2xl mx-auto animate-fade-up stagger-1">
             Decentralized community voting for all Pollar Pitch Projects. Rankings update live with every cryptographically signed vote on Stellar. Zero gas fees, instant non-repudiation.
           </p>
         </div>
@@ -103,7 +109,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
               return (
                 <div 
                   onMouseMove={handleMouseMove}
-                  className={`ctrl-card order-2 lg:order-1 p-6 sm:p-7 flex flex-col items-center text-center justify-between ${
+                  className={`ctrl-card scale-on-scroll animate-zoom-in-up stagger-2 order-2 lg:order-1 p-6 sm:p-7 flex flex-col items-center text-center justify-between ${
                     isUserVoteTop2 ? '!border-blue-500 ring-2 ring-blue-500/30' : ''
                   }`}
                 >
@@ -185,7 +191,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
               return (
                 <div 
                   onMouseMove={handleMouseMove}
-                  className={`ctrl-card order-1 lg:order-2 p-6 sm:p-7 flex flex-col items-center text-center justify-between !border-blue-500 ring-2 ring-blue-500/40 shadow-2xl ${
+                  className={`ctrl-card scale-on-scroll animate-overshoot order-1 lg:order-2 p-6 sm:p-7 flex flex-col items-center text-center justify-between !border-blue-500 ring-2 ring-blue-500/40 shadow-2xl ${
                     isUserVoteTop1 ? 'ring-4 ring-blue-500/50' : ''
                   }`}
                 >
@@ -267,7 +273,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
               return (
                 <div 
                   onMouseMove={handleMouseMove}
-                  className={`ctrl-card order-3 lg:order-3 p-6 sm:p-7 flex flex-col items-center text-center justify-between ${
+                  className={`ctrl-card scale-on-scroll animate-zoom-in-up stagger-3 order-3 lg:order-3 p-6 sm:p-7 flex flex-col items-center text-center justify-between ${
                     isUserVoteTop3 ? '!border-blue-500 ring-2 ring-blue-500/30' : ''
                   }`}
                 >
@@ -346,7 +352,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
         )}
 
         {/* Full Leaderboard Table Wrapped in Ctrl Card */}
-        <div className="ctrl-card overflow-hidden shadow-xl">
+        <div className="ctrl-card overflow-hidden shadow-xl animate-fade-up stagger-4">
           <div className="p-4 sm:p-6 border-b dark:border-white/[0.08] border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 bg-[#ecefec]/40 dark:bg-white/[0.02]">
             <h4 className="text-xs sm:text-sm font-black dark:text-white text-slate-950 uppercase tracking-wider font-mono">
               All Projects & Vote Distribution
@@ -364,7 +370,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
               return (
                 <div
                   key={project.id}
-                  className={`p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors ${
+                  className={`p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors animate-slide-in-left stagger-${Math.min((index % 6) + 1, 6)} ${
                     isVoted
                       ? 'dark:bg-blue-950/30 bg-blue-50/80 border-l-4 border-l-blue-500'
                       : 'dark:hover:bg-white/[0.02] hover:bg-slate-50'

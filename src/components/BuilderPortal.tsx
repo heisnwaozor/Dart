@@ -118,21 +118,27 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
 
         {/* Portal Header */}
         <div className="mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ecefec] dark:bg-white/[0.08] text-xs sm:text-sm font-semibold dark:text-slate-200 text-slate-700 shadow-sm animate-fade-up">
             <span className="w-2 h-2 rounded-full bg-[#05c92f] animate-pulse"></span>
             <span>Builder Submission Gateway</span>
           </div>
           <h1 className="text-4xl sm:text-6xl font-black dark:text-white text-slate-950 tracking-[-0.03em] leading-[0.98]">
-            Submit <span className="inline-block text-emerald-600 dark:text-emerald-400 transform hover:rotate-12 transition-transform duration-300">❖</span> Project.
+            <span className="mask-reveal-box">
+              <span className="mask-reveal-text">Submit</span>
+            </span>{" "}
+            <span className="inline-block text-emerald-600 dark:text-emerald-400 transform hover:rotate-12 transition-transform duration-300 animate-pop-in">❖</span>{" "}
+            <span className="mask-reveal-box">
+              <span className="mask-reveal-text" style={{ animationDelay: '120ms' }}>Project.</span>
+            </span>
           </h1>
-          <p className="text-sm sm:text-base dark:text-slate-400 text-slate-600 max-w-2xl">
+          <p className="text-sm sm:text-base dark:text-slate-400 text-slate-600 max-w-2xl animate-fade-up stagger-1">
             Register your decentralized application for the Pollar Pitch Projects. Submissions will be opened immediately to community voting and expert review.
           </p>
         </div>
 
         {/* Account Gate Status Banner */}
         {!currentUser ? (
-          <div className="ctrl-card mb-10 p-5 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-[36px] bg-amber-500/10 border-2 border-amber-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 sm:gap-6 shadow-lg">
+          <div className="ctrl-card mb-10 p-5 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl md:rounded-[36px] bg-amber-500/10 border-2 border-amber-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 sm:gap-6 shadow-lg animate-pop-in stagger-2">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl sm:rounded-full bg-amber-500/20 border-2 border-amber-500 text-amber-500 flex items-center justify-center flex-shrink-0">
                 <Lock className="w-6 h-6 sm:w-7 sm:h-7" />
@@ -246,10 +252,10 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
             {/* Left 4 Cols: Tracks & Guidelines */}
-            <div className="lg:col-span-4 space-y-6">
+            <div className="lg:col-span-4 space-y-6 animate-slide-in-left stagger-1">
               
               {/* Prize Tracks Card */}
-              <div className="ctrl-card p-6 sm:p-7 shadow-sm space-y-4">
+              <div className="ctrl-card scale-on-scroll p-6 sm:p-7 shadow-sm space-y-4">
                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-amber-500 uppercase tracking-wider">
                   <Trophy className="w-4 h-4" />
                   <span>$75,000 USD Prize Tracks</span>
@@ -308,7 +314,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
             </div>
 
             {/* Right 8 Cols: The Submission Form */}
-            <div className="lg:col-span-8">
+            <div className="lg:col-span-8 animate-fade-up stagger-2">
               <form onSubmit={handleSubmit} className="ctrl-card p-4 sm:p-7 md:p-10 rounded-2xl sm:rounded-3xl md:rounded-[36px] shadow-xl space-y-5 sm:space-y-6">
                 
                 {errorMsg && (
@@ -467,7 +473,7 @@ export const BuilderPortal: React.FC<BuilderPortalProps> = ({
                 <div className="pt-4">
                   <button
                     type="submit"
-                    className="ctrl-roll-button w-full px-4 sm:px-8 py-3.5 sm:py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-base border-2 border-slate-950 shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 sm:gap-3.5 group"
+                    className="ctrl-roll-button magnetic-pull w-full px-4 sm:px-8 py-3.5 sm:py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-xs sm:text-base border-2 border-slate-950 shadow-xl shadow-emerald-500/25 active:scale-95 transition-all flex items-center justify-center gap-2 sm:gap-3.5 group"
                   >
                     <div className="hidden sm:flex items-center -space-x-1.5 flex-shrink-0">
                       <span className="w-3.5 h-3.5 rounded-full bg-[#fbe74e] ring-2 ring-slate-950"></span>
