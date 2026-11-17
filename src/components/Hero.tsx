@@ -31,6 +31,17 @@ export const Hero: React.FC<HeroProps> = ({
   onViewLeaderboard,
 }) => {
   const [timeLeft, setTimeLeft] = useState({ days: 5, hours: 14, minutes: 38, seconds: 42 });
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleWindowMouseMove = (e: MouseEvent) => {
+      const offsetX = (e.clientX / window.innerWidth - 0.5) * 45;
+      const offsetY = (e.clientY / window.innerHeight - 0.5) * 35;
+      setMouseOffset({ x: offsetX, y: offsetY });
+    };
+    window.addEventListener('mousemove', handleWindowMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleWindowMouseMove);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -55,9 +66,19 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section className="relative overflow-hidden pt-16 sm:pt-28 lg:pt-36 pb-24 sm:pb-36 lg:pb-44 border-b dark:border-white/[0.08] border-slate-200">
       
-      {/* Background Aurora Waves and Dynamic Mesh */}
-      <div className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[800px] sm:w-[1200px] h-[450px] sm:h-[650px] bg-gradient-to-tr from-blue-600/25 via-sky-400/20 to-indigo-600/25 rounded-full blur-[160px] pointer-events-none -z-10 animate-pulse-glow" />
-      <div className="absolute top-28 right-[-12%] w-[400px] sm:w-[700px] h-[400px] sm:h-[700px] bg-sky-500/15 rounded-full blur-[180px] pointer-events-none -z-10 animate-float-delayed" />
+      {/* Background Aurora Waves with Dynamic Mouse Parallax Tracking */}
+      <div 
+        className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[800px] sm:w-[1200px] h-[450px] sm:h-[650px] bg-gradient-to-tr from-blue-600/25 via-sky-400/20 to-indigo-600/25 rounded-full blur-[160px] pointer-events-none -z-10 animate-pulse-glow transition-transform duration-700 ease-physics"
+        style={{
+          transform: `translate3d(calc(-50% + ${mouseOffset.x}px), ${mouseOffset.y}px, 0)`
+        }}
+      />
+      <div 
+        className="absolute top-28 right-[-12%] w-[400px] sm:w-[700px] h-[400px] sm:h-[700px] bg-sky-500/15 rounded-full blur-[180px] pointer-events-none -z-10 animate-float-delayed transition-transform duration-700 ease-physics"
+        style={{
+          transform: `translate3d(${-mouseOffset.x * 0.7}px, ${-mouseOffset.y * 0.7}px, 0)`
+        }}
+      />
       <div className="absolute inset-0 mesh-grid [mask-image:radial-gradient(ellipse_70%_60%_at_50%_25%,#000_70%,transparent_100%)] pointer-events-none -z-10" />
 
       <div className="motion-container">
@@ -91,6 +112,7 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="mt-10 sm:mt-14 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 max-w-xl mx-auto animate-spring stagger-2">
           <button
             onClick={onExplore}
+            data-tooltip="Cast Gasless Ballots"
             className="ctrl-roll-button magnetic-pull w-full sm:w-auto inline-flex items-center justify-center gap-3.5 px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-base sm:text-lg shadow-xl shadow-emerald-500/25 active:scale-95 transition-all duration-300 border-2 border-slate-950 group"
           >
             <div className="flex items-center -space-x-1.5 flex-shrink-0 animate-bounce-soft">
@@ -104,6 +126,7 @@ export const Hero: React.FC<HeroProps> = ({
 
           <button
             onClick={onViewLeaderboard}
+            data-tooltip="View Live Rankings"
             className="ctrl-roll-button magnetic-pull w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-4 sm:py-5 rounded-full bg-white dark:bg-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.14] text-slate-950 dark:text-white font-bold text-base sm:text-lg border-2 border-slate-950 dark:border-white/20 shadow-md active:scale-95 transition-all duration-300"
           >
             <Trophy className="w-5 h-5 text-amber-500" />
@@ -196,7 +219,7 @@ export const Hero: React.FC<HeroProps> = ({
         {/* Live Metrics Card: Clean modern card on mobile/tablet, sleek ribbon on desktop */}
         <div className="mt-12 sm:mt-20 p-5 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl lg:rounded-full border dark:border-white/10 border-slate-200/80 ctrl-pill-nav shadow-md animate-pop-in stagger-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-center lg:justify-around gap-4 sm:gap-6 lg:gap-8 text-xs sm:text-sm font-mono">
-            <div className="flex items-center space-x-2.5">
+            <div className="flex items-center space-x-2.5 cursor-help" data-tooltip="$75,000 USD Hackathon Pool">
               <Coins className="w-5 h-5 text-amber-500 flex-shrink-0" />
               <span className="dark:text-slate-400 text-slate-500 font-medium">Prize Pool:</span>
               <span className="dark:text-white text-slate-950 font-black">{hackathon.prizePool}</span>
@@ -204,7 +227,7 @@ export const Hero: React.FC<HeroProps> = ({
 
             <span className="hidden lg:inline text-slate-300 dark:text-white/20 select-none">|</span>
 
-            <div className="flex items-center space-x-2.5">
+            <div className="flex items-center space-x-2.5 cursor-help" data-tooltip="Verified Testnet Projects">
               <Flame className="w-5 h-5 text-blue-500 flex-shrink-0" />
               <span className="dark:text-slate-400 text-slate-500 font-medium">Submissions:</span>
               <span className="dark:text-white text-slate-950 font-black">{totalProjects} Projects</span>
@@ -212,7 +235,7 @@ export const Hero: React.FC<HeroProps> = ({
 
             <span className="hidden lg:inline text-slate-300 dark:text-white/20 select-none">|</span>
 
-            <div className="flex items-center space-x-2.5">
+            <div className="flex items-center space-x-2.5 cursor-help" data-tooltip="Cryptographically Verified on Stellar">
               <Fingerprint className="w-5 h-5 text-sky-500 flex-shrink-0" />
               <span className="dark:text-slate-400 text-slate-500 font-medium">SEP-53 Votes:</span>
               <span className="text-blue-600 dark:text-sky-400 font-black">{totalVotes}</span>
@@ -220,7 +243,7 @@ export const Hero: React.FC<HeroProps> = ({
 
             <span className="hidden lg:inline text-slate-300 dark:text-white/20 select-none">|</span>
 
-            <div className="flex items-center space-x-2.5">
+            <div className="flex items-center space-x-2.5 cursor-help" data-tooltip="1 Ballot Per Pollar Account">
               <ShieldCheck className="w-5 h-5 text-emerald-500 flex-shrink-0" />
               <span className="dark:text-slate-400 text-slate-500 font-medium">Sybil Defense:</span>
               <span className="dark:text-white text-slate-950 font-black">1 Vote / Wallet</span>

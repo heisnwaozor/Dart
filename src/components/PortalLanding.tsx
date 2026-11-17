@@ -69,6 +69,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Primary Action: Signature Green Pill Button with 3-dot Badge */}
             <button
               onClick={onEnterVoting}
+              data-tooltip="Cast Gasless Ballots on Stellar"
               className="ctrl-roll-button magnetic-pull w-full sm:w-auto inline-flex items-center justify-center gap-3.5 px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[#05c92f] hover:bg-[#04b82a] text-slate-950 font-black text-base sm:text-lg shadow-xl shadow-emerald-500/25 active:scale-95 transition-all duration-300 border-2 border-slate-950 group"
             >
               {/* Overlapping Multi-Color Status Circles (from Ctrl.xyz) */}
@@ -84,6 +85,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Secondary Action: Sleek Dark / White Pill Button for Builders */}
             <button
               onClick={onEnterBuilder}
+              data-tooltip="Submit Soroban Smart Contract"
               className="ctrl-roll-button magnetic-pull w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-4 sm:py-5 rounded-full bg-white dark:bg-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.14] text-slate-950 dark:text-white font-bold text-base sm:text-lg border-2 border-slate-950 dark:border-white/20 shadow-md active:scale-95 transition-all duration-300"
             >
               <Code2 className="w-5 h-5 text-blue-500" />
@@ -133,6 +135,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Doorway 1: Community Voters */}
             <div 
               onClick={onEnterVoting}
+              data-tooltip="Enter Voting Arena"
               className="ctrl-card scale-on-scroll animate-slide-in-left p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl md:rounded-[36px] cursor-pointer flex flex-col justify-between group shadow-xl"
             >
               <div className="space-y-5 sm:space-y-6">
@@ -188,6 +191,7 @@ export const PortalLanding: React.FC<PortalLandingProps> = ({
             {/* Doorway 2: Hackathon Builders */}
             <div 
               onClick={onEnterBuilder}
+              data-tooltip="Enter Builder Submission Portal"
               className="ctrl-card scale-on-scroll animate-fade-up stagger-1 p-5 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl md:rounded-[36px] cursor-pointer flex flex-col justify-between group shadow-xl"
             >
               <div className="space-y-5 sm:space-y-6">

@@ -17,6 +17,7 @@ import { INITIAL_HACKATHON } from './data/mockData';
 import { ThemeProvider } from './context/ThemeContext';
 import { PollarProvider } from '@pollar/react';
 import { DartLogo } from './components/DartLogo';
+import { CursorFollower } from './components/CursorFollower';
 import { ShieldCheck, RotateCcw, ExternalLink } from 'lucide-react';
 
 const MainApp: React.FC = () => {
@@ -104,6 +105,9 @@ const MainApp: React.FC = () => {
   return (
     <div className="min-h-screen dark:bg-[#070A13] bg-[#F8FAFC] dark:text-[#F3F4F6] text-slate-900 flex flex-col selection:bg-blue-600 selection:text-white transition-colors duration-300">
       
+      {/* Dynamic Cursor Follower with Geometric Diamond Trail and Tooltip */}
+      <CursorFollower />
+
       {/* Scroll Scrub Progress Bar */}
       <div 
         className="fixed top-0 left-0 h-[2.5px] bg-gradient-to-r from-blue-600 via-sky-400 to-emerald-400 z-50 transition-all duration-75 pointer-events-none"

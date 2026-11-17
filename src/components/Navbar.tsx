@@ -95,6 +95,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Brand Identity: Fine-tuned clean logo without SDK badge (Ctrl.xyz style) */}
           <div 
             onClick={() => setCurrentView('portal')}
+            data-tooltip="Dart: Stellar Voting Portal"
             className="flex items-center space-x-3.5 cursor-pointer select-none group"
           >
             <div className="relative flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
@@ -230,6 +231,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {userVote && onCheckMyVote && (
               <button
                 onClick={onCheckMyVote}
+                data-tooltip="View Verified SEP-53 Receipt"
                 className="hidden lg:flex items-center space-x-1.5 px-3.5 py-2 rounded-full bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-bold transition-all shadow-sm group hover:scale-105"
                 title="Check Your Verified SEP-53 Vote Receipt"
               >
@@ -241,6 +243,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Dark / Light Mode Switcher */}
             <button
               onClick={toggleTheme}
+              data-tooltip={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               aria-label="Toggle Theme"
               className="p-2 sm:p-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] border dark:border-white/[0.1] border-slate-200 text-slate-700 dark:text-slate-200 transition-all duration-300 hover:rotate-45"
             >

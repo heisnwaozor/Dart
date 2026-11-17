@@ -225,6 +225,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   {/* Image Banner & Live Floating Pills */}
                   <div 
                     onClick={() => onSelectProject(project)}
+                    data-tooltip="Inspect Live Demo & Pitch"
                     className="relative h-60 sm:h-64 w-full overflow-hidden bg-slate-900 cursor-pointer"
                   >
                     <img
@@ -310,6 +311,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
 
                         <button
                           onClick={() => onInitiateVote(project)}
+                          data-tooltip={isUserVotedForThis ? "Change Your Vote" : "Cast Cryptographic Ballot"}
                           className={`ctrl-roll-button magnetic-pull flex items-center space-x-2 px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 ${
                             isUserVotedForThis
                               ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border-2 border-blue-500 hover:bg-blue-500/25'
